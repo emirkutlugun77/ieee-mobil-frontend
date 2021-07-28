@@ -51,6 +51,7 @@ class SocialFeed extends StatelessWidget {
             ),
             Flexible(
               child: ListView.builder(
+                padding: EdgeInsets.zero,
                 itemCount: 15,
                 itemBuilder: (context, index) => GFListTile(
                     avatar: GFAvatar(

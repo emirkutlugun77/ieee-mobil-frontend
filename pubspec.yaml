@@ -46,6 +46,7 @@ dependencies:
   getwidget: ^2.0.2
   loading_animations: ^2.2.0
   menu_button: ^1.4.2+1
+  http: ^0.13.3
 dev_dependencies:
   flutter_test:
     sdk: flutter

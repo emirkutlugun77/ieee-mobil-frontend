@@ -8,10 +8,11 @@ import 'package:my_app/UI/article/article_page.dart';
 import 'package:my_app/UI/commitee_page/commitee.dart';
 import 'package:my_app/UI/home/home_widgets/article_container.dart';
 import 'package:my_app/UI/home/home_widgets/carousel_card.dart';
+import 'package:my_app/UI/models/user.dart';
 
 class Home1 extends StatefulWidget {
-  const Home1({Key? key}) : super(key: key);
-
+  Home1({required this.user});
+  User user;
   @override
   _Home1State createState() => _Home1State();
 }
@@ -63,7 +64,7 @@ class _Home1State extends State<Home1> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Hoşgeldin Emir!',
+                  'Hoşgeldin ${widget.user.name}!',
                   style: Theme.of(context)
                       .textTheme
                       .subtitle1!

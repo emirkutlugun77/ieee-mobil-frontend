@@ -59,7 +59,10 @@ class SingleComment extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 28.0 * height / 1000),
               child: Text(
                 'Lorem ipsum dolor sit amet, consectetur adipiscing amet, consectetur adipiscin',
-                style: Theme.of(context).textTheme.bodyText2,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(fontSize: 18),
               ),
             ),
             SizedBox(
@@ -85,6 +88,7 @@ class SingleComment extends StatelessWidget {
             ),
             Flexible(
               child: ListView.builder(
+                padding: EdgeInsets.zero,
                 itemCount: 15,
                 itemBuilder: (context, index) => GFListTile(
                     avatar: GFAvatar(

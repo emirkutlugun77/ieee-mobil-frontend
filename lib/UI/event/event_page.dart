@@ -26,6 +26,7 @@ class Events extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: StaggeredGridView.countBuilder(
+                padding: EdgeInsets.zero,
                 crossAxisCount: 4,
                 itemCount: 7,
                 itemBuilder: (BuildContext context, int index) =>

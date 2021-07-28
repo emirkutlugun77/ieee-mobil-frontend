@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_lorem/flutter_lorem.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:line_icons/line_icon.dart';
+import 'package:date_time_format/date_time_format.dart';
 
 class SingleEvent extends StatefulWidget {
   final int index;
@@ -76,6 +77,10 @@ class _SingleEventState extends State<SingleEvent> {
                     SizedBox(
                       height: height * 1 / 100,
                     ),
+                    CustomDiv(),
+                    SizedBox(
+                      height: height * 1 / 100,
+                    ),
                     Material(
                       child: GFAccordion(
                         contentBorderRadius: BorderRadius.circular(10),
@@ -83,30 +88,26 @@ class _SingleEventState extends State<SingleEvent> {
                         contentChild: Container(
                             height: height * 1 / 3.3,
                             width: double.infinity,
-                            child: ListView(
+                            child: ListView.builder(
+                              padding: EdgeInsets.zero,
                               scrollDirection: Axis.vertical,
-                              children: [
-                                GFListTile(
-                                    titleText: 'Oturum 1',
-                                    subTitleText:
-                                        'ed ut perspiciatis unde omnis iste natus error',
-                                    icon: LineIcon.video(
-                                      color: Theme.of(context).primaryColor,
-                                    )),
-                                GFListTile(
-                                    titleText: 'Oturum 2',
-                                    subTitleText:
-                                        'illo inventore veritatis et quasi architecto ',
-                                    icon: LineIcon.video(
-                                      color: Theme.of(context).primaryColor,
-                                    )),
-                                GFListTile(
-                                    titleText: 'Oturum 3',
-                                    subTitleText:
-                                        'explicabo. Nemo enim ipsam voluptatem',
-                                    icon: LineIcon.video(
-                                        color: Theme.of(context).primaryColor)),
-                              ],
+                              itemCount: 5,
+                              itemBuilder: (context, index) => GFListTile(
+                                  title: Text(
+                                    'Oturum ${index}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline1!
+                                        .copyWith(fontSize: 20),
+                                  ),
+                                  subTitle: Text(
+                                    'ed ut perspiciatis unde omnis iste natus error',
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  ),
+                                  icon: LineIcon.video(
+                                    color: Theme.of(context).primaryColor,
+                                  )),
                             )),
                         contentBackgroundColor:
                             Color(0xFFE6EAF1).withOpacity(0.1),
@@ -134,54 +135,33 @@ class _SingleEventState extends State<SingleEvent> {
                         contentChild: Container(
                             height: height * 1 / 3.3,
                             width: double.infinity,
-                            child: ListView(
+                            child: ListView.builder(
+                              padding: EdgeInsets.zero,
                               scrollDirection: Axis.vertical,
-                              children: [
-                                GFListTile(
-                                    margin: EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 5),
-                                    avatar: GFAvatar(),
-                                    title: Text('Yorum 1',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline2!
-                                            .copyWith(
-                                                fontSize: 17 * height / 700)),
-                                    subTitleText:
-                                        'ed ut perspiciatis unde omnis iste natus error',
-                                    icon: LineIcon.thumbsUp(
-                                      color: Theme.of(context).primaryColor,
-                                    )),
-                                GFListTile(
-                                    margin: EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 5),
-                                    avatar: GFAvatar(),
-                                    title: Text('Yorum 2',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline2!
-                                            .copyWith(
-                                                fontSize: 17 * height / 700)),
-                                    subTitleText:
-                                        'illo inventore veritatis et quasi architecto ',
-                                    icon: LineIcon.thumbsUp(
-                                      color: Theme.of(context).primaryColor,
-                                    )),
-                                GFListTile(
-                                    margin: EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 5),
-                                    avatar: GFAvatar(),
-                                    title: Text('Yorum 3',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline2!
-                                            .copyWith(
-                                                fontSize: 17 * height / 700)),
-                                    subTitleText:
-                                        'explicabo. Nemo enim ipsam voluptatem',
-                                    icon: LineIcon.thumbsUp(
-                                        color: Theme.of(context).primaryColor)),
-                              ],
+                              itemCount: 5,
+                              itemBuilder: (context, index) => GFListTile(
+                                  description: Text(
+                                    DateTime.now()
+                                        .format('M j, H:i')
+                                        .toString(),
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  ),
+                                  title: Text(
+                                    'Yorum ${index}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline1!
+                                        .copyWith(fontSize: 20),
+                                  ),
+                                  subTitle: Text(
+                                    'ed ut perspiciatis unde omnis iste natus error',
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  ),
+                                  icon: LineIcon.thumbsUp(
+                                    color: Theme.of(context).primaryColor,
+                                  )),
                             )),
                         contentBackgroundColor:
                             Color(0xFFE6EAF1).withOpacity(0.1),

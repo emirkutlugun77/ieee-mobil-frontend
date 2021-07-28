@@ -8,11 +8,13 @@ import 'package:my_app/UI/home/home_sections/home1.dart';
 
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:my_app/UI/models/user.dart';
 import 'package:my_app/UI/profile/profile.dart';
 import 'package:my_app/UI/search/search_page.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+  MyHomePage({required this.user});
+  User user;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -36,7 +38,9 @@ class _MyHomePageState extends State<MyHomePage> {
               setState(() => _currentIndex = index);
             },
             children: <Widget>[
-              Home1(),
+              Home1(
+                user: widget.user,
+              ),
               SocialFeed(),
               SearchBar(),
               Events(),

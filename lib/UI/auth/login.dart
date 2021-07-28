@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/Functions/auth_functions.dart';
 import 'package:my_app/UI/home/home.dart';
+import 'package:my_app/UI/models/user.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -8,6 +10,10 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
+User? user;
+String email = '';
+String password = '';
+
 class _LoginPageState extends State<LoginPage> {
   bool obsPass = true;
 
@@ -15,6 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+
     return Padding(
       padding:
           EdgeInsets.symmetric(vertical: width / 25, horizontal: width / 25),
@@ -54,7 +61,9 @@ class _LoginPageState extends State<LoginPage> {
               ),
               verticalSpace(height / 1.5),
               Center(
-                child: usernameTextField(context),
+                child: usernameTextField(
+                  context,
+                ),
               ),
               verticalSpace(height * 1.5),
               Row(
@@ -71,9 +80,14 @@ class _LoginPageState extends State<LoginPage> {
               ),
               verticalSpace(height * 1.5),
               GestureDetector(
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => MyHomePage()));
+                onTap: () async {
+                  user = await loginUser(email, password);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MyHomePage(
+                                user: user!,
+                              )));
                 },
                 child: Container(
                   height: height * 1 / 14,
@@ -114,6 +128,11 @@ class _LoginPageState extends State<LoginPage> {
 
   TextField usernameTextField(BuildContext context) {
     return TextField(
+      onChanged: (String value) {
+        setState(() {
+          email = value;
+        });
+      },
       style: Theme.of(context).textTheme.bodyText2,
       decoration: InputDecoration(
         focusedBorder: UnderlineInputBorder(
@@ -122,8 +141,15 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  TextField passwordTextField(BuildContext context) {
+  TextField passwordTextField(
+    BuildContext context,
+  ) {
     return TextField(
+      onChanged: (String value) {
+        setState(() {
+          password = value;
+        });
+      },
       decoration: InputDecoration(
           focusedBorder: UnderlineInputBorder(
               borderSide:

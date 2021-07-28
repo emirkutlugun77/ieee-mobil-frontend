@@ -221,10 +221,14 @@ class _SignInPageState extends State<SignInPage> {
             verticalSpace(height * 1.3),
             GestureDetector(
               onTap: () {
-                setState(() {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => MyHomePage()));
-                });
+                /*setState(() {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MyHomePage(
+                                user: null,
+                              )));
+                });*/
               },
               child: Container(
                 height: height * 1 / 14,
