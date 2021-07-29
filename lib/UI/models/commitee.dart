@@ -9,7 +9,6 @@ class Commitee {
     required this.id,
     required this.subscriptionCount,
     required this.photo,
-    required this.cover,
     required this.instaUrl,
     required this.color,
     required this.icon,
@@ -19,43 +18,41 @@ class Commitee {
     required this.v,
   });
 
-  final Id id;
+  final String id;
   final int subscriptionCount;
   final String photo;
-  final String cover;
+
   final String instaUrl;
   final String color;
   final dynamic icon;
   final String name;
   final String description;
-  final Date date;
+  final DateTime date;
   final int v;
 
   factory Commitee.fromJson(Map<String, dynamic> json) => Commitee(
-        id: Id.fromJson(json["_id"]),
+        id: json["_id"],
         subscriptionCount: json["subscriptionCount"],
         photo: json["photo"],
-        cover: json["cover"],
-        instaUrl: json["instaUrl"],
+        instaUrl: json["instaUrl"] == null ? '' : json["instaUrl"],
         color: json["color"],
-        icon: json["icon"],
+        icon: json["icon"] == null ? '' : json['icon'],
         name: json["name"],
         description: json["description"],
-        date: Date.fromJson(json["date"]),
+        date: DateTime.parse(json["date"]),
         v: json["__v"],
       );
 
   Map<String, dynamic> toJson() => {
-        "_id": id.toJson(),
+        "_id": id,
         "subscriptionCount": subscriptionCount,
         "photo": photo,
-        "cover": cover,
         "instaUrl": instaUrl,
         "color": color,
         "icon": icon,
         "name": name,
         "description": description,
-        "date": date.toJson(),
+        "date": date,
         "__v": v,
       };
 }

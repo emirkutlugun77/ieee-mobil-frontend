@@ -5,14 +5,17 @@ import 'package:getwidget/getwidget.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:my_app/UI/article/article_page.dart';
+import 'package:my_app/UI/auth/login.dart';
 import 'package:my_app/UI/commitee_page/commitee.dart';
 import 'package:my_app/UI/home/home_widgets/article_container.dart';
 import 'package:my_app/UI/home/home_widgets/carousel_card.dart';
+import 'package:my_app/UI/models/commitee.dart';
 import 'package:my_app/UI/models/user.dart';
 
 class Home1 extends StatefulWidget {
-  Home1({required this.user});
+  Home1({required this.user, required this.committees});
   User user;
+  List<ComiteeCard> committees;
   @override
   _Home1State createState() => _Home1State();
 }
@@ -20,33 +23,7 @@ class Home1 extends StatefulWidget {
 class _Home1State extends State<Home1> {
   int current = 0;
   CarouselController _carouselController = CarouselController();
-  List<ComiteeCard> carouselItems = [
-    ComiteeCard(
-      imageId: 'images/cas.png',
-      comiteeName: 'CAS',
-      index: 0,
-    ),
-    ComiteeCard(
-      imageId: 'images/cs.png',
-      comiteeName: 'Computer Society',
-      index: 1,
-    ),
-    ComiteeCard(
-      imageId: 'images/embs.png',
-      comiteeName: 'EMB',
-      index: 2,
-    ),
-    ComiteeCard(
-      imageId: 'images/etkinlik.png',
-      comiteeName: 'TEGEK',
-      index: 3,
-    ),
-    ComiteeCard(
-      index: 4,
-      imageId: 'images/uluslar.png',
-      comiteeName: 'Uluslararası İlişkiler',
-    )
-  ];
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -109,15 +86,15 @@ class _Home1State extends State<Home1> {
             width: double.infinity,
             child: CarouselSlider(
                 carouselController: _carouselController,
-                items: carouselItems
+                items: widget.committees
                     .map((e) => GestureDetector(
                           onTap: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => ComiteePage(
-                                          index: current,
-                                          image: carouselItems[current].imageId,
+                                          commitee: widget
+                                              .committees[current].commitee,
                                         )));
                           },
                           child: e,

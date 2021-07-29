@@ -4,15 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:my_app/UI/event/single_event.dart';
+import 'package:my_app/UI/models/commitee.dart';
 
 class ComiteePage extends StatefulWidget {
-  final String image;
-  final int index;
-  const ComiteePage({
-    Key? key,
-    required this.image,
-    required this.index,
-  }) : super(key: key);
+  final Commitee commitee;
+  const ComiteePage({Key? key, required this.commitee}) : super(key: key);
 
   @override
   _ComiteePageState createState() => _ComiteePageState();
@@ -34,8 +30,8 @@ class _ComiteePageState extends State<ComiteePage> {
                   child: Stack(
                     children: [
                       Hero(
-                        tag: 'commiteePic${widget.index}',
-                        child: Image.asset(widget.image),
+                        tag: widget.commitee.photo,
+                        child: Image.network(widget.commitee.photo),
                       ),
                       Positioned(
                           top: 20,

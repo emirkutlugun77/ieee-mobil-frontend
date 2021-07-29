@@ -1,17 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icon.dart';
+import 'package:my_app/UI/models/commitee.dart';
 
 class ComiteeCard extends StatelessWidget {
-  final String imageId;
-  final String comiteeName;
-  final int index;
-  const ComiteeCard({
-    Key? key,
-    required this.imageId,
-    required this.comiteeName,
-    required this.index,
-  }) : super(key: key);
-
+  ComiteeCard({required this.commitee});
+  final Commitee commitee;
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -22,7 +15,7 @@ class ComiteeCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Hero(
-              tag: 'commiteePic${index}',
+              tag: commitee.photo,
               child: Container(
                 margin: EdgeInsets.only(bottom: 6),
                 decoration: BoxDecoration(
@@ -33,8 +26,8 @@ class ComiteeCard extends StatelessWidget {
                 height: height * 2 / 6,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(30),
-                  child: Image.asset(
-                    imageId,
+                  child: Image.network(
+                    commitee.photo,
                     fit: BoxFit.fitHeight,
                   ),
                 ),
@@ -45,7 +38,7 @@ class ComiteeCard extends StatelessWidget {
         Row(
           children: [
             Text(
-              comiteeName,
+              commitee.name,
               style: Theme.of(context)
                   .textTheme
                   .headline1!

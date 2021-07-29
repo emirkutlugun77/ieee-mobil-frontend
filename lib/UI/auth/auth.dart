@@ -33,7 +33,7 @@ class _AuthPageState extends State<AuthPage> {
                   child: Center(
                     child: Image.asset(
                       'images/ieee.png',
-                      fit: BoxFit.cover,
+                      fit: BoxFit.fill,
                     ),
                   ),
                 ),
