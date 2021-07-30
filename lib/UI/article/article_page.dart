@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_lorem/flutter_lorem.dart';
 import 'package:line_icons/line_icon.dart';
 
@@ -157,14 +158,12 @@ class _ArticlePageState extends State<ArticlePage> {
                       height: height * 1 / 60,
                     ),
                     Container(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 48.0),
-                        child: Text(
-                          lorem(paragraphs: 5),
-                          style: Theme.of(context).textTheme.bodyText1,
-                        ),
-                      ),
-                    )
+                        child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Html(
+                          data:
+                              "<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Yalan makinesi uzmanı ABD’li elektronikçi Cleve Backster bir gece eğlence olsun diye yalan makinesi elektrotlarını tropikal bir bitkinin yapraklarına yerleştirdi. Yalan makinesinin çeşitli sevinç, korku, şaşkınlık durumlarının yol açtığı elektriksel değişimleri ölçtüğünü göz önünde bulundurarak elektrotları bağladığı bitkiye bu durumları yaşatmaya başladı.</p><p> İlk olarak sulanırsa sevineceğini düşünerek bitkiyi suladı. Backster’ın varsayımlarına göre galvanometrede yukarı yönlü bir hareket gözlenmeliydi, fakat bitki beklediği tepkinin tam tersini vererek zikzaklar çizerek aşağı doğru indi. Şaşkınlıkla galvanometreyi izleyen Backster kibriti alıp bitkiyi yakmayı düşündüğünde bitki çılgınca galvanometrenin ibresini tavan yaptırdı. Bitkinin bu tepkisi Backster’ın şaşkınlığını ikiye katladı çünkü kendisi henüz bu eylemi gerçekleştirmemiş, sadece aklından geçirmişti. Yoksa bitkiler düşüncelerimizi okuyabiliyor muydu?</p><p>&nbsp; Bu olayı bir sürü deney takip etti ve alınan sonuçlar inanılmazdı. Yapılan deneyler bize bitkilerin sadece düşüncelerimizi okumakla kalmayıp çevrelerindeki her şeyi hissettiklerini de gösterdi. Kaynar suya atılan karideslerin ölümlerini, eline iğne battığında duyulan acıyı da hissediyordu bitkiler. Kilometrelerce ötede olunsa bile yaşanan sevinç ve üzüntüleri de hissediyor hatta korkudan baygınlık bile geçiriyorlardı.</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Bir gün şehir dışından gelen bir botanikçi içeri girdiğinde bütün bitkiler sessizleşti. Hiçbirinden tepki gelmiyordu. Sanki hepsi birden sessizliğe bürünmüştü. Botanikçi havaalanından uçağa binip gittikten 45 dakika sonra yeniden tepki vermeye başladılar. Backster bitkilerin botanikçiyi görünce korkudan bayıldıklarını, botanikçinin bitkileri kurutup ölçümler yaptığını öğrendiği zaman anladı. Bunun üzerine Backster “Acaba bitkilerin hafızası var mı?” sorusuna cevap arayan bir deney tasarladı. 6 yardımcısına aynı gece aynı saatlerde yapmak üzere farklı görevler verdi. Görevlerden biri gece yarısı gelip laboratuvardaki bitkilerden birini söküp parçalamaktı. Ertesi gün o gece bitkiyi parçalayan yardımcı içeri girdiğinde ibrelerin hepsi tavan yapmaya başladı. Cleve Backster ise bunu “bitkilerin çılgınlar gibi bağırması” olarak kaydetti. Bu deney bitkilerin sadece hissetmeyip, aynı zamanda hafızalarının da olduğunu kanıtladı.</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Bu çalışmalar makale olarak yayınlanmaya başlayınca dünyanın dört bir yanından bilim insanları konu üzerinde çalışmalara başladılar ve akıl almaz sonuçlara ulaştılar. Koparılmış bir yaprak, kendisine güzel sözler söylenmesi durumunda normal yapraktan aylarca daha uzun süre canlı kalabiliyor. 120 km mesafedeki bir acıyı, sevinci hissedebiliyor. İnsanların düşüncelerini okuyabiliyor, kötülük yapanları hafızasına kaydedebiliyor. Aynı zamanda bu bilgileri diğer bitkilerle de paylaşıyor. Kendisine kötü davranılan bitki üzüntüsünden intihar bile ediyor. Yanındaki bitkinin susuz kalması durumunda kendi suyunu onunla paylaşıyor.</p><p> Bitkiler, bütün canlılarla iletişim kurma konusunda bizim hayallerimizin ötesinde bir hassasiyete sahip. Bütün bu veriler bizi basit bir soruya götürüyor; “Bitkilerin beyni var mıdır?” Sorumuzun cevabı elbette “Hayır.” Bitkilerin beyni ve sinir sistemleri yok. Ama bitkilerde bizim gibi elektriği kullanarak iletişim kurma yeteneğine sahipler.</p><p></p><p><strong>Detaylı bilgi almak adına dilerseniz bu videolara da göz atabilirsiniz:</strong></p><p>Backster Deneyleri: </p><p></p><iframe src="),
+                    ))
                   ],
                 ),
               ),

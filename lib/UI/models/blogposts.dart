@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+
 BlogPost blogPostFromJson(String str) => BlogPost.fromJson(json.decode(str));
 
 String blogPostToJson(BlogPost data) => json.encode(data.toJson());
@@ -20,80 +22,149 @@ class BlogPost {
     required this.v,
   });
 
-  final Id id;
-  final List<Id> blogCategoryId;
-  final List<Id> likedBy;
+  final String id;
+  final BlogCategoryId blogCategoryId;
+  final List<String> likedBy;
   final List<String> tags;
-  final Id userId;
+  final UserId userId;
   final String text;
   final String title;
   final String photo;
   final String slug;
   final int viewCount;
-  final Date date;
+  final DateTime date;
   final int v;
 
   factory BlogPost.fromJson(Map<String, dynamic> json) => BlogPost(
-        id: Id.fromJson(json["_id"]),
-        blogCategoryId:
-            List<Id>.from(json["blogCategoryId"].map((x) => Id.fromJson(x))),
-        likedBy: List<Id>.from(json["likedBy"].map((x) => Id.fromJson(x))),
-        tags: List<String>.from(json["tags"].map((x) => x)),
-        userId: Id.fromJson(json["userId"]),
+        id: json["_id"],
+        blogCategoryId: BlogCategoryId(
+            id: json['blogCategoryId'][0]['_id'],
+            name: json['blogCategoryId'][0]['name'],
+            color: json['blogCategoryId'][0]['color'],
+            description: json['blogCategoryId'][0]['description'],
+            slug: json['blogCategoryId'][0]['slug']),
+        likedBy: List<String>.from(json["likedBy"].map((x) => x.toString())),
+        tags: List<String>.from(json["tags"].map((x) => x.toString())),
+        userId: UserId.fromJson(json["userId"]),
         text: json["text"],
         title: json["title"],
-        photo: json["photo"],
+        photo: json["photo"] != null ? json['photo'] : '',
         slug: json["slug"],
         viewCount: json["viewCount"],
-        date: Date.fromJson(json["date"]),
+        date: DateTime.parse(json["date"]),
         v: json["__v"],
       );
 
   Map<String, dynamic> toJson() => {
-        "_id": id.toJson(),
-        "blogCategoryId":
-            List<dynamic>.from(blogCategoryId.map((x) => x.toJson())),
-        "likedBy": List<dynamic>.from(likedBy.map((x) => x.toJson())),
+        "_id": id,
+        "blogCategoryId": blogCategoryId,
+        "likedBy": List<dynamic>.from(likedBy.map((x) => x)),
         "tags": List<dynamic>.from(tags.map((x) => x)),
-        "userId": userId.toJson(),
+        "userId": userId,
         "text": text,
         "title": title,
         "photo": photo,
         "slug": slug,
         "viewCount": viewCount,
-        "date": date.toJson(),
+        "date": date,
         "__v": v,
       };
 }
 
-class Id {
-  Id({
-    required this.oid,
-  });
+class BlogCategoryId {
+  final String id;
+  final String name;
+  final String color;
+  final String description;
+  final String slug;
+  BlogCategoryId(
+      {required this.id,
+      required this.name,
+      required this.color,
+      required this.description,
+      required this.slug});
 
-  final String oid;
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'color': color,
+      'description': description,
+      'slug': slug,
+    };
+  }
 
-  factory Id.fromJson(Map<String, dynamic> json) => Id(
-        oid: json["\u0024oid"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "\u0024oid": oid,
-      };
+  factory BlogCategoryId.fromJson(Map<String, dynamic> map) {
+    return BlogCategoryId(
+      id: map[0],
+      name: map[1],
+      color: map[2],
+      description: map[3],
+      slug: map[4],
+    );
+  }
 }
 
-class Date {
-  Date({
-    required this.date,
+class UserId {
+  final String bio;
+  final String photoSm;
+  final String photoXs;
+
+  final String id;
+  final String name;
+  final String surname;
+  final String username;
+  UserId({
+    required this.bio,
+    required this.photoSm,
+    required this.photoXs,
+    required this.id,
+    required this.name,
+    required this.surname,
+    required this.username,
   });
 
-  final DateTime date;
+  UserId copyWith({
+    String? bio,
+    String? photoSm,
+    String? photoXs,
+    String? id,
+    String? name,
+    String? surname,
+    String? username,
+  }) {
+    return UserId(
+      bio: bio ?? this.bio,
+      photoSm: photoSm ?? this.photoSm,
+      photoXs: photoXs ?? this.photoXs,
+      id: id ?? this.id,
+      name: name ?? this.name,
+      surname: surname ?? this.surname,
+      username: username ?? this.username,
+    );
+  }
 
-  factory Date.fromJson(Map<String, dynamic> json) => Date(
-        date: DateTime.parse(json["\u0024date"]),
-      );
+  Map<String, dynamic> toJson() {
+    return {
+      'bio': bio,
+      'photoSm': photoSm,
+      'photoXs': photoXs,
+      'id': id,
+      'name': name,
+      'surname': surname,
+      'username': username,
+    };
+  }
 
-  Map<String, dynamic> toJson() => {
-        "\u0024date": date.toIso8601String(),
-      };
+  factory UserId.fromJson(Map<String, dynamic> map) {
+    return UserId(
+      bio: map['bio'] != null ? map['bio'] : '',
+      photoSm: map['photoSm'] != null ? map['photoSm'] : '',
+      photoXs: map['photoXs'] != null ? map['photoXs'] : '',
+      id: map['_id'],
+      name: map['name'],
+      surname: map['surname'],
+      username: map['username'],
+    );
+  }
 }

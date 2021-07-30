@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/Functions/auth_functions.dart';
+import 'package:my_app/Functions/blog.dart';
 import 'package:my_app/Functions/committee.dart';
+import 'package:my_app/UI/auth/auth_widgets/slidingUpPanel.dart';
 import 'package:my_app/UI/home/home.dart';
 import 'package:my_app/UI/home/home_widgets/carousel_card.dart';
+import 'package:my_app/UI/models/blogposts.dart';
 import 'package:my_app/UI/models/commitee.dart';
 import 'package:my_app/UI/models/user.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -16,6 +19,7 @@ class LoginPage extends StatefulWidget {
 
 User? user;
 List<Commitee> commiteeList = [];
+List<BlogPost> blogPosts = [];
 dynamic userVariable = '';
 String email = '';
 String password = '';
@@ -24,11 +28,13 @@ class _LoginPageState extends State<LoginPage> {
   bool obsPass = true;
   PanelController _panelController = PanelController();
   late Future future;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    future = getAllCommittees(commiteeList);
+    future =
+        getAllCommittees(commiteeList).then((value) => getMost5(blogPosts));
   }
 
   @override
@@ -113,6 +119,9 @@ class _LoginPageState extends State<LoginPage> {
                               });
                               if (snapshot.connectionState ==
                                   ConnectionState.done) {
+                                blogPosts.forEach((element) {
+                                  print(element.blogCategoryId.id);
+                                });
                                 List<ComiteeCard> widgetOfCommittees =
                                     commiteeList
                                         .map((e) => ComiteeCard(commitee: e))
@@ -172,34 +181,10 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                SlidingUpPanel(
-                  boxShadow: [
-                    BoxShadow(blurRadius: 0, color: Colors.transparent)
-                  ],
-                  color: Colors.transparent,
-                  controller: _panelController,
-                  defaultPanelState: PanelState.CLOSED,
-                  minHeight: 0,
-                  maxHeight: height * 1 / 8,
-                  panel: Padding(
-                    padding: const EdgeInsets.all(28.0),
-                    child: Container(
-                      height: height * 1 / 8,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: Theme.of(context).errorColor,
-                      ),
-                      child: Center(
-                        child: Text(
-                          userVariable,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText1!
-                              .copyWith(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ),
+                SlidingWidget(
+                  panelController: _panelController,
+                  height: height,
+                  errorMessage: userVariable,
                 )
               ],
             ),

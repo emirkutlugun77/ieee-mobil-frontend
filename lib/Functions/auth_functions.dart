@@ -32,6 +32,37 @@ Future<dynamic> loginUser(String email, String password) async {
   }
 }
 
+Future<dynamic> registerUser(String name, String surname, Education education,
+    String email, String password) async {
+  var response =
+      await http.post(Uri.parse(baseUri + 'v1/auth/register'), body: {
+    'email': email,
+    'name': name,
+    'surname': surname,
+    'education': education,
+    'password': password
+  });
+  if (response.statusCode == 200) {
+    var decodedData = jsonDecode(response.body);
+    var id = decodedData['userId'];
+    getUser(id);
+    User user = await getUser(id);
+    return user;
+  } else {
+    var errorMessage;
+    await translator
+        .translate(
+            jsonDecode(response.body)['errors'][0] != null
+                ? jsonDecode(response.body)['errors'][0]
+                : 'Böyle bir hesap bulunamadı',
+            from: 'en',
+            to: 'tr')
+        .then((value) => errorMessage = value.text);
+
+    return errorMessage;
+  }
+}
+
 Future getUser(String id) async {
   var response = await http.get(Uri.parse(baseUri + 'v1/users/$id'));
   if (response.statusCode == 400) {

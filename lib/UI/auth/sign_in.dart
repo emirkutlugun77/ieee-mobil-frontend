@@ -1,7 +1,12 @@
 import 'package:flip_card/flip_card_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flip_card/flip_card.dart';
+import 'package:my_app/Functions/committee.dart';
+import 'package:my_app/UI/auth/auth_widgets/slidingUpPanel.dart';
 import 'package:my_app/UI/home/home.dart';
+import 'package:my_app/UI/models/commitee.dart';
+import 'package:my_app/UI/models/user.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -10,24 +15,55 @@ class SignInPage extends StatefulWidget {
   _SignInPageState createState() => _SignInPageState();
 }
 
+User? user;
+List<Commitee> commiteeList = [];
+dynamic userVariable = '';
+String email = '';
+String password = '';
+Education? education;
+String name = '';
+String surname = '';
+
 class _SignInPageState extends State<SignInPage> {
   FlipCardController _flipCardController = FlipCardController();
+  PanelController _panelController = PanelController();
+  late Future future;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    future = getAllCommittees(commiteeList);
+  }
+
   double sliderValue = 0;
   bool obsPass = true;
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return Padding(
-      padding:
-          EdgeInsets.symmetric(vertical: width / 25, horizontal: width / 25),
-      child: FlipCard(
-        flipOnTouch: false,
-        controller: _flipCardController,
-        back: cardBack(width, context, height),
-        front: cardFront(width, context, height),
-      ),
-    );
+    return FutureBuilder(
+        future: future,
+        builder: (context, snapshot) {
+          return Stack(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    vertical: width / 25, horizontal: width / 25),
+                child: FlipCard(
+                  flipOnTouch: false,
+                  controller: _flipCardController,
+                  back: cardBack(width, context, height),
+                  front: cardFront(width, context, height),
+                ),
+              ),
+              SlidingWidget(
+                errorMessage: userVariable,
+                height: height,
+                panelController: _panelController,
+              )
+            ],
+          );
+        });
   }
 
   Container cardFront(double width, BuildContext context, double height) {
