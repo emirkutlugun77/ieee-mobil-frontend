@@ -1,25 +1,14 @@
 import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icon.dart';
+import 'package:my_app/UI/models/blogposts.dart';
 
 class ArticleContainer extends StatelessWidget {
-  final String imageId;
-  final String name;
-  final DateTime date;
-  final int likes;
-  final String header;
-  final String content;
-  final String topic;
+  final BlogPost blogPost;
 
   const ArticleContainer({
     Key? key,
-    required this.imageId,
-    required this.name,
-    required this.date,
-    required this.likes,
-    required this.header,
-    required this.content,
-    required this.topic,
+    required this.blogPost,
     required this.width,
     required this.height,
   }) : super(key: key);
@@ -38,13 +27,15 @@ class ArticleContainer extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Hero(
-            tag: 'image1',
+            tag: blogPost.id,
             child: ClipRRect(
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),
                     bottomLeft: Radius.circular(20)),
-                child: Image.asset(
-                  imageId,
+                child: Image.network(
+                  blogPost.photo != ''
+                      ? blogPost.photo
+                      : 'https://ae01.alicdn.com/kf/HTB1kBs1IFXXXXXuXXXXq6xXFXXXD/Fine-oil-painting-on-canvas-Vincent-Van-Gogh-The-Starry-Night-moon-landscape-canvas.jpg_Q90.jpg_.webp',
                   fit: BoxFit.fill,
                   width: width * 1 / 4.5,
                   height: height * 1 / 4,
@@ -55,33 +46,28 @@ class ArticleContainer extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(header,
-                    style: Theme.of(context).textTheme.headline1!.copyWith(
-                        fontSize: 15 * height / 800,
-                        color: Theme.of(context).primaryColor,
-                        fontWeight: FontWeight.w100)),
+                Flexible(
+                  child: Container(
+                    width: width * 1 / 2.2,
+                    child: Text(blogPost.title,
+                        style: Theme.of(context).textTheme.headline1!.copyWith(
+                            fontSize: 15 * height / 800,
+                            color: Theme.of(context).primaryColor,
+                            fontWeight: FontWeight.w100)),
+                  ),
+                ),
+                SizedBox(
+                  height: height * 1 / 100,
+                ),
                 Text(
-                  name,
+                  blogPost.userId.name + ' ' + blogPost.userId.surname,
                   style: Theme.of(context)
                       .textTheme
                       .subtitle1!
                       .copyWith(fontSize: 14 * height / 700),
                 ),
                 SizedBox(
-                  height: height * 1 / 180,
-                ),
-                Container(
-                  width: width * 1 / 3,
-                  child: Text(
-                    topic,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(fontSize: 13 * height / 900),
-                  ),
-                ),
-                SizedBox(
-                  height: height * 1 / 250,
+                  height: height * 1 / 50,
                 ),
                 Flexible(
                   child: Container(
@@ -91,7 +77,7 @@ class ArticleContainer extends StatelessWidget {
                           color: Theme.of(context).cardColor,
                         ),
                         Text(
-                          likes.toString(),
+                          blogPost.likedBy.length.toString(),
                           style: Theme.of(context)
                               .textTheme
                               .subtitle1!
@@ -104,7 +90,7 @@ class ArticleContainer extends StatelessWidget {
                           color: Theme.of(context).cardColor,
                         ),
                         Text(
-                          date.format(' M j, H:i'),
+                          blogPost.date.format(' M j, H:i'),
                           style: Theme.of(context)
                               .textTheme
                               .subtitle1!

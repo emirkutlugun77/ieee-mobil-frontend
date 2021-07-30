@@ -134,6 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                                           builder: (context) => MyHomePage(
                                                 user: user!,
                                                 committees: widgetOfCommittees,
+                                                blogPosts: blogPosts,
                                               )));
                                 } else {
                                   //opens error panel

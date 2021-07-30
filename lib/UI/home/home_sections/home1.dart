@@ -9,13 +9,16 @@ import 'package:my_app/UI/auth/login.dart';
 import 'package:my_app/UI/commitee_page/commitee.dart';
 import 'package:my_app/UI/home/home_widgets/article_container.dart';
 import 'package:my_app/UI/home/home_widgets/carousel_card.dart';
+import 'package:my_app/UI/models/blogposts.dart';
 import 'package:my_app/UI/models/commitee.dart';
 import 'package:my_app/UI/models/user.dart';
 
 class Home1 extends StatefulWidget {
-  Home1({required this.user, required this.committees});
+  Home1(
+      {required this.user, required this.committees, required this.blogPosts});
   User user;
   List<ComiteeCard> committees;
+  List<BlogPost> blogPosts;
   @override
   _Home1State createState() => _Home1State();
 }
@@ -117,7 +120,7 @@ class _Home1State extends State<Home1> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Son Yazılar',
+                    'En Popüler Yazılar',
                     style: Theme.of(context)
                         .textTheme
                         .headline2!
@@ -134,29 +137,35 @@ class _Home1State extends State<Home1> {
           SizedBox(
             height: height * 1 / 60,
           ),
-          SingleChildScrollView(
-            child: Container(
-              child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ArticlePage()));
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: width / 10),
-                    child: ArticleContainer(
-                      width: width,
-                      height: height,
-                      content: lorem(paragraphs: 2),
-                      date: DateTime.now(),
-                      header: 'Bir Eser, Bir Hikaye',
-                      imageId: 'images/resim.png',
-                      likes: 10,
-                      name: 'Emir Kutlugün',
-                      topic:
-                          'Sanat şüphesiz hepimize mutluluk aşılayan nadir şeylerden',
+          Flexible(
+            child: ListView.builder(
+                padding: EdgeInsets.zero,
+                itemCount: 5,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                    child: Container(
+                      child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ArticlePage(
+                                          blogPost: blogPosts[index],
+                                        )));
+                          },
+                          child: Padding(
+                            padding:
+                                EdgeInsets.symmetric(horizontal: width / 10),
+                            child: ArticleContainer(
+                              width: width,
+                              height: height,
+                              blogPost: blogPosts[index],
+                            ),
+                          )),
                     ),
-                  )),
-            ),
+                  );
+                }),
           )
         ],
       ),

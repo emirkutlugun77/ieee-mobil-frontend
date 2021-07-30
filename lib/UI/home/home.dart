@@ -9,15 +9,18 @@ import 'package:my_app/UI/home/home_sections/home1.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:my_app/UI/home/home_widgets/carousel_card.dart';
+import 'package:my_app/UI/models/blogposts.dart';
 import 'package:my_app/UI/models/commitee.dart';
 import 'package:my_app/UI/models/user.dart';
 import 'package:my_app/UI/profile/profile.dart';
 import 'package:my_app/UI/search/search_page.dart';
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({required this.user, required this.committees});
+  MyHomePage(
+      {required this.user, required this.committees, required this.blogPosts});
   User user;
   List<ComiteeCard> committees;
+  List<BlogPost> blogPosts;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -42,9 +45,9 @@ class _MyHomePageState extends State<MyHomePage> {
             },
             children: <Widget>[
               Home1(
-                user: widget.user,
-                committees: widget.committees,
-              ),
+                  user: widget.user,
+                  committees: widget.committees,
+                  blogPosts: widget.blogPosts),
               SocialFeed(),
               SearchBar(),
               Events(),

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_lorem/flutter_lorem.dart';
-import 'package:line_icons/line_icon.dart';
 
+import 'package:line_icons/line_icon.dart';
+import 'package:date_time_format/date_time_format.dart';
 import 'package:my_app/UI/article/article_widgets/chip.dart';
+import 'package:my_app/UI/models/blogposts.dart';
 
 class ArticlePage extends StatefulWidget {
+  final BlogPost blogPost;
+  ArticlePage({required this.blogPost});
   @override
   _ArticlePageState createState() => _ArticlePageState();
 }
@@ -43,7 +46,7 @@ class _ArticlePageState extends State<ArticlePage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 58.0),
             child: Text(
-              'Bir Eser, Bir Hikaye',
+              widget.blogPost.title,
               style: Theme.of(context).textTheme.headline1,
             ),
           ),
@@ -56,9 +59,8 @@ class _ArticlePageState extends State<ArticlePage> {
               spacing: 10,
               children: [
                 CustomChip(
-                  tag: 'Sanat',
+                  tag: widget.blogPost.blogCategoryId.name,
                 ),
-                CustomChip(tag: 'Tarih')
               ],
             ),
           ),
@@ -77,8 +79,10 @@ class _ArticlePageState extends State<ArticlePage> {
                       BoxDecoration(borderRadius: BorderRadius.circular(10)),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: Image.asset(
-                      'images/emir.jpeg',
+                    child: Image.network(
+                      widget.blogPost.userId.photoSm != ''
+                          ? widget.blogPost.userId.photoSm
+                          : 'https://ae01.alicdn.com/kf/HTB1kBs1IFXXXXXuXXXXq6xXFXXXD/Fine-oil-painting-on-canvas-Vincent-Van-Gogh-The-Starry-Night-moon-landscape-canvas.jpg_Q90.jpg_.webp',
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -87,18 +91,20 @@ class _ArticlePageState extends State<ArticlePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Emir Kutlugün',
+                      widget.blogPost.userId.name +
+                          ' ' +
+                          widget.blogPost.userId.surname,
                       style: Theme.of(context).textTheme.subtitle1,
                     ),
                     SizedBox(
                       height: height * 1 / 180,
                     ),
                     Text(
-                      '29.01.2001',
+                      widget.blogPost.date.format(' M j, H:i'),
                       style: Theme.of(context)
                           .textTheme
-                          .subtitle2!
-                          .copyWith(color: Colors.grey.shade500, fontSize: 12),
+                          .subtitle1!
+                          .copyWith(fontSize: 12 * height / 800),
                     ),
                   ],
                 ),
@@ -126,7 +132,7 @@ class _ArticlePageState extends State<ArticlePage> {
                 child: Column(
                   children: [
                     Hero(
-                      tag: 'image1',
+                      tag: widget.blogPost.id,
                       child: Container(
                         width: double.infinity,
                         height: height * 1 / 3,
@@ -134,8 +140,10 @@ class _ArticlePageState extends State<ArticlePage> {
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(20),
                               topRight: Radius.circular(20)),
-                          child: Image.asset(
-                            'images/resim.png',
+                          child: Image.network(
+                            widget.blogPost.photo != ''
+                                ? widget.blogPost.photo
+                                : 'https://ae01.alicdn.com/kf/HTB1kBs1IFXXXXXuXXXXq6xXFXXXD/Fine-oil-painting-on-canvas-Vincent-Van-Gogh-The-Starry-Night-moon-landscape-canvas.jpg_Q90.jpg_.webp',
                             fit: BoxFit.fill,
                           ),
                         ),
@@ -147,7 +155,7 @@ class _ArticlePageState extends State<ArticlePage> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 38.0),
                       child: Text(
-                        'Sanat, şüphesiz hepimize mutluluk aşılayan nadir şeylerden.',
+                        widget.blogPost.title,
                         style: Theme.of(context)
                             .textTheme
                             .headline1!
@@ -159,11 +167,10 @@ class _ArticlePageState extends State<ArticlePage> {
                     ),
                     Container(
                         child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Html(
-                          data:
-                              "<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Yalan makinesi uzmanı ABD’li elektronikçi Cleve Backster bir gece eğlence olsun diye yalan makinesi elektrotlarını tropikal bir bitkinin yapraklarına yerleştirdi. Yalan makinesinin çeşitli sevinç, korku, şaşkınlık durumlarının yol açtığı elektriksel değişimleri ölçtüğünü göz önünde bulundurarak elektrotları bağladığı bitkiye bu durumları yaşatmaya başladı.</p><p> İlk olarak sulanırsa sevineceğini düşünerek bitkiyi suladı. Backster’ın varsayımlarına göre galvanometrede yukarı yönlü bir hareket gözlenmeliydi, fakat bitki beklediği tepkinin tam tersini vererek zikzaklar çizerek aşağı doğru indi. Şaşkınlıkla galvanometreyi izleyen Backster kibriti alıp bitkiyi yakmayı düşündüğünde bitki çılgınca galvanometrenin ibresini tavan yaptırdı. Bitkinin bu tepkisi Backster’ın şaşkınlığını ikiye katladı çünkü kendisi henüz bu eylemi gerçekleştirmemiş, sadece aklından geçirmişti. Yoksa bitkiler düşüncelerimizi okuyabiliyor muydu?</p><p>&nbsp; Bu olayı bir sürü deney takip etti ve alınan sonuçlar inanılmazdı. Yapılan deneyler bize bitkilerin sadece düşüncelerimizi okumakla kalmayıp çevrelerindeki her şeyi hissettiklerini de gösterdi. Kaynar suya atılan karideslerin ölümlerini, eline iğne battığında duyulan acıyı da hissediyordu bitkiler. Kilometrelerce ötede olunsa bile yaşanan sevinç ve üzüntüleri de hissediyor hatta korkudan baygınlık bile geçiriyorlardı.</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Bir gün şehir dışından gelen bir botanikçi içeri girdiğinde bütün bitkiler sessizleşti. Hiçbirinden tepki gelmiyordu. Sanki hepsi birden sessizliğe bürünmüştü. Botanikçi havaalanından uçağa binip gittikten 45 dakika sonra yeniden tepki vermeye başladılar. Backster bitkilerin botanikçiyi görünce korkudan bayıldıklarını, botanikçinin bitkileri kurutup ölçümler yaptığını öğrendiği zaman anladı. Bunun üzerine Backster “Acaba bitkilerin hafızası var mı?” sorusuna cevap arayan bir deney tasarladı. 6 yardımcısına aynı gece aynı saatlerde yapmak üzere farklı görevler verdi. Görevlerden biri gece yarısı gelip laboratuvardaki bitkilerden birini söküp parçalamaktı. Ertesi gün o gece bitkiyi parçalayan yardımcı içeri girdiğinde ibrelerin hepsi tavan yapmaya başladı. Cleve Backster ise bunu “bitkilerin çılgınlar gibi bağırması” olarak kaydetti. Bu deney bitkilerin sadece hissetmeyip, aynı zamanda hafızalarının da olduğunu kanıtladı.</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Bu çalışmalar makale olarak yayınlanmaya başlayınca dünyanın dört bir yanından bilim insanları konu üzerinde çalışmalara başladılar ve akıl almaz sonuçlara ulaştılar. Koparılmış bir yaprak, kendisine güzel sözler söylenmesi durumunda normal yapraktan aylarca daha uzun süre canlı kalabiliyor. 120 km mesafedeki bir acıyı, sevinci hissedebiliyor. İnsanların düşüncelerini okuyabiliyor, kötülük yapanları hafızasına kaydedebiliyor. Aynı zamanda bu bilgileri diğer bitkilerle de paylaşıyor. Kendisine kötü davranılan bitki üzüntüsünden intihar bile ediyor. Yanındaki bitkinin susuz kalması durumunda kendi suyunu onunla paylaşıyor.</p><p> Bitkiler, bütün canlılarla iletişim kurma konusunda bizim hayallerimizin ötesinde bir hassasiyete sahip. Bütün bu veriler bizi basit bir soruya götürüyor; “Bitkilerin beyni var mıdır?” Sorumuzun cevabı elbette “Hayır.” Bitkilerin beyni ve sinir sistemleri yok. Ama bitkilerde bizim gibi elektriği kullanarak iletişim kurma yeteneğine sahipler.</p><p></p><p><strong>Detaylı bilgi almak adına dilerseniz bu videolara da göz atabilirsiniz:</strong></p><p>Backster Deneyleri: </p><p></p><iframe src="),
-                    ))
+                            padding: const EdgeInsets.all(8.0),
+                            child: Html(
+                              data: widget.blogPost.text.toString(),
+                            )))
                   ],
                 ),
               ),
