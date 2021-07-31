@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:date_time_format/date_time_format.dart';
+import 'package:my_app/Functions/post_functions.dart';
 import 'package:my_app/UI/feed/add_to_feed.dart';
 import 'package:my_app/UI/feed/single_comment.dart';
 
@@ -15,9 +16,8 @@ class SocialFeed extends StatelessWidget {
       color: Color(0xFFF8FAFF),
       child: Scaffold(
         floatingActionButton: GestureDetector(
-          onTap: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => AddToFeed()));
+          onTap: () async {
+            getAllPosts();
           },
           child: Container(
             width: width * 1 / 5,

@@ -1,9 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/components/list_tile/gf_list_tile.dart';
 import 'package:line_icons/line_icon.dart';
 
 import 'package:loading_animations/loading_animations.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
+import 'package:my_app/Functions/search.dart';
 
 enum searchState { FOUND, LOOKING, NO_RESULTS, INIT }
 
@@ -13,6 +15,8 @@ class SearchBar extends StatefulWidget {
   @override
   _SearchBarState createState() => _SearchBarState();
 }
+
+ListBox? result;
 
 class _SearchBarState extends State<SearchBar> {
   bool queryOn = false;
@@ -65,30 +69,143 @@ class _SearchBarState extends State<SearchBar> {
                       ),
                     );
                   } else if (status == searchState.FOUND) {
-                    return ListView.builder(
-                        itemCount: 10,
-                        itemBuilder: (context, index) => Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                color: Colors.accents[index],
-                                child: GFListTile(
-                                    title: Text('Title',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline1!
-                                            .copyWith(color: Colors.white)),
-                                    subTitle: Text(
-                                      'Lorem ipsum dolor sit amet, consectetur adipiscing',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1!
-                                          .copyWith(color: Colors.white),
-                                    ),
-                                    icon: LineIcon.chevronRight(
-                                      color: Colors.white,
-                                    )),
+                    return Column(
+                      children: [
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 28.0, vertical: 8),
+                              child: Text(
+                                result!.committees.length > 0
+                                    ? 'Komiteler'
+                                    : '',
+                                style: Theme.of(context).textTheme.headline1,
                               ),
-                            ));
+                            ),
+                          ],
+                        ),
+                        Builder(builder: (context) {
+                          if (result!.committees.length > 0) {
+                            return Flexible(
+                              child: ListView.builder(
+                                  shrinkWrap: true,
+                                  padding: EdgeInsets.zero,
+                                  itemCount: result!.committees.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0, horizontal: 28),
+                                      child: Container(
+                                        color: Colors.white,
+                                        child: GFListTile(
+                                            avatar: CachedNetworkImage(
+                                              imageUrl: result!
+                                                  .committees[index].photo,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  7,
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  7,
+                                              progressIndicatorBuilder:
+                                                  (context, url,
+                                                          downloadProgress) =>
+                                                      CircularProgressIndicator(
+                                                          value:
+                                                              downloadProgress
+                                                                  .progress),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      Icon(Icons.error),
+                                            ),
+                                            title: Text(
+                                                result!.committees[index].name,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline1!
+                                                    .copyWith(
+                                                        color: Colors.black)),
+                                            icon: LineIcon.chevronRight(
+                                              color: Colors.black,
+                                            )),
+                                      ),
+                                    );
+                                  }),
+                            );
+                          } else {
+                            return SizedBox();
+                          }
+                        }),
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 28.0, vertical: 8),
+                              child: Text(
+                                result!.events.length > 0 ? 'Etkinlikler' : '',
+                                style: Theme.of(context).textTheme.headline1,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Builder(builder: (context) {
+                          if (result!.events.length > 0) {
+                            return Flexible(
+                              child: ListView.builder(
+                                  padding: EdgeInsets.zero,
+                                  itemCount: result!.events.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0, horizontal: 28),
+                                      child: Container(
+                                        color: Colors.white,
+                                        child: GFListTile(
+                                            avatar: CachedNetworkImage(
+                                              imageUrl:
+                                                  result!.events[index].photo,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  7,
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  7,
+                                              progressIndicatorBuilder:
+                                                  (context, url,
+                                                          downloadProgress) =>
+                                                      CircularProgressIndicator(
+                                                          value:
+                                                              downloadProgress
+                                                                  .progress),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      Icon(Icons.error),
+                                            ),
+                                            title: Text(
+                                                result!.events[index].name,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline1!
+                                                    .copyWith(
+                                                        color: Colors.black)),
+                                            icon: LineIcon.chevronRight(
+                                              color: Colors.black,
+                                            )),
+                                      ),
+                                    );
+                                  }),
+                            );
+                          } else {
+                            return SizedBox();
+                          }
+                        }),
+                      ],
+                    );
                   } else {
                     return SizedBox();
                   }
@@ -117,14 +234,14 @@ class _SearchBarState extends State<SearchBar> {
       onQueryChanged: (query) {
         setState(() {
           status = searchState.LOOKING;
-
-          Future.delayed(Duration(milliseconds: 1000))
-              .then((value) => setState(() {
-                    status = searchState.FOUND;
-                    if (query == '') {
-                      status = searchState.INIT;
-                    }
-                  }));
+          if (query == '') {
+            status = searchState.INIT;
+          } else {
+            searchAll(query).then((value) => setState(() {
+                  result = value;
+                  status = searchState.FOUND;
+                }));
+          }
         });
       },
       builder: (context, transition) {

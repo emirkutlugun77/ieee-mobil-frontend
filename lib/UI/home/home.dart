@@ -19,7 +19,7 @@ class MyHomePage extends StatefulWidget {
   MyHomePage(
       {required this.user, required this.committees, required this.blogPosts});
   User user;
-  List<ComiteeCard> committees;
+  List<Commitee> committees;
   List<BlogPost> blogPosts;
 
   @override

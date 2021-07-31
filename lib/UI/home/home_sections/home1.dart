@@ -1,23 +1,27 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_lorem/flutter_lorem.dart';
+import 'package:flutter_html/flutter_html.dart';
+
 import 'package:getwidget/components/badge/gf_badge.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:my_app/Functions/committee.dart';
 import 'package:my_app/UI/article/article_page.dart';
-import 'package:my_app/UI/auth/login.dart';
 import 'package:my_app/UI/commitee_page/commitee.dart';
+
 import 'package:my_app/UI/home/home_widgets/article_container.dart';
-import 'package:my_app/UI/home/home_widgets/carousel_card.dart';
+
 import 'package:my_app/UI/models/blogposts.dart';
 import 'package:my_app/UI/models/commitee.dart';
 import 'package:my_app/UI/models/user.dart';
 
+// ignore: must_be_immutable
 class Home1 extends StatefulWidget {
   Home1(
       {required this.user, required this.committees, required this.blogPosts});
   User user;
-  List<ComiteeCard> committees;
+  List<Commitee> committees;
   List<BlogPost> blogPosts;
   @override
   _Home1State createState() => _Home1State();
@@ -81,35 +85,68 @@ class _Home1State extends State<Home1> {
               ],
             ),
           ),
-          SizedBox(
-            height: height * 1 / 30,
-          ),
-          Container(
-            height: height * 2.1 / 5,
-            width: double.infinity,
-            child: CarouselSlider(
-                carouselController: _carouselController,
-                items: widget.committees
-                    .map((e) => GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ComiteePage(
-                                          commitee: widget
-                                              .committees[current].commitee,
-                                        )));
-                          },
-                          child: e,
-                        ))
-                    .toList(),
-                options: CarouselOptions(
-                    onPageChanged: (prev, next) => current = prev,
-                    enlargeStrategy: CenterPageEnlargeStrategy.scale,
-                    enlargeCenterPage: true,
-                    initialPage: 0,
-                    enableInfiniteScroll: false,
-                    aspectRatio: 0.9)),
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GridView.builder(
+                  padding: EdgeInsets.zero,
+                  itemCount: widget.committees.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: width * 1 / 50,
+                      childAspectRatio: 2.8),
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () async {
+                        var userList = await getCoordinationTeam(
+                            widget.committees[index].id);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ComiteePage(
+                                      commitee: widget.committees[index],
+                                      coordination: userList,
+                                    )));
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          height: height * 1 / 20,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              color: Colors.white),
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Hero(
+                                  tag: widget.committees[index].photo,
+                                  child: CachedNetworkImage(
+                                    imageUrl: widget.committees[index].photo,
+                                    placeholder: (context, url) =>
+                                        CircularProgressIndicator(),
+                                    errorWidget: (context, url, error) =>
+                                        Icon(Icons.error),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  width: width * 1 / 4.3,
+                                  child: Text(widget.committees[index].name,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+            ),
           ),
           SizedBox(
             height: height * 1 / 60,
@@ -151,7 +188,7 @@ class _Home1State extends State<Home1> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => ArticlePage(
-                                          blogPost: blogPosts[index],
+                                          blogPost: widget.blogPosts[index],
                                         )));
                           },
                           child: Padding(
@@ -160,7 +197,7 @@ class _Home1State extends State<Home1> {
                             child: ArticleContainer(
                               width: width,
                               height: height,
-                              blogPost: blogPosts[index],
+                              blogPost: widget.blogPosts[index],
                             ),
                           )),
                     ),

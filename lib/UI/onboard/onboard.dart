@@ -62,27 +62,28 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
 
       pages: [
         PageViewModel(
-          title: "Learn as you go",
+          title: "Social Artık Mobilde!",
           body:
-              "Download the Stockpile app and master the market with our mini-lesson.",
+              "Socialdaki birçok özellik artık mobil uygulamamızda, isterseniz komiteler hakkında bilgi alın, isterseniz makale okuyun!",
           image: Image.asset('images/ob1.png'),
           decoration: pageDecoration.copyWith(
-              imagePadding: EdgeInsets.only(bottom: 19)),
+              imagePadding: EdgeInsets.only(bottom: 32)),
         ),
         PageViewModel(
-          title: "Kids and teens",
+          title: "QR Kodlar",
           body:
-              "Kids and teens can track their stocks 24/7 and place trades that you approve.",
-          image: Image.asset('images/ob2.png'),
-          decoration: pageDecoration,
-        ),
-        PageViewModel(
-          title: "Full Screen Page",
-          body:
-              "Pages can be full screen as well.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc id euismod lectus, non tempor felis. Nam rutrum rhoncus est ac venenatis.",
+              "Etkinlik oturumlarına katılırken QR kodunuzu uygulamadan okutabilirsiniz!  ",
           image: Image.asset('images/ob3.png'),
           decoration: pageDecoration.copyWith(
-              imagePadding: EdgeInsets.only(bottom: 22)),
+              imagePadding: EdgeInsets.only(bottom: 40)),
+        ),
+        PageViewModel(
+          title: "Sertifikalar",
+          body:
+              "Artık sertifikalarınız cebinizde! \n Social mobil ile dilediğiniz zamann sertifikalarınıza bakabilirsiniz",
+          image: Image.asset('images/ob2.png'),
+          decoration: pageDecoration.copyWith(
+              imagePadding: EdgeInsets.only(bottom: 18)),
         ),
       ],
       onDone: () => _onIntroEnd(context),
@@ -91,9 +92,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       skipFlex: 0,
       nextFlex: 0,
       //rtl: true, // Display as right-to-left
-      skip: const Text('Skip'),
+      skip: const Text('Geç'),
       next: const Icon(Icons.arrow_forward),
-      done: const Text('Done', style: TextStyle(fontWeight: FontWeight.w600)),
+      done: const Text('Giriş', style: TextStyle(fontWeight: FontWeight.w600)),
       curve: Curves.fastLinearToSlowEaseIn,
       controlsMargin: const EdgeInsets.all(16),
       controlsPadding: kIsWeb

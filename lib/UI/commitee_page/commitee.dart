@@ -5,10 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:my_app/UI/event/single_event.dart';
 import 'package:my_app/UI/models/commitee.dart';
+import 'package:my_app/UI/models/user.dart';
 
 class ComiteePage extends StatefulWidget {
   final Commitee commitee;
-  const ComiteePage({Key? key, required this.commitee}) : super(key: key);
+  final List<User> coordination;
+  const ComiteePage(
+      {Key? key, required this.commitee, required this.coordination})
+      : super(key: key);
 
   @override
   _ComiteePageState createState() => _ComiteePageState();
@@ -27,21 +31,26 @@ class _ComiteePageState extends State<ComiteePage> {
               children: [
                 Expanded(
                   flex: 3,
-                  child: Stack(
-                    children: [
-                      Hero(
-                        tag: widget.commitee.photo,
-                        child: Image.network(widget.commitee.photo),
-                      ),
-                      Positioned(
-                          top: 20,
-                          left: 20,
-                          child: GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: LineIcon.arrowLeft())),
-                    ],
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Stack(
+                      children: [
+                        Hero(
+                          tag: widget.commitee.photo,
+                          child: Image.network(
+                            widget.commitee.photo,
+                          ),
+                        ),
+                        Positioned(
+                            top: 20,
+                            left: 20,
+                            child: GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: LineIcon.arrowLeft())),
+                      ],
+                    ),
                   ),
                 ),
                 Expanded(
@@ -52,35 +61,49 @@ class _ComiteePageState extends State<ComiteePage> {
                     children: [
                       Center(
                         child: Text(
-                          'CS',
+                          widget.commitee.name,
                           style: Theme.of(context).textTheme.headline1,
                         ),
                       ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 1 / 40,
                       ),
-                      Text('Koordinasyon Ekibi',
-                          style: Theme.of(context).textTheme.headline2),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 8.0,
-                        ),
-                        child: Divider(
-                          height: 5,
-                          color: Colors.black,
-                        ),
-                      ),
-                      Text('Komite Başkanı:',
-                          style: Theme.of(context).textTheme.bodyText2),
-                      Text('Emir Kutlugün',
-                          style: Theme.of(context).textTheme.bodyText1),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 1 / 80,
-                      ),
-                      Text('Komite Başkan Yardımcısı:',
-                          style: Theme.of(context).textTheme.bodyText2),
-                      Text('Cemre Kılıç',
-                          style: Theme.of(context).textTheme.bodyText1)
+                      Container(
+                        width: MediaQuery.of(context).size.width * 1 / 2,
+                        height: MediaQuery.of(context).size.height * 1 / 5.5,
+                        child: ListView.builder(
+                            padding: EdgeInsets.zero,
+                            itemCount: widget.coordination.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: Container(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        widget.coordination[index].title,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .copyWith(
+                                                fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                          widget.coordination[index].name +
+                                              ' ' +
+                                              widget
+                                                  .coordination[index].surname,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1)
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }),
+                      )
                     ],
                   ),
                 )
@@ -102,7 +125,9 @@ class _ComiteePageState extends State<ComiteePage> {
               padding: const EdgeInsets.symmetric(horizontal: 28.0),
               child: Wrap(children: [
                 Text(
-                    'IEEE YTU Computer Society’nin temel amacı, bilgisayar ile da bulunmaktadır.IEEE YTU Computer Society’nin temel amacı, bilgisayar ile da bulunmaktadır.IEEE YTU Computer Society’nin temel amacı, bilgisayar ile da bulunmaktadır.IEEE YTU Computer Society’nin temel amacı, bilgisayar ile da bulunmaktadır...',
+                    widget.commitee.description.length >= 300
+                        ? widget.commitee.description.substring(0, 300) + '...'
+                        : widget.commitee.description,
                     style: Theme.of(context).textTheme.bodyText1),
                 GestureDetector(
                   onTap: () {
@@ -112,19 +137,20 @@ class _ComiteePageState extends State<ComiteePage> {
                           if (Platform.isIOS) {
                             return CupertinoAlertDialog(
                               title: Text('Hakkımızda'),
-                              content: Text(
-                                  'IEEE YTU Computer Society’nin temel amacı, bilgisayar ile ilgilenen üyelerin projeler üzerinden bilgisayar ve bilgi işleme teknolojisine dayalı yeteneklerini geliştirmesine imkân sağlayacak ortamı sağlamaktır. Bunların yanısıra kulübün ihtiyacı olan teknik desteği sağlamaktadır. Farklı programlama dillerinde uygulama ve algoritma geliştirmeyi amaçlayan komite, projelerin geliştirilmesine katkıda bulunmanın yanısıra üyelerin ihtiyaç duyduğu mentörlük, eğitim ve tartışma ortamını sağlamak amacıyla birçok faaliyette bulunmaktadır. Yıl içerisinde düzenlenen çeşitli workshop’lar, etkinlikler ve eğitimler ile birlikte üyelerin yazılım ve bilişim konusunda kendilerini geliştirmelerine katkıda bulunmaktadır.'),
+                              content: Text(widget.commitee.description),
                             );
                           } else {
                             return AlertDialog(
                               title: Text('Hakkımızda'),
-                              content: Text(
-                                  'IEEE YTU Computer Society’nin temel amacı, bilgisayar ile ilgilenen üyelerin projeler üzerinden bilgisayar ve bilgi işleme teknolojisine dayalı yeteneklerini geliştirmesine imkân sağlayacak ortamı sağlamaktır. Bunların yanısıra kulübün ihtiyacı olan teknik desteği sağlamaktadır. Farklı programlama dillerinde uygulama ve algoritma geliştirmeyi amaçlayan komite, projelerin geliştirilmesine katkıda bulunmanın yanısıra üyelerin ihtiyaç duyduğu mentörlük, eğitim ve tartışma ortamını sağlamak amacıyla birçok faaliyette bulunmaktadır. Yıl içerisinde düzenlenen çeşitli workshop’lar, etkinlikler ve eğitimler ile birlikte üyelerin yazılım ve bilişim konusunda kendilerini geliştirmelerine katkıda bulunmaktadır.'),
+                              content: Text(widget.commitee.description),
                             );
                           }
                         });
                   },
-                  child: Text('Tamamını Oku',
+                  child: Text(
+                      widget.commitee.description.length >= 300
+                          ? 'Tamamını Oku'
+                          : '',
                       style: Theme.of(context)
                           .textTheme
                           .bodyText1!

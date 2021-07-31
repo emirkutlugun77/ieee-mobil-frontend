@@ -1,6 +1,7 @@
 import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icon.dart';
+import 'package:my_app/UI/article/article_widgets/chip.dart';
 import 'package:my_app/UI/models/blogposts.dart';
 
 class ArticleContainer extends StatelessWidget {
@@ -67,7 +68,11 @@ class ArticleContainer extends StatelessWidget {
                       .copyWith(fontSize: 14 * height / 700),
                 ),
                 SizedBox(
-                  height: height * 1 / 50,
+                  height: height * 1 / 100,
+                ),
+                CustomChip(tag: blogPost.blogCategoryId.name),
+                SizedBox(
+                  height: height * 1 / 100,
                 ),
                 Flexible(
                   child: Container(

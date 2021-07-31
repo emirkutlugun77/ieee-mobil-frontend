@@ -6,10 +6,12 @@ class SlidingWidget extends StatelessWidget {
       {Key? key,
       required PanelController panelController,
       required this.height,
-      required this.errorMessage})
+      required this.message,
+      required this.backgroundColor})
       : _panelController = panelController,
         super(key: key);
-  final String errorMessage;
+  final Color backgroundColor;
+  final String message;
   final PanelController _panelController;
   final double height;
 
@@ -28,11 +30,11 @@ class SlidingWidget extends StatelessWidget {
           height: height * 1 / 8,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
-            color: Theme.of(context).errorColor,
+            color: backgroundColor,
           ),
           child: Center(
             child: Text(
-              errorMessage,
+              message,
               style: Theme.of(context)
                   .textTheme
                   .bodyText1!

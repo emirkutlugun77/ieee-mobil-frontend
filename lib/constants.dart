@@ -8,6 +8,7 @@ ThemeData whiteTheme = ThemeData(
     cardColor: Color(0xFF0D253C),
     bottomAppBarColor: Color(0xFF7B8BB2),
     accentColor: Color(0xFF8FE6FF),
+    splashColor: Color(0xFF127C12),
     textTheme: TextTheme(
       bodyText1: GoogleFonts.inter(
           fontSize: 14, color: Color(0xFF0D253C), fontWeight: FontWeight.w400),

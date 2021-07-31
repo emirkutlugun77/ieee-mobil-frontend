@@ -57,10 +57,10 @@ class _SignInPageState extends State<SignInPage> {
                 ),
               ),
               SlidingWidget(
-                errorMessage: userVariable,
-                height: height,
-                panelController: _panelController,
-              )
+                  message: userVariable,
+                  height: height,
+                  panelController: _panelController,
+                  backgroundColor: Theme.of(context).errorColor)
             ],
           );
         });
