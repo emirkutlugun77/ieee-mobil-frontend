@@ -2,8 +2,6 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:my_app/UI/models/blogposts.dart';
-import 'package:my_app/UI/models/user.dart';
-import 'package:translator/translator.dart';
 
 const baseUri = 'https://ancient-falls-28306.herokuapp.com/';
 

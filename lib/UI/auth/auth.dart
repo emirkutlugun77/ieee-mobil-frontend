@@ -22,7 +22,6 @@ class _AuthPageState extends State<AuthPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     future =
         getAllCommittees(commiteeList).then((value) => getMost5(blogPosts));
@@ -33,7 +32,7 @@ class _AuthPageState extends State<AuthPage> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
+
     return FutureBuilder(
         future: future,
         builder: (context, snapshot) {

@@ -1,15 +1,18 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_lorem/flutter_lorem.dart';
+import 'package:flutter_html/flutter_html.dart';
+
 import 'package:getwidget/getwidget.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:date_time_format/date_time_format.dart';
+import 'package:my_app/UI/models/event.dart';
 
 class SingleEvent extends StatefulWidget {
-  final int index;
+  final Event event;
 
   const SingleEvent({
     Key? key,
-    required this.index,
+    required this.event,
   }) : super(key: key);
 
   @override
@@ -47,20 +50,13 @@ class _SingleEventState extends State<SingleEvent> {
                           top: 28.0 * height / 1000,
                           bottom: 15.0 * height / 1000),
                       child: Text(
-                        'Bioform VIII',
+                        widget.event.name,
                         style: Theme.of(context).textTheme.headline1!.copyWith(
                             color: Colors.white,
                             backgroundColor: Theme.of(context).primaryColor),
+                        textAlign: TextAlign.center,
                       ),
                     ),
-                    Text(
-                      'Bu Etkinlikte Yaşam Var',
-                      style: Theme.of(context).textTheme.headline2,
-                    ),
-                    SizedBox(
-                      height: height * 1 / 100,
-                    ),
-                    CustomDiv(),
                     SizedBox(
                       height: height * 1 / 100,
                     ),
@@ -68,11 +64,16 @@ class _SingleEventState extends State<SingleEvent> {
                         height: height * 1 / 4,
                         width: double.infinity,
                         child: SingleChildScrollView(
-                          child: Text(
-                              lorem(
-                                paragraphs: 2,
-                              ),
-                              style: Theme.of(context).textTheme.bodyText1),
+                          child: Builder(builder: (context) {
+                            if (widget.event.description.contains('<')) {
+                              return Html(
+                                data: widget.event.description,
+                              );
+                            } else {
+                              return Text(widget.event.description,
+                                  style: Theme.of(context).textTheme.bodyText1);
+                            }
+                          }),
                         )),
                     SizedBox(
                       height: height * 1 / 100,
@@ -94,7 +95,7 @@ class _SingleEventState extends State<SingleEvent> {
                               itemCount: 5,
                               itemBuilder: (context, index) => GFListTile(
                                   title: Text(
-                                    'Oturum ${index}',
+                                    'Oturum $index',
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline1!
@@ -138,17 +139,17 @@ class _SingleEventState extends State<SingleEvent> {
                             child: ListView.builder(
                               padding: EdgeInsets.zero,
                               scrollDirection: Axis.vertical,
-                              itemCount: 5,
+                              itemCount: widget.event.commentCount,
                               itemBuilder: (context, index) => GFListTile(
                                   description: Text(
-                                    DateTime.now()
+                                    widget.event.eventDate
                                         .format('M j, H:i')
                                         .toString(),
                                     style:
                                         Theme.of(context).textTheme.bodyText1,
                                   ),
                                   title: Text(
-                                    'Yorum ${index}',
+                                    'Yorum $index',
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline1!
@@ -227,17 +228,20 @@ class _SingleEventState extends State<SingleEvent> {
           });
         },
         child: Hero(
-          tag: 'event${widget.index + 1}',
+          tag: widget.event.photo,
           child: Stack(
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(30),
                     bottomRight: Radius.circular(30)),
-                child: Image.asset(
-                  'images/ev${widget.index + 1}.jpg',
+                child: CachedNetworkImage(
                   fit: BoxFit.fitWidth,
                   width: width,
+                  imageUrl: widget.event.photo,
+                  placeholder: (context, url) =>
+                      Center(child: CircularProgressIndicator()),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
               ),
             ],

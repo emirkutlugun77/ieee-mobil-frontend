@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/UI/auth/sign_in.dart';
+
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'package:my_app/Functions/auth_functions.dart';
 
 import 'package:my_app/UI/auth/auth_widgets/slidingUpPanel.dart';
 import 'package:my_app/UI/home/home.dart';
-import 'package:my_app/UI/home/home_widgets/carousel_card.dart';
+
 import 'package:my_app/UI/models/blogposts.dart';
 import 'package:my_app/UI/models/commitee.dart';
 import 'package:my_app/UI/models/user.dart';
 
+// ignore: must_be_immutable
 class LoginPage extends StatefulWidget {
   List<Commitee> commiteeList = [];
   List<BlogPost> blogPosts = [];

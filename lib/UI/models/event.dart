@@ -53,17 +53,21 @@ class Event {
         photo: json["photo"],
         likedBy: List<String>.from(json["likedBy"].map((x) => x.toString())),
         isClosed: json["isClosed"],
-        committeeId: json["committeeId"],
-        website: json["website"],
+        committeeId: json["committeeId"]['_id'],
+        website: json["website"] != null ? json["website"] : '',
         name: json["name"],
         description: json["description"],
-        sessions: List<Session>.from(
-            json["sessions"].map((x) => Session.fromJson(x))),
+        sessions: List<Session>.from(json["sessions"].map((x) => Session(
+            attendanceButton: x['attendanceButton'],
+            time: DateTime.parse(x['time']),
+            link: x['link'] != null ? x['link'] : '',
+            title: x['title'],
+            id: x['_id']))),
         date: DateTime.parse(json["date"]),
         eventDate: DateTime.parse(json["eventDate"]),
-        adder: json["adder"],
+        adder: json["adder"]['_id'],
         slug: json["slug"],
-        appCount: json["appCount"],
+        appCount: json["applicationCount"],
         v: json["__v"],
       );
 
@@ -109,7 +113,7 @@ class Session {
         time: DateTime.parse(json["time"]),
         title: json["title"],
         attendanceButton: json["attendanceButton"],
-        link: json["link"],
+        link: json["link"] != null ? json['link'] : '',
       );
 
   Map<String, dynamic> toJson() => {

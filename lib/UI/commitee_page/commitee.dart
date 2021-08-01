@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icon.dart';
-import 'package:my_app/UI/event/single_event.dart';
+
 import 'package:my_app/UI/models/commitee.dart';
 import 'package:my_app/UI/models/user.dart';
 
@@ -181,11 +181,11 @@ class _ComiteePageState extends State<ComiteePage> {
                       padding: const EdgeInsets.all(15.0),
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.push(
+                          /*Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      SingleEvent(index: index)));
+                                      SingleEvent(event: )));*/
                         },
                         child: Hero(
                           tag: 'event${index + 1}',

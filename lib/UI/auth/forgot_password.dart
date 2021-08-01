@@ -6,6 +6,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 enum resetState { INITIAL, CHECKING_TOKEN, CHECKING_PASSWORD }
 var current = resetState.INITIAL;
 
+// ignore: must_be_immutable
 class ForgotPassword extends StatefulWidget {
   ForgotPassword({required this.pageController});
   PageController pageController;

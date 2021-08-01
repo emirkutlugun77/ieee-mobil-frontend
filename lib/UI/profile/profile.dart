@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_lorem/flutter_lorem.dart';
+
 import 'package:line_icons/line_icon.dart';
 import 'package:my_app/UI/home/QR/qr.dart';
 
-import 'package:my_app/UI/home/home_widgets/article_container.dart';
-import 'package:my_app/UI/profile/profile_widgets/dropdown_widget.dart';
 import 'package:my_app/UI/profile/profile_widgets/profile_container.dart';
 import 'package:my_app/UI/profile/profile_widgets/profile_section.dart';
-import 'package:menu_button/menu_button.dart';
 
 class ProfilePage extends StatefulWidget {
   @override

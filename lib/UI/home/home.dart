@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:line_icons/line_icon.dart';
+
 import 'package:my_app/UI/event/event_page.dart';
 import 'package:my_app/UI/feed/social_feed.dart';
-import 'package:my_app/UI/home/QR/qr.dart';
 
 import 'package:my_app/UI/home/home_sections/home1.dart';
 
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:my_app/UI/home/home_widgets/carousel_card.dart';
+
 import 'package:my_app/UI/models/blogposts.dart';
 import 'package:my_app/UI/models/commitee.dart';
+import 'package:my_app/UI/models/event.dart';
 import 'package:my_app/UI/models/user.dart';
 import 'package:my_app/UI/profile/profile.dart';
 import 'package:my_app/UI/search/search_page.dart';
 
+// ignore: must_be_immutable
 class MyHomePage extends StatefulWidget {
   MyHomePage(
       {required this.user, required this.committees, required this.blogPosts});
@@ -27,8 +28,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  List<Event> events = [];
   int _currentIndex = 0;
   PageController _pageController = PageController();
+
   void dispose() {
     _pageController.dispose();
     super.dispose();

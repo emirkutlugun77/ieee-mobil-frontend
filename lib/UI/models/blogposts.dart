@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
-
 BlogPost blogPostFromJson(String str) => BlogPost.fromJson(json.decode(str));
 
 String blogPostToJson(BlogPost data) => json.encode(data.toJson());

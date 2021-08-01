@@ -1,11 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 
 import 'package:getwidget/components/badge/gf_badge.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:line_icons/line_icon.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+
 import 'package:my_app/Functions/committee.dart';
 import 'package:my_app/UI/article/article_page.dart';
 import 'package:my_app/UI/commitee_page/commitee.dart';
@@ -29,7 +28,6 @@ class Home1 extends StatefulWidget {
 
 class _Home1State extends State<Home1> {
   int current = 0;
-  CarouselController _carouselController = CarouselController();
 
   @override
   Widget build(BuildContext context) {

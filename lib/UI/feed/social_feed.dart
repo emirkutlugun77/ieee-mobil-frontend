@@ -3,11 +3,17 @@ import 'package:getwidget/getwidget.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:date_time_format/date_time_format.dart';
 import 'package:my_app/Functions/post_functions.dart';
-import 'package:my_app/UI/feed/add_to_feed.dart';
+
 import 'package:my_app/UI/feed/single_comment.dart';
 
-class SocialFeed extends StatelessWidget {
+class SocialFeed extends StatefulWidget {
+  @override
+  _SocialFeedState createState() => _SocialFeedState();
+}
+
+class _SocialFeedState extends State<SocialFeed> {
   DateTime date = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
