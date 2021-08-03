@@ -18,10 +18,14 @@ import 'package:my_app/UI/search/search_page.dart';
 // ignore: must_be_immutable
 class MyHomePage extends StatefulWidget {
   MyHomePage(
-      {required this.user, required this.committees, required this.blogPosts});
+      {required this.user,
+      required this.committees,
+      required this.blogPosts,
+      required this.events});
   User user;
   List<Commitee> committees;
   List<BlogPost> blogPosts;
+  List<Event> events;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -53,7 +57,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   blogPosts: widget.blogPosts),
               SocialFeed(),
               SearchBar(),
-              Events(),
+              Events(
+                events: widget.events,
+              ),
               ProfilePage()
             ],
           ),

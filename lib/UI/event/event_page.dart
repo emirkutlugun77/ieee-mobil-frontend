@@ -8,6 +8,8 @@ import 'package:my_app/UI/models/event.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class Events extends StatefulWidget {
+  List<Event> events;
+  Events({required this.events});
   @override
   _EventsState createState() => _EventsState();
 }
@@ -15,13 +17,10 @@ class Events extends StatefulWidget {
 bool loading = true;
 
 class _EventsState extends State<Events> {
-  List<Event> events = [];
-  late Future future;
   int page = 0;
   @override
   void initState() {
     super.initState();
-    future = getAllEvents(page).then((value) => events = value);
   }
 
   RefreshController _refreshController =
@@ -29,86 +28,75 @@ class _EventsState extends State<Events> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: future,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else {
-            return Container(
-              color: Color(0xFFE6EAF1).withOpacity(0.1),
-              child: Column(
-                children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 58.0, left: 58, right: 58),
-                    child: Row(
-                      children: [
-                        Text(
-                          'Etkinlikler',
-                          style: Theme.of(context).textTheme.headline1,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SmartRefresher(
-                        enablePullUp: true,
-                        enablePullDown: false,
-                        onLoading: _onLoading,
-                        controller: _refreshController,
-                        child: StaggeredGridView.countBuilder(
-                          padding: EdgeInsets.zero,
-                          crossAxisCount: 4,
-                          itemCount: events.length,
-                          itemBuilder: (BuildContext context, int index) =>
-                              GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          SingleEvent(event: events[index])));
-                            },
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(15),
-                              child: Hero(
-                                tag: events[index].photo,
-                                child: CachedNetworkImage(
-                                  fit: BoxFit.fill,
-                                  imageUrl: events[index].photo,
-                                  placeholder: (context, url) => Center(
-                                      child: CircularProgressIndicator()),
-                                  errorWidget: (context, url, error) =>
-                                      Icon(Icons.error),
-                                ),
-                              ),
-                            ),
-                          ),
-                          staggeredTileBuilder: (int index) =>
-                              new StaggeredTile.count(2, index.isEven ? 3 : 2),
-                          mainAxisSpacing: 10.0,
-                          crossAxisSpacing: 10.0,
+    return Container(
+      color: Color(0xFFE6EAF1).withOpacity(0.1),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 58.0, left: 58, right: 58),
+            child: Row(
+              children: [
+                Text(
+                  'Etkinlikler',
+                  style: Theme.of(context).textTheme.headline1,
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SmartRefresher(
+                enablePullUp: true,
+                enablePullDown: false,
+                onLoading: _onLoading,
+                controller: _refreshController,
+                child: StaggeredGridView.countBuilder(
+                  padding: EdgeInsets.zero,
+                  crossAxisCount: 4,
+                  itemCount: widget.events.length,
+                  itemBuilder: (BuildContext context, int index) =>
+                      GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  SingleEvent(event: widget.events[index])));
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: Hero(
+                        tag: widget.events[index].photo,
+                        child: CachedNetworkImage(
+                          fit: BoxFit.fill,
+                          imageUrl: widget.events[index].photo,
+                          placeholder: (context, url) =>
+                              Center(child: CircularProgressIndicator()),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
                         ),
                       ),
                     ),
-                  )
-                ],
+                  ),
+                  staggeredTileBuilder: (int index) =>
+                      new StaggeredTile.count(2, index.isEven ? 3 : 2),
+                  mainAxisSpacing: 10.0,
+                  crossAxisSpacing: 10.0,
+                ),
               ),
-            );
-          }
-        });
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   void _onLoading() async {
     page++;
     // monitor network fetch
     await getAllEvents(page)
-        .then((value) => value.forEach((e) => events.add(e)));
+        .then((value) => value.forEach((e) => widget.events.add(e)));
     // if failed,use loadFailed(),if no data return,use LoadNodata()
 
     if (mounted) setState(() {});

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:line_icons/line_icon.dart';
 import 'package:my_app/UI/home/QR/qr.dart';
+import 'package:my_app/UI/onboard/onboard.dart';
 
 import 'package:my_app/UI/profile/profile_widgets/profile_container.dart';
 import 'package:my_app/UI/profile/profile_widgets/profile_section.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -47,12 +49,22 @@ class _ProfilePageState extends State<ProfilePage> {
                         return PopupMenuItem<String>(
                           value: choice,
                           child: GestureDetector(
-                              onTap: () {
+                              onTap: () async {
                                 if (choice == 'QR Kodum') {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => QrCode()));
+                                } else if (choice == 'Çıkış Yap') {
+                                  SharedPreferences prefs =
+                                      await SharedPreferences.getInstance();
+                                  prefs.setBool('logged', false);
+                                  prefs.setString('id', '');
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              OnBoardingPage()));
                                 }
                               },
                               child: Text(choice)),
