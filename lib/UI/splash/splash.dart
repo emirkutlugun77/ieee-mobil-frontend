@@ -1,20 +1,19 @@
 import 'dart:async';
 
-import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:loading_animations/loading_animations.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+
 import 'package:my_app/Functions/auth_functions.dart';
 import 'package:my_app/Functions/blog.dart';
 import 'package:my_app/Functions/committee.dart';
 import 'package:my_app/Functions/events.dart';
+import 'package:my_app/Functions/post_functions.dart';
 import 'package:my_app/UI/home/home.dart';
 import 'package:my_app/UI/models/blogposts.dart';
 import 'package:my_app/UI/models/commitee.dart';
 import 'package:my_app/UI/models/event.dart';
+import 'package:my_app/UI/models/post.dart';
 import 'package:my_app/UI/models/user.dart';
-import 'package:my_app/UI/onboard/onboard.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -32,11 +31,12 @@ List<Commitee> commiteeList = [];
 List<BlogPost> blogPosts = [];
 List<Event> events = [];
 bool logging = true;
+List<Post> posts = [];
+String token = '';
 
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     new Timer.periodic(Duration(milliseconds: 500), (timer) {
       if (opacityValue == 1) {
@@ -52,9 +52,11 @@ class _SplashScreenState extends State<SplashScreen> {
     getAllCommittees(commiteeList)
         .then((value) => getMost5(blogPosts))
         .then((value) => getAllEvents(0).then((value) => events = value))
+        .then((value) => getAllPosts(posts))
         .then((value) async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? id = prefs.getString('id');
+      token = prefs.getString('token')!;
       user = await getUser(id!);
     }).then((value) {
       Navigator.push(
@@ -65,6 +67,8 @@ class _SplashScreenState extends State<SplashScreen> {
                     user: user!,
                     committees: commiteeList,
                     blogPosts: blogPosts,
+                    posts: posts,
+                    token: token,
                   )));
       logging = false;
     });

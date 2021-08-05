@@ -11,6 +11,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:my_app/UI/models/blogposts.dart';
 import 'package:my_app/UI/models/commitee.dart';
 import 'package:my_app/UI/models/event.dart';
+import 'package:my_app/UI/models/post.dart';
 import 'package:my_app/UI/models/user.dart';
 import 'package:my_app/UI/profile/profile.dart';
 import 'package:my_app/UI/search/search_page.dart';
@@ -21,11 +22,15 @@ class MyHomePage extends StatefulWidget {
       {required this.user,
       required this.committees,
       required this.blogPosts,
-      required this.events});
+      required this.events,
+      required this.posts,
+      required this.token});
   User user;
+  String token;
   List<Commitee> committees;
   List<BlogPost> blogPosts;
   List<Event> events;
+  List<Post> posts;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -55,7 +60,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   user: widget.user,
                   committees: widget.committees,
                   blogPosts: widget.blogPosts),
-              SocialFeed(),
+              SocialFeed(
+                posts: widget.posts.reversed.toList(),
+                token: widget.token,
+              ),
               SearchBar(),
               Events(
                 events: widget.events,
@@ -94,23 +102,18 @@ class _MyHomePageState extends State<MyHomePage> {
             tabs: [
               GButton(
                 icon: LineIcons.home,
-                text: 'Home',
               ),
               GButton(
                 icon: LineIcons.hashtag,
-                text: 'Pano',
               ),
               GButton(
                 icon: LineIcons.search,
-                text: 'Search',
               ),
               GButton(
                 icon: LineIcons.layerGroup,
-                text: 'Search',
               ),
               GButton(
                 icon: LineIcons.user,
-                text: 'Profile',
               ),
             ]));
   }

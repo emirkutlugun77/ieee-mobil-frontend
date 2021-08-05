@@ -8,7 +8,7 @@ import 'package:my_app/UI/models/event.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class Events extends StatefulWidget {
-  List<Event> events;
+  final List<Event> events;
   Events({required this.events});
   @override
   _EventsState createState() => _EventsState();

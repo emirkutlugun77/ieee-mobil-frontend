@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:my_app/Functions/blog.dart';
 import 'package:my_app/Functions/committee.dart';
 import 'package:my_app/Functions/events.dart';
+import 'package:my_app/Functions/post_functions.dart';
 import 'package:my_app/UI/auth/forgot_password.dart';
 import 'package:my_app/UI/auth/login.dart';
 import 'package:my_app/UI/auth/sign_in.dart';
 import 'package:my_app/UI/models/blogposts.dart';
 import 'package:my_app/UI/models/commitee.dart';
 import 'package:my_app/UI/models/event.dart';
+import 'package:my_app/UI/models/post.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({Key? key}) : super(key: key);
@@ -19,6 +21,7 @@ class AuthPage extends StatefulWidget {
 List<Commitee> commiteeList = [];
 List<BlogPost> blogPosts = [];
 List<Event> events = [];
+List<Post> posts = [];
 
 class _AuthPageState extends State<AuthPage> {
   late Future future;
@@ -28,7 +31,8 @@ class _AuthPageState extends State<AuthPage> {
     super.initState();
     future = getAllCommittees(commiteeList)
         .then((value) => getMost5(blogPosts))
-        .then((value) => getAllEvents(0).then((value) => events = value));
+        .then((value) => getAllEvents(0).then((value) => events = value))
+        .then((value) => getAllPosts(posts));
   }
 
   bool login = true;

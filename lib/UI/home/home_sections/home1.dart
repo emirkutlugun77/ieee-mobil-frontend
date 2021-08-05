@@ -175,7 +175,7 @@ class _Home1State extends State<Home1> {
           Flexible(
             child: ListView.builder(
                 padding: EdgeInsets.zero,
-                itemCount: 5,
+                itemCount: widget.blogPosts.length,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: EdgeInsets.symmetric(vertical: 8.0),

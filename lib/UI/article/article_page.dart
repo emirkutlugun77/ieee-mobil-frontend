@@ -24,8 +24,11 @@ class _ArticlePageState extends State<ArticlePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(
-                top: 58.0, left: 58, right: 58, bottom: 38),
+            padding: EdgeInsets.only(
+                top: 58.0 * height / 1000,
+                left: 58 * height / 1000,
+                right: 58 * height / 1000,
+                bottom: 38 * height / 1000),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -44,14 +47,18 @@ class _ArticlePageState extends State<ArticlePage> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 58.0),
-            child: Text(
-              widget.blogPost.title,
-              style: Theme.of(context).textTheme.headline1,
+            padding: EdgeInsets.symmetric(horizontal: 58.0 * height / 1000),
+            child: Container(
+              height: height / 12,
+              width: width,
+              child: Text(
+                widget.blogPost.title,
+                style: Theme.of(context).textTheme.headline1,
+              ),
             ),
           ),
           SizedBox(
-            height: height * 1 / 100,
+            height: height * 1 / 400,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 58.0, vertical: 5),
@@ -109,7 +116,7 @@ class _ArticlePageState extends State<ArticlePage> {
                   ],
                 ),
                 SizedBox(
-                  width: width * 1 / 7,
+                  width: width * 1 / 14,
                 ),
                 LineIcon.telegramPlane(
                   size: 30,

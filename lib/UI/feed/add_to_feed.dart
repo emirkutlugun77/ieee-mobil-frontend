@@ -15,20 +15,22 @@ class AddToFeed extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(
                 top: 58.0 * height / 1000,
-                left: 58.0 * height / 1000,
+                left: 28.0 * height / 1000,
                 right: 58.0 * height / 1000),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Yorum Ekle',
-                  style: Theme.of(context).textTheme.headline1,
-                ),
                 GestureDetector(
                     onTap: () {
                       Navigator.pop(context);
                     },
-                    child: LineIcon.angleLeft())
+                    child: LineIcon.angleLeft()),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 20,
+                ),
+                Text(
+                  'Yorum Ekle',
+                  style: Theme.of(context).textTheme.headline1,
+                ),
               ],
             ),
           )

@@ -159,7 +159,7 @@ class _ComiteePageState extends State<ComiteePage> {
               ]),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 1 / 20,
+              height: MediaQuery.of(context).size.height * 1 / 40,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 28.0),
@@ -172,13 +172,16 @@ class _ComiteePageState extends State<ComiteePage> {
             ),
             Flexible(
                 child: Padding(
-              padding: const EdgeInsets.only(bottom: 58.0, top: 28),
+              padding: EdgeInsets.only(
+                top: 8 * MediaQuery.of(context).size.height / 1000,
+                bottom: 18.0 * MediaQuery.of(context).size.height / 1000,
+              ),
               child: ListView.builder(
                   itemCount: 7,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
                     return Padding(
-                      padding: const EdgeInsets.all(15.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 18.0),
                       child: GestureDetector(
                         onTap: () {
                           /*Navigator.push(
@@ -187,15 +190,17 @@ class _ComiteePageState extends State<ComiteePage> {
                                   builder: (context) =>
                                       SingleEvent(event: )));*/
                         },
-                        child: Hero(
-                          tag: 'event${index + 1}',
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: Image.asset(
-                              'images/ev${index + 1}.jpg',
-                              fit: BoxFit.fitHeight,
-                              width:
-                                  MediaQuery.of(context).size.width * 1 / 2.5,
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 1 / 4,
+                          child: Hero(
+                            tag: 'event${index + 1}',
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: Image.asset(
+                                'images/ev${index + 1}.jpg',
+                                fit: BoxFit.fitWidth,
+                                width: 170,
+                              ),
                             ),
                           ),
                         ),

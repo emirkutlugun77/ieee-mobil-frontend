@@ -43,16 +43,19 @@ class ArticleContainer extends StatelessWidget {
                 )),
           ),
           Padding(
-            padding: EdgeInsets.all(18.0 * height / 900),
+            padding: EdgeInsets.all(18.0 * height / 1200),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Flexible(
+                Expanded(
                   child: Container(
-                    width: width * 1 / 2.2,
-                    child: Text(blogPost.title,
+                    width: width * 1 / 2,
+                    child: Text(
+                        blogPost.title.length >= 21
+                            ? blogPost.title.substring(0, 21) + '...'
+                            : blogPost.title,
                         style: Theme.of(context).textTheme.headline1!.copyWith(
-                            fontSize: 15 * height / 800,
+                            fontSize: 14 * height / 700,
                             color: Theme.of(context).primaryColor,
                             fontWeight: FontWeight.w100)),
                   ),
@@ -65,41 +68,47 @@ class ArticleContainer extends StatelessWidget {
                   style: Theme.of(context)
                       .textTheme
                       .subtitle1!
-                      .copyWith(fontSize: 14 * height / 700),
+                      .copyWith(fontSize: 13 * height / 700),
                 ),
                 SizedBox(
                   height: height * 1 / 100,
                 ),
-                CustomChip(tag: blogPost.blogCategoryId.name),
+                Container(
+                    height: height * 1 / 20,
+                    child: CustomChip(tag: blogPost.blogCategoryId.name)),
                 SizedBox(
                   height: height * 1 / 100,
                 ),
                 Flexible(
-                  child: Container(
+                  child: Center(
                     child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         LineIcon.thumbsUp(
                           color: Theme.of(context).cardColor,
+                          size: height / 25,
                         ),
                         Text(
                           blogPost.likedBy.length.toString(),
                           style: Theme.of(context)
                               .textTheme
                               .subtitle1!
-                              .copyWith(fontSize: 13 * height / 700),
+                              .copyWith(fontSize: 14 * height / 700),
                         ),
                         SizedBox(
                           width: width * 1 / 120,
                         ),
                         LineIcon.clock(
                           color: Theme.of(context).cardColor,
+                          size: height / 25,
                         ),
                         Text(
                           blogPost.date.format(' M j, H:i'),
                           style: Theme.of(context)
                               .textTheme
                               .subtitle1!
-                              .copyWith(fontSize: 12 * height / 800),
+                              .copyWith(fontSize: 14 * height / 700),
                         ),
                       ],
                     ),

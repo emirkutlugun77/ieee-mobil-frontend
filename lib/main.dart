@@ -10,10 +10,11 @@ void main() async {
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  bool logged = prefs.getBool('logged')!;
+  bool? logged =
+      prefs.getBool('logged') == null ? false : prefs.getBool('logged');
 
   runApp(MaterialApp(
       title: 'Flutter Demo',
       theme: whiteTheme,
-      home: OnBoardingPage())); //logged ? SplashScreen() : OnBoardingPage()));
+      home: logged! ? SplashScreen() : OnBoardingPage()));
 }

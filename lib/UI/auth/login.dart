@@ -39,6 +39,7 @@ bool logging = false;
 dynamic userVariable = '';
 String email = '';
 String password = '';
+String token = '';
 
 class _LoginPageState extends State<LoginPage> {
   bool obsPass = true;
@@ -50,6 +51,7 @@ class _LoginPageState extends State<LoginPage> {
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: Colors.transparent,
       body: ModalProgressHUD(
         opacity: 0,
@@ -57,155 +59,163 @@ class _LoginPageState extends State<LoginPage> {
         progressIndicator: LoadingBouncingGrid.circle(
           backgroundColor: Theme.of(context).primaryColor,
         ),
-        child: Stack(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(
-                  vertical: width / 25, horizontal: width / 25),
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(35)),
+        child: SingleChildScrollView(
+          child: Stack(
+            children: [
+              SingleChildScrollView(
                 child: Padding(
-                  padding: EdgeInsets.all(width * 1 / 9),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            'Hoşgeldin',
-                            style: Theme.of(context).textTheme.headline1,
-                          ),
-                        ],
-                      ),
-                      verticalSpace(height / 2),
-                      Row(
-                        children: [
-                          Text(
-                            'Hesabınızla hemen giriş yapın',
-                            style: Theme.of(context).textTheme.subtitle1,
-                          ),
-                        ],
-                      ),
-                      verticalSpace(height * 2.4),
-                      Row(
-                        children: [
-                          Text(
-                            'Kullanıcı Adı',
-                            style: Theme.of(context).textTheme.subtitle2,
-                          )
-                        ],
-                      ),
-                      verticalSpace(height / 1.5),
-                      Center(
-                        child: usernameTextField(
-                          context,
-                        ),
-                      ),
-                      verticalSpace(height * 1.5),
-                      Row(
-                        children: [
-                          Text(
-                            'Şifre',
-                            style: Theme.of(context).textTheme.subtitle2,
-                          )
-                        ],
-                      ),
-                      verticalSpace(height / 1.5),
-                      Center(
-                        child: passwordTextField(context),
-                      ),
-                      verticalSpace(height * 1.5),
-                      GestureDetector(
-                        onTap: () async {
-                          setState(() {
-                            logging = true;
-                          });
-                          var result = await loginUser(email, password);
-                          setState(() {
-                            if (!(result is User)) {
-                              userVariable = result;
-                              logging = false;
-                            } else {
-                              user = result;
-                            }
-                          });
-
-                          if (user != null) {
-                            SharedPreferences prefs =
-                                await SharedPreferences.getInstance();
-                            prefs.setBool('logged', true);
-                            prefs.setString('id', user!.id);
-                            setState(() {
-                              logging = false;
-                            });
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => MyHomePage(
-                                          events: events,
-                                          user: user!,
-                                          committees: widget.commiteeList,
-                                          blogPosts: widget.blogPosts,
-                                        )));
-                          } else {
-                            //opens error panel
-                            _panelController.open();
-                            Future.delayed(Duration(seconds: 1))
-                                .then((value) => _panelController.close());
-                          }
-                        },
-                        child: Container(
-                          height: height * 1 / 14,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: Theme.of(context).primaryColor),
-                          child: Center(
-                            child: Text(
-                              'Giriş Yap',
-                              style: Theme.of(context).textTheme.headline3,
-                            ),
-                          ),
-                        ),
-                      ),
-                      verticalSpace(height),
-                      Row(
+                  padding: EdgeInsets.symmetric(
+                      vertical: width / 25, horizontal: width / 25),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(35)),
+                    child: Padding(
+                      padding: EdgeInsets.all(width * 1 / 9),
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            'Şifreni mi Unuttun?',
-                            style: Theme.of(context).textTheme.subtitle1,
+                          Row(
+                            children: [
+                              Text(
+                                'Hoşgeldin',
+                                style: Theme.of(context).textTheme.headline1,
+                              ),
+                            ],
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              widget.pageController.animateToPage(2,
-                                  duration: Duration(milliseconds: 750),
-                                  curve: Curves.ease);
-                            },
-                            child: Text(
-                              ' Burdan Yenile',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle1!
-                                  .copyWith(
-                                      color: Theme.of(context).primaryColor),
+                          verticalSpace(height / 2),
+                          Row(
+                            children: [
+                              Text(
+                                'Hesabınızla hemen giriş yapın',
+                                style: Theme.of(context).textTheme.subtitle1,
+                              ),
+                            ],
+                          ),
+                          verticalSpace(height * 2.4),
+                          Row(
+                            children: [
+                              Text(
+                                'Kullanıcı Adı',
+                                style: Theme.of(context).textTheme.subtitle2,
+                              )
+                            ],
+                          ),
+                          verticalSpace(height / 1.5),
+                          Center(
+                            child: usernameTextField(
+                              context,
                             ),
-                          )
+                          ),
+                          verticalSpace(height * 1.5),
+                          Row(
+                            children: [
+                              Text(
+                                'Şifre',
+                                style: Theme.of(context).textTheme.subtitle2,
+                              )
+                            ],
+                          ),
+                          verticalSpace(height / 1.5),
+                          Center(
+                            child: passwordTextField(context),
+                          ),
+                          verticalSpace(height * 1.5),
+                          GestureDetector(
+                            onTap: () async {
+                              setState(() {
+                                logging = true;
+                              });
+                              var result = await loginUser(email, password);
+                              setState(() {
+                                if (!(result is User)) {
+                                  userVariable = result;
+                                  logging = false;
+                                } else {
+                                  user = result;
+                                }
+                              });
+
+                              if (user != null) {
+                                SharedPreferences prefs =
+                                    await SharedPreferences.getInstance();
+                                prefs.setBool('logged', true);
+                                prefs.setString('id', user!.id);
+                                token = prefs.getString('token')!;
+                                setState(() {
+                                  logging = false;
+                                });
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MyHomePage(
+                                              events: events,
+                                              user: user!,
+                                              committees: widget.commiteeList,
+                                              blogPosts: widget.blogPosts,
+                                              posts: posts,
+                                              token: token,
+                                            )));
+                              } else {
+                                //opens error panel
+                                _panelController.open();
+                                Future.delayed(Duration(seconds: 1))
+                                    .then((value) => _panelController.close());
+                              }
+                            },
+                            child: Container(
+                              height: height * 1 / 14,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: Theme.of(context).primaryColor),
+                              child: Center(
+                                child: Text(
+                                  'Giriş Yap',
+                                  style: Theme.of(context).textTheme.headline3,
+                                ),
+                              ),
+                            ),
+                          ),
+                          verticalSpace(height),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Şifreni mi Unuttun?',
+                                style: Theme.of(context).textTheme.subtitle1,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  widget.pageController.animateToPage(2,
+                                      duration: Duration(milliseconds: 750),
+                                      curve: Curves.ease);
+                                },
+                                child: Text(
+                                  ' Burdan Yenile',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1!
+                                      .copyWith(
+                                          color:
+                                              Theme.of(context).primaryColor),
+                                ),
+                              )
+                            ],
+                          ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            SlidingWidget(
-              panelController: _panelController,
-              height: height,
-              message: userVariable,
-              backgroundColor: Theme.of(context).errorColor,
-            )
-          ],
+              SlidingWidget(
+                panelController: _panelController,
+                height: height,
+                message: userVariable,
+                backgroundColor: Theme.of(context).errorColor,
+              )
+            ],
+          ),
         ),
       ),
     );
