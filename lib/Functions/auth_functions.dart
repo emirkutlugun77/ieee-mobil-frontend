@@ -17,7 +17,7 @@ Future<dynamic> loginUser(String email, String password) async {
     var decodedData = jsonDecode(response.body);
     var prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', decodedData['token']);
-    var id = decodedData['userId'];
+
     print(response.body);
     var token = prefs.getString('token');
 
