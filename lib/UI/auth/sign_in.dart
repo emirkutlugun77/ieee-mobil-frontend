@@ -43,32 +43,36 @@ class _SignInPageState extends State<SignInPage> {
     return FutureBuilder(
         future: future,
         builder: (context, snapshot) {
-          return Stack(
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: width / 25, horizontal: width / 25),
-                child: FlipCard(
-                  flipOnTouch: false,
-                  controller: _flipCardController,
-                  back: cardBack(width, context, height),
-                  front: cardFront(width, context, height),
+          return SingleChildScrollView(
+            child: Stack(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      vertical: width / 25, horizontal: width / 25),
+                  child: FlipCard(
+                    flipOnTouch: false,
+                    controller: _flipCardController,
+                    back: cardBack(width, context, height),
+                    front: cardFront(width, context, height),
+                  ),
                 ),
-              ),
-              SlidingWidget(
-                  message: userVariable,
-                  height: height,
-                  panelController: _panelController,
-                  backgroundColor: Theme.of(context).errorColor)
-            ],
+                SlidingWidget(
+                    message: userVariable,
+                    height: height,
+                    panelController: _panelController,
+                    backgroundColor: Theme.of(context).errorColor)
+              ],
+            ),
           );
         });
   }
 
   Container cardFront(double width, BuildContext context, double height) {
     return Container(
+      height: height * 1 / 1.5,
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(35)),
+          color: Theme.of(context).backgroundColor,
+          borderRadius: BorderRadius.circular(35)),
       child: Padding(
         padding: EdgeInsets.all(width * 1 / 9),
         child: Column(
@@ -165,8 +169,10 @@ class _SignInPageState extends State<SignInPage> {
     ];
 
     return Container(
+      height: height * 1 / 1.5,
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(35)),
+          color: Theme.of(context).backgroundColor,
+          borderRadius: BorderRadius.circular(35)),
       child: Padding(
         padding: EdgeInsets.only(
             top: width * 1 / 16, left: width * 1 / 9, right: width * 1 / 9),

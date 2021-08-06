@@ -23,7 +23,8 @@ class ArticleContainer extends StatelessWidget {
       width: width,
       height: height * 1 / 5.5,
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(15)),
+          color: Theme.of(context).backgroundColor,
+          borderRadius: BorderRadius.circular(15)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [

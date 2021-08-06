@@ -31,8 +31,7 @@ class _AuthPageState extends State<AuthPage> {
     super.initState();
     future = getAllCommittees(commiteeList)
         .then((value) => getMost5(blogPosts))
-        .then((value) => getAllEvents(0).then((value) => events = value))
-        .then((value) => getAllPosts(posts));
+        .then((value) => getAllEvents(0).then((value) => events = value));
   }
 
   bool login = true;
@@ -45,7 +44,7 @@ class _AuthPageState extends State<AuthPage> {
         future: future,
         builder: (context, snapshot) {
           return Container(
-            color: Colors.white,
+            color: Theme.of(context).backgroundColor,
             child: Scaffold(
               resizeToAvoidBottomInset: false,
               backgroundColor: Colors.transparent,

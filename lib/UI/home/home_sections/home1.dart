@@ -34,7 +34,7 @@ class _Home1State extends State<Home1> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Container(
-      color: Color(0xFFF8FAFF),
+      color: Theme.of(context).backgroundColor,
       child: Column(
         children: [
           Padding(
@@ -112,7 +112,7 @@ class _Home1State extends State<Home1> {
                           height: height * 1 / 20,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
-                              color: Colors.white),
+                              color: Theme.of(context).backgroundColor),
                           child: Row(
                             children: [
                               Padding(

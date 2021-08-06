@@ -73,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
         bottomNavigationBar: GNav(
-            backgroundColor: Colors.white,
+            backgroundColor: Theme.of(context).backgroundColor,
             selectedIndex: _currentIndex,
             rippleColor: Colors.grey, // tab button ripple color when pressed
             hoverColor: Colors.grey, // tab button hover color

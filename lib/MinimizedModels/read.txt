@@ -1,0 +1,12 @@
+
+
+
+user data alırken kullanılan veriler modellerle uyuşmuyo
+null safety açık olduğu için daha az veri içeren modeller yaptım
+
+
+
+1) Sertifika
+2) Komite
+3) Etkinlik
+4) Pano Yazısı

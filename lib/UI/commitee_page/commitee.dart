@@ -22,7 +22,7 @@ class _ComiteePageState extends State<ComiteePage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Colors.white,
+        color: Theme.of(context).backgroundColor,
         child: Padding(
           padding: const EdgeInsets.only(top: 58.0),
           child: Column(children: [

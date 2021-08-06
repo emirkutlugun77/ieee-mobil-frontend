@@ -90,21 +90,16 @@ flutter:
     - images/ob2.png
     - images/ob3.png
     - images/ieee.png
-    - images/cas.png
-    - images/cs.png
-    - images/embs.png
-    - images/uluslar.png
-    - images/etkinlik.png
     - images/resim.png
     - images/emir.jpeg
     - images/java.png
-    - images/ev1.jpg
-    - images/ev2.jpg
-    - images/ev3.jpg
-    - images/ev4.jpg
-    - images/ev5.jpg
-    - images/ev6.jpg
-    - images/ev7.jpg
+    - images/avatar1.png
+    - images/avatar2.png
+    - images/avatar3.png
+    - images/avatar4.png
+    - images/avatar5.png
+    - images/avatar6.png
+    
     - images/search.png
     
   #   - images/a_dot_ham.jpeg

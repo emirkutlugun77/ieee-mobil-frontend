@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:my_app/Functions/post_functions.dart';
 import 'package:my_app/UI/auth/auth.dart';
 import 'package:my_app/UI/models/event.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -62,86 +63,88 @@ class _LoginPageState extends State<LoginPage> {
         child: SingleChildScrollView(
           child: Stack(
             children: [
-              SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: width / 25, horizontal: width / 25),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(35)),
-                    child: Padding(
-                      padding: EdgeInsets.all(width * 1 / 9),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                'Hoşgeldin',
-                                style: Theme.of(context).textTheme.headline1,
-                              ),
-                            ],
-                          ),
-                          verticalSpace(height / 2),
-                          Row(
-                            children: [
-                              Text(
-                                'Hesabınızla hemen giriş yapın',
-                                style: Theme.of(context).textTheme.subtitle1,
-                              ),
-                            ],
-                          ),
-                          verticalSpace(height * 2.4),
-                          Row(
-                            children: [
-                              Text(
-                                'Kullanıcı Adı',
-                                style: Theme.of(context).textTheme.subtitle2,
-                              )
-                            ],
-                          ),
-                          verticalSpace(height / 1.5),
-                          Center(
-                            child: usernameTextField(
-                              context,
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    vertical: width / 25, horizontal: width / 25),
+                child: Container(
+                  height: height / 1.5,
+                  decoration: BoxDecoration(
+                      color: Theme.of(context).backgroundColor,
+                      borderRadius: BorderRadius.circular(35)),
+                  child: Padding(
+                    padding: EdgeInsets.all(width * 1 / 9),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              'Hoşgeldin',
+                              style: Theme.of(context).textTheme.headline1,
                             ),
+                          ],
+                        ),
+                        verticalSpace(height / 2),
+                        Row(
+                          children: [
+                            Text(
+                              'Hesabınızla hemen giriş yapın',
+                              style: Theme.of(context).textTheme.subtitle1,
+                            ),
+                          ],
+                        ),
+                        verticalSpace(height * 2.4),
+                        Row(
+                          children: [
+                            Text(
+                              'Kullanıcı Adı',
+                              style: Theme.of(context).textTheme.subtitle2,
+                            )
+                          ],
+                        ),
+                        verticalSpace(height / 1.5),
+                        Center(
+                          child: usernameTextField(
+                            context,
                           ),
-                          verticalSpace(height * 1.5),
-                          Row(
-                            children: [
-                              Text(
-                                'Şifre',
-                                style: Theme.of(context).textTheme.subtitle2,
-                              )
-                            ],
-                          ),
-                          verticalSpace(height / 1.5),
-                          Center(
-                            child: passwordTextField(context),
-                          ),
-                          verticalSpace(height * 1.5),
-                          GestureDetector(
-                            onTap: () async {
-                              setState(() {
-                                logging = true;
-                              });
-                              var result = await loginUser(email, password);
-                              setState(() {
-                                if (!(result is User)) {
-                                  userVariable = result;
-                                  logging = false;
-                                } else {
-                                  user = result;
-                                }
-                              });
+                        ),
+                        verticalSpace(height * 1.5),
+                        Row(
+                          children: [
+                            Text(
+                              'Şifre',
+                              style: Theme.of(context).textTheme.subtitle2,
+                            )
+                          ],
+                        ),
+                        verticalSpace(height / 1.5),
+                        Center(
+                          child: passwordTextField(context),
+                        ),
+                        verticalSpace(height * 1.5),
+                        GestureDetector(
+                          onTap: () async {
+                            setState(() {
+                              logging = true;
+                            });
+                            var result = await loginUser(email, password);
+                            setState(() {
+                              if (!(result is User)) {
+                                userVariable = result;
+                                logging = false;
+                              } else {
+                                user = result;
+                              }
+                            });
 
-                              if (user != null) {
-                                SharedPreferences prefs =
-                                    await SharedPreferences.getInstance();
-                                prefs.setBool('logged', true);
-                                prefs.setString('id', user!.id);
-                                token = prefs.getString('token')!;
+                            if (user != null) {
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              prefs.setBool('logged', true);
+                              prefs.setString('id', user!.id);
+                              token = prefs.getString('token')!;
+
+                              getAllPosts(posts).then((value) {
                                 setState(() {
                                   logging = false;
                                 });
@@ -156,54 +159,53 @@ class _LoginPageState extends State<LoginPage> {
                                               posts: posts,
                                               token: token,
                                             )));
-                              } else {
-                                //opens error panel
-                                _panelController.open();
-                                Future.delayed(Duration(seconds: 1))
-                                    .then((value) => _panelController.close());
-                              }
-                            },
-                            child: Container(
-                              height: height * 1 / 14,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: Theme.of(context).primaryColor),
-                              child: Center(
-                                child: Text(
-                                  'Giriş Yap',
-                                  style: Theme.of(context).textTheme.headline3,
-                                ),
+                              });
+                            } else {
+                              //opens error panel
+                              _panelController.open();
+                              Future.delayed(Duration(seconds: 1))
+                                  .then((value) => _panelController.close());
+                            }
+                          },
+                          child: Container(
+                            height: height * 1 / 14,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Theme.of(context).primaryColor),
+                            child: Center(
+                              child: Text(
+                                'Giriş Yap',
+                                style: Theme.of(context).textTheme.headline3,
                               ),
                             ),
                           ),
-                          verticalSpace(height),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Şifreni mi Unuttun?',
-                                style: Theme.of(context).textTheme.subtitle1,
+                        ),
+                        verticalSpace(height),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Şifreni mi Unuttun?',
+                              style: Theme.of(context).textTheme.subtitle1,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                widget.pageController.animateToPage(2,
+                                    duration: Duration(milliseconds: 750),
+                                    curve: Curves.ease);
+                              },
+                              child: Text(
+                                ' Burdan Yenile',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .subtitle1!
+                                    .copyWith(
+                                        color: Theme.of(context).primaryColor),
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  widget.pageController.animateToPage(2,
-                                      duration: Duration(milliseconds: 750),
-                                      curve: Curves.ease);
-                                },
-                                child: Text(
-                                  ' Burdan Yenile',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle1!
-                                      .copyWith(
-                                          color:
-                                              Theme.of(context).primaryColor),
-                                ),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
+                            )
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ),

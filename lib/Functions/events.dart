@@ -18,3 +18,7 @@ Future getAllEvents(int pageNum) async {
   print(events.length);
   return events;
 }
+
+Future findEventComments(int commentCount, String eventId) async {
+  var response = await http.get(Uri.parse(baseUri + 'v1/comments/' + eventId));
+}
