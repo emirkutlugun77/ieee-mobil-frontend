@@ -40,13 +40,7 @@ class ProfileSection extends StatelessWidget {
                 ],
               ),
             ),
-            Flexible(
-                child: ListView.builder(
-                    padding: EdgeInsets.zero,
-                    itemCount: 15,
-                    itemBuilder: (context, index) => Padding(
-                        padding: const EdgeInsets.only(bottom: 12.0),
-                        child: child))),
+            child
           ],
         ),
       ),

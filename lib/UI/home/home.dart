@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/MinimizedModels/MinCertificate.dart';
+import 'package:my_app/MinimizedModels/MinCommittee.dart';
+import 'package:my_app/MinimizedModels/MinEvent.dart';
 
 import 'package:my_app/UI/event/event_page.dart';
 import 'package:my_app/UI/feed/social_feed.dart';
@@ -24,14 +27,21 @@ class MyHomePage extends StatefulWidget {
       required this.blogPosts,
       required this.events,
       required this.posts,
-      required this.token});
+      required this.token,
+      required this.minCommittees,
+      required this.minEvents,
+      required this.minnCerts,
+      required this.userPosts});
   User user;
   String token;
   List<Commitee> committees;
   List<BlogPost> blogPosts;
   List<Event> events;
   List<Post> posts;
-
+  List<MinEvent> minEvents;
+  List<MinCertificate> minnCerts;
+  List<MinCommittee> minCommittees;
+  List<Post> userPosts;
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -68,7 +78,12 @@ class _MyHomePageState extends State<MyHomePage> {
               Events(
                 events: widget.events,
               ),
-              ProfilePage()
+              ProfilePage(
+                  user: widget.user,
+                  minCommittees: widget.minCommittees,
+                  minEvents: widget.minEvents,
+                  minnCerts: widget.minnCerts,
+                  userPosts: widget.userPosts)
             ],
           ),
         ),

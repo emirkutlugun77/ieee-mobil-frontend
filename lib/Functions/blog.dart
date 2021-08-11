@@ -11,16 +11,12 @@ Future getMost5(List<BlogPost> blogPosts) async {
 
   if (response.statusCode == 200) {
     var decodedData = jsonDecode(response.body);
-
+    print(decodedData['mostViewedBlogPosts'].length); // always print 5
     decodedData['mostViewedBlogPosts'].forEach((e) async {
-      var singleResponse =
-          await http.get(Uri.parse(baseUri + 'v1/blog-post/${e['slug']}'));
-
-      blogPosts
-          .add(BlogPost.fromJson(jsonDecode(singleResponse.body)['blogPost']));
+      await http.get(Uri.parse(baseUri + 'v1/blog-post/${e['slug']}')).then(
+          (value) => blogPosts
+              .add(BlogPost.fromJson(jsonDecode(value.body)['blogPost'])));
     });
-
-    return blogPosts;
   } else {
     return 'error';
   }

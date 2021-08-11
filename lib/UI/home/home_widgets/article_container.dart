@@ -75,10 +75,10 @@ class ArticleContainer extends StatelessWidget {
                   height: height * 1 / 100,
                 ),
                 Container(
-                    height: height * 1 / 20,
+                    height: height * 1 / 30,
                     child: CustomChip(tag: blogPost.blogCategoryId.name)),
                 SizedBox(
-                  height: height * 1 / 100,
+                  height: height * 1 / 70,
                 ),
                 Flexible(
                   child: Center(

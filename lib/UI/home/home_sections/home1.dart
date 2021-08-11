@@ -28,6 +28,11 @@ class Home1 extends StatefulWidget {
 
 class _Home1State extends State<Home1> {
   int current = 0;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,15 +100,12 @@ class _Home1State extends State<Home1> {
                       childAspectRatio: 2.8),
                   itemBuilder: (context, index) {
                     return GestureDetector(
-                      onTap: () async {
-                        var userList = await getCoordinationTeam(
-                            widget.committees[index].id);
+                      onTap: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => ComiteePage(
                                       commitee: widget.committees[index],
-                                      coordination: userList,
                                     )));
                       },
                       child: Padding(

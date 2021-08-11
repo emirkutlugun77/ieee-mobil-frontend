@@ -7,13 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:getwidget/getwidget.dart';
-import 'package:line_icons/line_icon.dart';
 import 'package:date_time_format/date_time_format.dart';
-import 'package:line_icons/line_icons.dart';
+
+import 'package:my_app/UI/article/article_widgets/chip.dart';
+import 'package:my_app/UI/article/article_widgets/chip_for_event.dart';
 import 'package:my_app/UI/models/event.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class SingleEvent extends StatefulWidget {
   final Event event;
@@ -56,63 +55,6 @@ class _SingleEventState extends State<SingleEvent> {
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      floatingActionButton: Container(
-        width: width / 2,
-        height: height / 15,
-        decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor,
-            borderRadius: BorderRadius.circular(15)),
-        child: Padding(
-          padding: EdgeInsets.all(4.0 * height / 1000),
-          child: FutureBuilder(
-              future: null,
-              builder: (context, snapshot) {
-                return Row(
-                  children: [
-                    Expanded(
-                      flex: 7,
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0 * height / 1000),
-                        child: Text('Yorumlar',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText2!
-                                .copyWith(
-                                    color: Theme.of(context).backgroundColor)),
-                      ),
-                    ),
-                    Expanded(
-                        child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 3.0 * height / 1000),
-                      child: VerticalDivider(
-                          color: Theme.of(context).backgroundColor),
-                    )),
-                    GestureDetector(
-                      onTap: () {
-                        _panelController.open();
-                      },
-                      child: Expanded(
-                        flex: 6,
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0 * height / 1000),
-                          child: Text('Oturumlar',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2!
-                                  .copyWith(
-                                      color:
-                                          Theme.of(context).backgroundColor)),
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              }),
-        ),
-      ),
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.miniCenterFloat,
       backgroundColor: Theme.of(context).backgroundColor,
       body: Stack(
         children: [
@@ -240,18 +182,35 @@ class _SingleEventState extends State<SingleEvent> {
                                 color: Color(0xFFECEDFE),
                                 borderRadius: BorderRadius.circular(10)),
                             child: Center(
-                              child: Icon(FontAwesomeIcons.pager,
+                              child: Icon(FontAwesomeIcons.comment,
                                   color: Theme.of(context).primaryColor),
                             ),
                           ),
                           Padding(
                               padding: EdgeInsets.symmetric(
                                   horizontal: width / 16.0),
-                              child: Text(
-                                widget.event.website != ''
-                                    ? widget.event.website
-                                    : 'https://social.ieeeytu.com/',
-                                style: TextStyle(fontSize: 22 * height / 1000),
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.all(8.0 * height / 1000),
+                                    child: CustomChipForEvent(
+                                      tag: 'Yorumlar',
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.all(8.0 * height / 1000),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        _panelController.open();
+                                      },
+                                      child: CustomChipForEvent(
+                                        tag: 'Oturumlar',
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               )),
                         ],
                       ),
@@ -312,7 +271,7 @@ class _SingleEventState extends State<SingleEvent> {
                         itemCount: widget.event.sessions.length,
                         itemBuilder: (context, index) {
                           return Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(8.0 * height / 1000),
                             child: Container(
                               width: width,
                               height: width / 4,
@@ -325,10 +284,33 @@ class _SingleEventState extends State<SingleEvent> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Container(
-                                      width: width / 1.6,
-                                      child: Text(
-                                          widget.event.sessions[index].title)),
+                                  SingleChildScrollView(
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          width: width / 1.6,
+                                          child: Text(
+                                              widget
+                                                  .event.sessions[index].title,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1),
+                                        ),
+                                        Container(
+                                            width: width / 1.6,
+                                            child: Text(
+                                              widget.event.sessions[index].time
+                                                  .format('M j, H:i'),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1!
+                                                  .copyWith(
+                                                      color: Theme.of(context)
+                                                          .primaryColor),
+                                            )),
+                                      ],
+                                    ),
+                                  ),
                                   Icon(FontAwesomeIcons.chevronRight)
                                 ],
                               ),
@@ -390,7 +372,7 @@ class _SingleEventState extends State<SingleEvent> {
                                               .textTheme
                                               .headline2!
                                               .copyWith(
-                                                  fontSize: 17 * height / 700,
+                                                  fontSize: 15 * height / 700,
                                                   color: Theme.of(context)
                                                       .primaryColor,
                                                   fontWeight: FontWeight.bold)))

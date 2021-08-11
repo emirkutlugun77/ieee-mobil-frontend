@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icon.dart';
+import 'package:my_app/UI/models/user.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+// ignore: must_be_immutable
 class QrCode extends StatelessWidget {
-  const QrCode({Key? key}) : super(key: key);
+  User user;
+  QrCode({
+    Key? key,
+    required this.user,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +32,7 @@ class QrCode extends StatelessWidget {
             ),
           ),
           Text(
-            'Emir Kutlugün',
+            user.name + ' ' + user.surname,
             style:
                 Theme.of(context).textTheme.headline1!.copyWith(fontSize: 32),
           ),
@@ -34,7 +40,7 @@ class QrCode extends StatelessWidget {
             height: height * 1 / 40,
           ),
           Text(
-            'Yıldız Teknik Üniversitesi',
+            user.education.university,
             style:
                 Theme.of(context).textTheme.subtitle2!.copyWith(fontSize: 20),
           ),
@@ -42,7 +48,7 @@ class QrCode extends StatelessWidget {
             height: height * 1 / 40,
           ),
           Text(
-            'Matematik Mühendisliği',
+            user.education.department,
             style:
                 Theme.of(context).textTheme.subtitle1!.copyWith(fontSize: 20),
           ),
@@ -50,7 +56,7 @@ class QrCode extends StatelessWidget {
             height: height * 1 / 40,
           ),
           QrImage(
-            data: "1234567890", //user.id
+            data: user.id, //user.id
             version: QrVersions.auto,
             size: height * 2 / 5,
           ),

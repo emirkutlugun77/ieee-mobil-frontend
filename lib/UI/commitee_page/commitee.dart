@@ -3,22 +3,31 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icon.dart';
+import 'package:my_app/Functions/committee.dart';
+import 'package:my_app/UI/event/single_event.dart';
 
 import 'package:my_app/UI/models/commitee.dart';
+import 'package:my_app/UI/models/event.dart';
 import 'package:my_app/UI/models/user.dart';
 
 class ComiteePage extends StatefulWidget {
   final Commitee commitee;
-  final List<User> coordination;
-  const ComiteePage(
-      {Key? key, required this.commitee, required this.coordination})
-      : super(key: key);
+
+  const ComiteePage({
+    Key? key,
+    required this.commitee,
+  }) : super(key: key);
 
   @override
   _ComiteePageState createState() => _ComiteePageState();
 }
 
 class _ComiteePageState extends State<ComiteePage> {
+  Future<List<dynamic>> getCoordinationTeamInit(String id) async {
+    var userList = await getCoordinationTeam(id);
+    return Future.value(userList);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -68,42 +77,58 @@ class _ComiteePageState extends State<ComiteePage> {
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 1 / 40,
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 1 / 2,
-                        height: MediaQuery.of(context).size.height * 1 / 5.5,
-                        child: ListView.builder(
-                            padding: EdgeInsets.zero,
-                            itemCount: widget.coordination.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child: Container(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        widget.coordination[index].title,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .copyWith(
-                                                fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                          widget.coordination[index].name +
-                                              ' ' +
-                                              widget
-                                                  .coordination[index].surname,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1)
-                                    ],
-                                  ),
-                                ),
+                      FutureBuilder<List<dynamic>>(
+                          future: getCoordinationTeamInit(widget.commitee.id),
+                          builder: (context, snapshot) {
+                            print(snapshot);
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Center(
+                                child: CircularProgressIndicator(),
                               );
-                            }),
-                      )
+                            } else {
+                              return Container(
+                                width:
+                                    MediaQuery.of(context).size.width * 1 / 2,
+                                height: MediaQuery.of(context).size.height *
+                                    1 /
+                                    5.5,
+                                child: ListView.builder(
+                                    padding: EdgeInsets.zero,
+                                    itemCount: snapshot.data!.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Container(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                snapshot.data![index].title,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1!
+                                                    .copyWith(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                              ),
+                                              Text(
+                                                  snapshot.data![index].name +
+                                                      ' ' +
+                                                      snapshot
+                                                          .data![index].surname,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText1)
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                              );
+                            }
+                          })
                     ],
                   ),
                 )
@@ -176,36 +201,54 @@ class _ComiteePageState extends State<ComiteePage> {
                 top: 8 * MediaQuery.of(context).size.height / 1000,
                 bottom: 18.0 * MediaQuery.of(context).size.height / 1000,
               ),
-              child: ListView.builder(
-                  itemCount: 7,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          /*Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      SingleEvent(event: )));*/
-                        },
-                        child: Container(
-                          height: MediaQuery.of(context).size.height * 1 / 4,
-                          child: Hero(
-                            tag: 'event${index + 1}',
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(15),
-                              child: Image.asset(
-                                'images/ev${index + 1}.jpg',
-                                fit: BoxFit.fitWidth,
-                                width: 170,
+              child: FutureBuilder<List<Event>>(
+                  future: getCommitteeEvents(widget.commitee.id),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else {
+                      return ListView.builder(
+                          itemCount: snapshot.data!.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 18.0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => SingleEvent(
+                                              event: snapshot.data![index])));
+                                },
+                                child: Container(
+                                  height: MediaQuery.of(context).size.height *
+                                      1 /
+                                      4,
+                                  child: Hero(
+                                    tag: 'event${index + 1}',
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(15),
+                                      child: Image.network(
+                                        snapshot.data![index].photo,
+                                        fit: BoxFit.cover,
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                2,
+                                        height:
+                                            MediaQuery.of(context).size.height /
+                                                5,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
+                            );
+                          });
+                    }
                   }),
             ))
           ]),

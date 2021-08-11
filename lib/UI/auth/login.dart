@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:my_app/Functions/post_functions.dart';
+import 'package:my_app/Functions/user.dart';
+import 'package:my_app/MinimizedModels/MinCertificate.dart';
+import 'package:my_app/MinimizedModels/MinCommittee.dart';
+import 'package:my_app/MinimizedModels/MinEvent.dart';
 import 'package:my_app/UI/auth/auth.dart';
 import 'package:my_app/UI/models/event.dart';
+import 'package:my_app/UI/models/post.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -42,6 +47,13 @@ String email = '';
 String password = '';
 String token = '';
 
+//USER VARIABLES
+List<Post> userPosts = [];
+List<MinEvent> minEvents = [];
+List<MinCertificate> minnCerts = [];
+List<MinCommittee> minCommittees = [];
+
+//USER VARIABLES
 class _LoginPageState extends State<LoginPage> {
   bool obsPass = true;
   PanelController _panelController = PanelController();
@@ -143,23 +155,33 @@ class _LoginPageState extends State<LoginPage> {
                               prefs.setBool('logged', true);
                               prefs.setString('id', user!.id);
                               token = prefs.getString('token')!;
-
-                              getAllPosts(posts).then((value) {
-                                setState(() {
-                                  logging = false;
-                                });
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => MyHomePage(
-                                              events: events,
-                                              user: user!,
-                                              committees: widget.commiteeList,
-                                              blogPosts: widget.blogPosts,
-                                              posts: posts,
-                                              token: token,
-                                            )));
-                              });
+                              getUserData(user!.id, minCommittees, minnCerts,
+                                      minEvents, userPosts, token)
+                                  .then((value) =>
+                                      getAllPosts(posts).then((value) {
+                                        setState(() {
+                                          logging = false;
+                                        });
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    MyHomePage(
+                                                      events: events,
+                                                      user: user!,
+                                                      committees:
+                                                          widget.commiteeList,
+                                                      blogPosts:
+                                                          widget.blogPosts,
+                                                      posts: posts,
+                                                      token: token,
+                                                      minCommittees:
+                                                          minCommittees,
+                                                      minEvents: minEvents,
+                                                      minnCerts: minnCerts,
+                                                      userPosts: userPosts,
+                                                    )));
+                                      }));
                             } else {
                               //opens error panel
                               _panelController.open();

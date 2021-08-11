@@ -50,7 +50,7 @@ class User {
         photo: json["photo"] == null ? '' : json["photo"],
         phoneNo: json["phoneNo"] == null ? '' : json['phoneNo'],
         committeeId: json['committeeId'],
-        title: json["title"],
+        title: json["title"] != null ? json["title"] : 'Üye',
         role: json["role"],
         name: json["name"],
         surname: json["surname"],

@@ -7,6 +7,10 @@ import 'package:my_app/Functions/blog.dart';
 import 'package:my_app/Functions/committee.dart';
 import 'package:my_app/Functions/events.dart';
 import 'package:my_app/Functions/post_functions.dart';
+import 'package:my_app/Functions/user.dart';
+import 'package:my_app/MinimizedModels/MinCertificate.dart';
+import 'package:my_app/MinimizedModels/MinCommittee.dart';
+import 'package:my_app/MinimizedModels/MinEvent.dart';
 import 'package:my_app/UI/home/home.dart';
 import 'package:my_app/UI/models/blogposts.dart';
 import 'package:my_app/UI/models/commitee.dart';
@@ -25,14 +29,27 @@ class SplashScreen extends StatefulWidget {
 
 User? user;
 
-Future futureOperation() async {}
-
+List<MinEvent> minEvents = [];
+List<MinCertificate> minnCerts = [];
+List<MinCommittee> minCommittees = [];
 List<Commitee> commiteeList = [];
+List<Post> userPosts = [];
 List<BlogPost> blogPosts = [];
 List<Event> events = [];
 bool logging = true;
 List<Post> posts = [];
 String token = '';
+String? id;
+Future futureOperation(context) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  id = prefs.getString('id');
+  token = prefs.getString('token')!;
+  user = await getUser(id!);
+
+  await getUserData(id!, minCommittees, minnCerts, minEvents, userPosts, token);
+
+  logging = false;
+}
 
 class _SplashScreenState extends State<SplashScreen> {
   @override
@@ -49,29 +66,29 @@ class _SplashScreenState extends State<SplashScreen> {
         });
       }
     });
-    getAllCommittees(commiteeList)
-        .then((value) => getMost5(blogPosts))
-        .then((value) => getAllEvents(0).then((value) => events = value))
-        .then((value) => getAllPosts(posts))
-        .then((value) async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? id = prefs.getString('id');
-      token = prefs.getString('token')!;
-      user = await getUser(id!);
-    }).then((value) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => MyHomePage(
-                    events: events,
-                    user: user!,
-                    committees: commiteeList,
-                    blogPosts: blogPosts,
-                    posts: posts,
-                    token: token,
-                  )));
-      logging = false;
-    });
+    Future.wait([
+      getMost5(blogPosts),
+      getAllCommittees(commiteeList),
+      getAllEvents(0).then((value) => events = value),
+      getAllPosts(posts),
+      futureOperation(context)
+    ])
+        .then((value) => Future.delayed(Duration(milliseconds: 1500)))
+        .then((value) => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MyHomePage(
+                      events: events,
+                      user: user!,
+                      committees: commiteeList,
+                      blogPosts: blogPosts,
+                      posts: posts,
+                      token: token,
+                      minCommittees: minCommittees,
+                      minEvents: minEvents,
+                      minnCerts: minnCerts,
+                      userPosts: userPosts,
+                    ))));
   }
 
   double opacityValue = 1;

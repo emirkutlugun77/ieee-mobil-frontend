@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/constants.dart' as constants;
 
-class CustomChip extends StatelessWidget {
+class CustomChipForEvent extends StatelessWidget {
   final String tag;
-  const CustomChip({required this.tag});
+  const CustomChipForEvent({required this.tag});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +11,7 @@ class CustomChip extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             border: Border.all(
-              color: constants.blogCategoryColors[tag]!,
+              color: Theme.of(context).primaryColor,
             ),
             borderRadius: BorderRadius.circular(8)),
         child: Padding(
@@ -21,7 +21,7 @@ class CustomChip extends StatelessWidget {
             style: Theme.of(context)
                 .textTheme
                 .subtitle2!
-                .copyWith(color: constants.blogCategoryColors[tag]!),
+                .copyWith(color: Theme.of(context).primaryColor),
           ),
         ),
       ),

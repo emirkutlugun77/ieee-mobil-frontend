@@ -1,12 +1,23 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+
+import 'package:my_app/UI/models/user.dart';
+import 'package:my_app/UI/splash/splash.dart';
 
 class ProfileContainer extends StatelessWidget {
   const ProfileContainer({
     Key? key,
+    required this.user,
     required this.width,
     required this.height,
+    required this.blogCount,
+    required this.committeCount,
+    required this.eventCount,
   }) : super(key: key);
-
+  final int blogCount;
+  final int committeCount;
+  final int eventCount;
+  final User user;
   final double width;
   final double height;
 
@@ -41,8 +52,10 @@ class ProfileContainer extends StatelessWidget {
                           height: width * 1 / 5,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
-                            child: Image.asset(
-                              'images/emir.jpeg',
+                            child: CachedNetworkImage(
+                              imageUrl: user.photoXs != ''
+                                  ? user.photoXs
+                                  : 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
                               fit: BoxFit.fill,
                             ),
                           ),
@@ -53,7 +66,7 @@ class ProfileContainer extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Emir Kutlugün',
+                                user.name + ' ' + user.surname,
                                 style: Theme.of(context)
                                     .textTheme
                                     .headline1!
@@ -63,7 +76,7 @@ class ProfileContainer extends StatelessWidget {
                                 height: height * 1 / 120,
                               ),
                               Text(
-                                'CS Komite Başkanı',
+                                user.title,
                                 style: Theme.of(context)
                                     .textTheme
                                     .subtitle1!
@@ -89,7 +102,7 @@ class ProfileContainer extends StatelessWidget {
                     child: Container(
                       width: width * 5 / 6,
                       child: Text(
-                        'Yıldız Teknik Üniversitesi',
+                        user.education.university,
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1!
@@ -110,7 +123,7 @@ class ProfileContainer extends StatelessWidget {
                     child: Container(
                       width: width * 5 / 6,
                       child: Text(
-                        'Matematik Mühendisliği',
+                        user.education.department,
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1!
@@ -143,7 +156,7 @@ class ProfileContainer extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          '50',
+                          eventCount.toString(),
                           style: Theme.of(context)
                               .textTheme
                               .headline1!
@@ -165,14 +178,14 @@ class ProfileContainer extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          '50',
+                          committeCount.toString(),
                           style: Theme.of(context)
                               .textTheme
                               .headline1!
                               .copyWith(color: Colors.white, fontSize: 20),
                         ),
                         Text(
-                          'Takipçi',
+                          'Komite',
                           style: Theme.of(context)
                               .textTheme
                               .subtitle1!
@@ -187,14 +200,14 @@ class ProfileContainer extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          '50',
+                          blogCount.toString(),
                           style: Theme.of(context)
                               .textTheme
                               .headline1!
                               .copyWith(color: Colors.white, fontSize: 20),
                         ),
                         Text(
-                          'Makale',
+                          'Sertifika',
                           style: Theme.of(context)
                               .textTheme
                               .subtitle1!
