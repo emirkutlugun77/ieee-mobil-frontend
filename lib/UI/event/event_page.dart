@@ -5,11 +5,13 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:my_app/Functions/events.dart';
 import 'package:my_app/UI/event/single_event.dart';
 import 'package:my_app/UI/models/event.dart';
+import 'package:my_app/UI/models/user.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class Events extends StatefulWidget {
   final List<Event> events;
-  Events({required this.events});
+  final User user;
+  Events({required this.events, required this.user});
   @override
   _EventsState createState() => _EventsState();
 }
@@ -18,10 +20,6 @@ bool loading = true;
 
 class _EventsState extends State<Events> {
   int page = 0;
-  @override
-  void initState() {
-    super.initState();
-  }
 
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -61,8 +59,9 @@ class _EventsState extends State<Events> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  SingleEvent(event: widget.events[index])));
+                              builder: (context) => SingleEvent(
+                                  event: widget.events[index],
+                                  user: widget.user)));
                     },
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(15),
@@ -95,8 +94,11 @@ class _EventsState extends State<Events> {
   void _onLoading() async {
     page++;
     // monitor network fetch
-    await getAllEvents(page)
-        .then((value) => value.forEach((e) => widget.events.add(e)));
+    await getAllEvents(page).then((value) => value.forEach((e) {
+          if (!widget.events.contains(e)) {
+            widget.events.add(e);
+          }
+        }));
     // if failed,use loadFailed(),if no data return,use LoadNodata()
 
     if (mounted) setState(() {});

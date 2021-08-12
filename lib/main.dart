@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:my_app/UI/onboard/onboard.dart';
 import 'package:my_app/UI/splash/splash.dart';
 import 'package:my_app/constants.dart';
+import 'package:my_app/html.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {

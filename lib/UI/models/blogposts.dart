@@ -36,12 +36,14 @@ class BlogPost {
   factory BlogPost.fromJson(Map<String, dynamic> json) => BlogPost(
         id: json["_id"],
         blogCategoryId: BlogCategoryId(
-            id: json['blogCategoryId'][0]['_id'],
-            name: json['blogCategoryId'][0]['name'],
-            color: json['blogCategoryId'][0]['color'],
-            description: json['blogCategoryId'][0]['description'],
-            slug: json['blogCategoryId'][0]['slug']),
-        likedBy: List<String>.from(json["likedBy"].map((x) => x.toString())),
+          id: json['blogCategoryId'][0]['_id'],
+          name: json['blogCategoryId'][0]['name'],
+          color: json['blogCategoryId'][0]['color'],
+          description: json['blogCategoryId'][0]['description'],
+        ),
+        likedBy: json["likedBy"] != null
+            ? List<String>.from(json["likedBy"].map((x) => x.toString()))
+            : [],
         tags: List<String>.from(json["tags"].map((x) => x.toString())),
         userId: UserId.fromJson(json["userId"]),
         text: json["text"],
@@ -74,13 +76,13 @@ class BlogCategoryId {
   final String name;
   final String color;
   final String description;
-  final String slug;
-  BlogCategoryId(
-      {required this.id,
-      required this.name,
-      required this.color,
-      required this.description,
-      required this.slug});
+
+  BlogCategoryId({
+    required this.id,
+    required this.name,
+    required this.color,
+    required this.description,
+  });
 
   Map<String, dynamic> toJson() {
     return {
@@ -88,7 +90,6 @@ class BlogCategoryId {
       'name': name,
       'color': color,
       'description': description,
-      'slug': slug,
     };
   }
 
@@ -98,13 +99,11 @@ class BlogCategoryId {
       name: map[1],
       color: map[2],
       description: map[3],
-      slug: map[4],
     );
   }
 }
 
 class UserId {
-  final String bio;
   final String photoSm;
   final String photoXs;
 
@@ -113,7 +112,6 @@ class UserId {
   final String surname;
   final String username;
   UserId({
-    required this.bio,
     required this.photoSm,
     required this.photoXs,
     required this.id,
@@ -123,7 +121,6 @@ class UserId {
   });
 
   UserId copyWith({
-    String? bio,
     String? photoSm,
     String? photoXs,
     String? id,
@@ -132,7 +129,6 @@ class UserId {
     String? username,
   }) {
     return UserId(
-      bio: bio ?? this.bio,
       photoSm: photoSm ?? this.photoSm,
       photoXs: photoXs ?? this.photoXs,
       id: id ?? this.id,
@@ -144,7 +140,6 @@ class UserId {
 
   Map<String, dynamic> toJson() {
     return {
-      'bio': bio,
       'photoSm': photoSm,
       'photoXs': photoXs,
       'id': id,
@@ -156,7 +151,6 @@ class UserId {
 
   factory UserId.fromJson(Map<String, dynamic> map) {
     return UserId(
-      bio: map['bio'] != null ? map['bio'] : '',
       photoSm: map['photoSm'] != null ? map['photoSm'] : '',
       photoXs: map['photoXs'] != null ? map['photoXs'] : '',
       id: map['_id'],

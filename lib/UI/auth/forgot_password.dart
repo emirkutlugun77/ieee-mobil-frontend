@@ -8,8 +8,11 @@ var current = resetState.INITIAL;
 
 // ignore: must_be_immutable
 class ForgotPassword extends StatefulWidget {
-  ForgotPassword({required this.pageController});
+  ForgotPassword({
+    required this.pageController,
+  });
   PageController pageController;
+
   @override
   _ForgotPasswordState createState() => _ForgotPasswordState();
 }
@@ -23,12 +26,19 @@ String token = '';
 
 class _ForgotPasswordState extends State<ForgotPassword> {
   PanelController _panelController = PanelController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    current = resetState.INITIAL;
+  }
 
   void checkState(var current) {
     switch (current) {
       case (resetState.INITIAL):
         setState(() {
           buttonText = 'Gönder';
+          textFieldDisplay = 'E-mail';
         });
         break;
       case (resetState.CHECKING_TOKEN):
@@ -48,6 +58,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   }
 
   String panelText = 'Kod Gönderildi';
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -196,12 +207,17 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         GestureDetector(
                           onTap: () {
                             setState(() {
-                              current = resetState.CHECKING_TOKEN;
+                              current == resetState.INITIAL
+                                  ? current = resetState.CHECKING_TOKEN
+                                  : current = resetState.INITIAL;
+                              print(current);
                               checkState(current);
                             });
                           },
                           child: Text(
-                            ' Kodum Var',
+                            current == resetState.INITIAL
+                                ? 'Kodum Var'
+                                : 'Kodum Yok',
                             style: Theme.of(context)
                                 .textTheme
                                 .subtitle1!

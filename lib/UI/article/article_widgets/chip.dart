@@ -15,7 +15,8 @@ class CustomChip extends StatelessWidget {
             ),
             borderRadius: BorderRadius.circular(8)),
         child: Padding(
-          padding: EdgeInsets.all(6.0),
+          padding:
+              EdgeInsets.all(6.00 * MediaQuery.of(context).size.height / 1000),
           child: Text(
             tag,
             style: Theme.of(context)

@@ -25,7 +25,7 @@ class SlidingWidget extends StatelessWidget {
       minHeight: 0,
       maxHeight: height * 1 / 8,
       panel: Padding(
-        padding: const EdgeInsets.all(28.0),
+        padding: EdgeInsets.all(30.0 * height / 1000),
         child: Container(
           height: height * 1 / 8,
           decoration: BoxDecoration(

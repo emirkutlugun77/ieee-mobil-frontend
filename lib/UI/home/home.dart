@@ -76,6 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               SearchBar(),
               Events(
+                user: widget.user,
                 events: widget.events,
               ),
               ProfilePage(

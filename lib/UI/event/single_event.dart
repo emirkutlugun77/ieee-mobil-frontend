@@ -2,30 +2,33 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import 'package:date_time_format/date_time_format.dart';
-
+import 'package:my_app/scan.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:my_app/UI/article/article_widgets/chip.dart';
 import 'package:my_app/UI/article/article_widgets/chip_for_event.dart';
 import 'package:my_app/UI/models/event.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:my_app/UI/models/user.dart';
 
 class SingleEvent extends StatefulWidget {
   final Event event;
-
+  final User user;
   const SingleEvent({
     Key? key,
     required this.event,
+    required this.user,
   }) : super(key: key);
 
   @override
   _SingleEventState createState() => _SingleEventState();
 }
 
+const List<String> choices = <String>['QR Kod Oku'];
 bool commentOrSession = false;
 PanelController _panelController = PanelController();
 
@@ -223,11 +226,7 @@ class _SingleEventState extends State<SingleEvent> {
                               style: Theme.of(context).textTheme.headline1),
                         ]),
                       ),
-                      Flexible(
-                          child: Container(
-                              child: SingleChildScrollView(
-                                  child:
-                                      Html(data: widget.event.description)))),
+                      Html(data: widget.event.description),
                     ],
                   ),
                 ),
@@ -288,7 +287,7 @@ class _SingleEventState extends State<SingleEvent> {
                                     child: Column(
                                       children: [
                                         Container(
-                                          width: width / 1.6,
+                                          width: width / 1.7,
                                           child: Text(
                                               widget
                                                   .event.sessions[index].title,
@@ -297,7 +296,7 @@ class _SingleEventState extends State<SingleEvent> {
                                                   .bodyText1),
                                         ),
                                         Container(
-                                            width: width / 1.6,
+                                            width: width / 2,
                                             child: Text(
                                               widget.event.sessions[index].time
                                                   .format('M j, H:i'),
@@ -311,7 +310,41 @@ class _SingleEventState extends State<SingleEvent> {
                                       ],
                                     ),
                                   ),
-                                  Icon(FontAwesomeIcons.chevronRight)
+                                  widget.user.role == 0
+                                      ? PopupMenuButton<String>(
+                                          color: Colors.white,
+                                          icon:
+                                              Icon(FontAwesomeIcons.ellipsisH),
+                                          itemBuilder: (BuildContext context) {
+                                            return choices.map((String choice) {
+                                              return PopupMenuItem<String>(
+                                                value: choice,
+                                                child: GestureDetector(
+                                                    onTap: () async {
+                                                      if (choice ==
+                                                          'QR Kod Oku') {
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        ScanViewPage(
+                                                                          eventId: widget
+                                                                              .event
+                                                                              .id,
+                                                                          sessionId: widget
+                                                                              .event
+                                                                              .sessions[index]
+                                                                              .id,
+                                                                        )));
+                                                      }
+                                                    },
+                                                    child: Text(choice)),
+                                              );
+                                            }).toList();
+                                          },
+                                        )
+                                      : SizedBox()
                                 ],
                               ),
                             ),

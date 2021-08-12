@@ -21,3 +21,14 @@ Future getMost5(List<BlogPost> blogPosts) async {
     return 'error';
   }
 }
+
+Future getAllBlogs(int pageNum) async {
+  var response =
+      await http.get(Uri.parse(baseUri + 'v1/blog-post?size=6&page=$pageNum'));
+
+  var decodedData = jsonDecode(response.body);
+  List<BlogPost> blogPosts = [];
+  decodedData['blogPosts'].forEach((e) => blogPosts.add(BlogPost.fromJson(e)));
+
+  return blogPosts;
+}

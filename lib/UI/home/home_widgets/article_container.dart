@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icon.dart';
@@ -34,8 +35,14 @@ class ArticleContainer extends StatelessWidget {
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),
                     bottomLeft: Radius.circular(20)),
-                child: Image.network(
-                  blogPost.photo != ''
+                child: CachedNetworkImage(
+                  errorWidget: (context, url, error) => Image.asset(
+                    'images/resim.png',
+                    fit: BoxFit.fill,
+                    width: width * 1 / 4.5,
+                    height: height * 1 / 4,
+                  ),
+                  imageUrl: blogPost.photo != ''
                       ? blogPost.photo
                       : 'https://ae01.alicdn.com/kf/HTB1kBs1IFXXXXXuXXXXq6xXFXXXD/Fine-oil-painting-on-canvas-Vincent-Van-Gogh-The-Starry-Night-moon-landscape-canvas.jpg_Q90.jpg_.webp',
                   fit: BoxFit.fill,
@@ -75,7 +82,7 @@ class ArticleContainer extends StatelessWidget {
                   height: height * 1 / 100,
                 ),
                 Container(
-                    height: height * 1 / 30,
+                    height: height * 1 / 25,
                     child: CustomChip(tag: blogPost.blogCategoryId.name)),
                 SizedBox(
                   height: height * 1 / 70,

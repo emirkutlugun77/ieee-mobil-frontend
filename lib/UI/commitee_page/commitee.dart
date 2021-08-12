@@ -1,21 +1,23 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icon.dart';
+
 import 'package:my_app/Functions/committee.dart';
 import 'package:my_app/UI/event/single_event.dart';
-
 import 'package:my_app/UI/models/commitee.dart';
 import 'package:my_app/UI/models/event.dart';
 import 'package:my_app/UI/models/user.dart';
 
 class ComiteePage extends StatefulWidget {
   final Commitee commitee;
-
-  const ComiteePage({
+  User user;
+  ComiteePage({
     Key? key,
     required this.commitee,
+    required this.user,
   }) : super(key: key);
 
   @override
@@ -222,7 +224,9 @@ class _ComiteePageState extends State<ComiteePage> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => SingleEvent(
-                                              event: snapshot.data![index])));
+                                                event: snapshot.data![index],
+                                                user: widget.user,
+                                              )));
                                 },
                                 child: Container(
                                   height: MediaQuery.of(context).size.height *
@@ -232,8 +236,12 @@ class _ComiteePageState extends State<ComiteePage> {
                                     tag: 'event${index + 1}',
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(15),
-                                      child: Image.network(
-                                        snapshot.data![index].photo,
+                                      child: CachedNetworkImage(
+                                        imageUrl: snapshot.data![index].photo,
+                                        placeholder: (context, url) => Center(
+                                            child: CircularProgressIndicator()),
+                                        errorWidget: (context, url, error) =>
+                                            Icon(Icons.error),
                                         fit: BoxFit.cover,
                                         width:
                                             MediaQuery.of(context).size.width /

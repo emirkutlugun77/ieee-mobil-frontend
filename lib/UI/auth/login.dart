@@ -72,10 +72,10 @@ class _LoginPageState extends State<LoginPage> {
         progressIndicator: LoadingBouncingGrid.circle(
           backgroundColor: Theme.of(context).primaryColor,
         ),
-        child: SingleChildScrollView(
-          child: Stack(
-            children: [
-              Padding(
+        child: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Padding(
                 padding: EdgeInsets.symmetric(
                     vertical: width / 25, horizontal: width / 25),
                 child: Container(
@@ -140,16 +140,21 @@ class _LoginPageState extends State<LoginPage> {
                               logging = true;
                             });
                             var result = await loginUser(email, password);
-                            setState(() {
-                              if (!(result is User)) {
-                                userVariable = result;
-                                logging = false;
-                              } else {
-                                user = result;
-                              }
-                            });
 
-                            if (user != null) {
+                            if (!(result is User)) {
+                              userVariable = result;
+                              _panelController.open();
+
+                              Future.delayed(Duration(seconds: 1))
+                                  .then((value) {
+                                print('panel');
+                                setState(() {
+                                  logging = false;
+                                });
+                                _panelController.close();
+                              });
+                            } else {
+                              user = result;
                               SharedPreferences prefs =
                                   await SharedPreferences.getInstance();
                               prefs.setBool('logged', true);
@@ -182,11 +187,6 @@ class _LoginPageState extends State<LoginPage> {
                                                       userPosts: userPosts,
                                                     )));
                                       }));
-                            } else {
-                              //opens error panel
-                              _panelController.open();
-                              Future.delayed(Duration(seconds: 1))
-                                  .then((value) => _panelController.close());
                             }
                           },
                           child: Container(
@@ -232,14 +232,14 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              SlidingWidget(
-                panelController: _panelController,
-                height: height,
-                message: userVariable,
-                backgroundColor: Theme.of(context).errorColor,
-              )
-            ],
-          ),
+            ),
+            SlidingWidget(
+              panelController: _panelController,
+              height: height,
+              message: userVariable,
+              backgroundColor: Theme.of(context).errorColor,
+            )
+          ],
         ),
       ),
     );

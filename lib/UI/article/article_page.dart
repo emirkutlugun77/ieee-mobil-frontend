@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 
@@ -28,7 +29,7 @@ class _ArticlePageState extends State<ArticlePage> {
                 top: 58.0 * height / 1000,
                 left: 58 * height / 1000,
                 right: 58 * height / 1000,
-                bottom: 38 * height / 1000),
+                bottom: 18 * height / 1000),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -49,11 +50,16 @@ class _ArticlePageState extends State<ArticlePage> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 58.0 * height / 1000),
             child: Container(
-              height: height / 15,
+              height: widget.blogPost.title.length >= 22
+                  ? height / 10
+                  : height / 14,
               width: width,
               child: Text(
                 widget.blogPost.title,
-                style: Theme.of(context).textTheme.headline1,
+                style: Theme.of(context)
+                    .textTheme
+                    .headline1!
+                    .copyWith(fontSize: 25 * height / 700),
               ),
             ),
           ),
@@ -61,15 +67,12 @@ class _ArticlePageState extends State<ArticlePage> {
               child: ListView(
             padding: EdgeInsets.zero,
             children: [
-              SizedBox(
-                height: height * 1 / 400,
-              ),
               Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal: 58.0 * height / 1000,
-                    vertical: 5 * height / 1000),
+                  horizontal: 58.0 * height / 1000,
+                ),
                 child: Wrap(
-                  spacing: 10,
+                  spacing: 1,
                   children: [
                     CustomChip(
                       tag: widget.blogPost.blogCategoryId.name,
@@ -95,7 +98,7 @@ class _ArticlePageState extends State<ArticlePage> {
                         child: Image.network(
                           widget.blogPost.userId.photoSm != ''
                               ? widget.blogPost.userId.photoSm
-                              : 'https://ae01.alicdn.com/kf/HTB1kBs1IFXXXXXuXXXXq6xXFXXXD/Fine-oil-painting-on-canvas-Vincent-Van-Gogh-The-Starry-Night-moon-landscape-canvas.jpg_Q90.jpg_.webp',
+                              : 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png',
                           fit: BoxFit.fill,
                         ),
                       ),
@@ -138,56 +141,48 @@ class _ArticlePageState extends State<ArticlePage> {
               SizedBox(
                 height: height * 1 / 20,
               ),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Container(
-                    width: double.infinity,
-                    child: Column(
-                      children: [
-                        Hero(
-                          tag: widget.blogPost.id,
-                          child: Container(
-                            width: double.infinity,
-                            height: height * 1 / 3,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20)),
-                              child: Image.network(
-                                widget.blogPost.photo != ''
-                                    ? widget.blogPost.photo
-                                    : 'https://ae01.alicdn.com/kf/HTB1kBs1IFXXXXXuXXXXq6xXFXXXD/Fine-oil-painting-on-canvas-Vincent-Van-Gogh-The-Starry-Night-moon-landscape-canvas.jpg_Q90.jpg_.webp',
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
+              Column(
+                children: [
+                  Hero(
+                    tag: widget.blogPost.id,
+                    child: Container(
+                      width: double.infinity,
+                      height: height * 1 / 3,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20)),
+                        child: CachedNetworkImage(
+                          imageUrl: widget.blogPost.photo != ''
+                              ? widget.blogPost.photo
+                              : 'https://www.etmd.org.tr/wp-content/uploads/2020/01/YTU_IEEE.jpg',
+                          errorWidget: (context, url, error) => Image.network(
+                              'https://www.etmd.org.tr/wp-content/uploads/2020/01/YTU_IEEE.jpg'),
+                          fit: BoxFit.fill,
                         ),
-                        SizedBox(
-                          height: height * 1 / 60,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 38.0),
-                          child: Text(
-                            widget.blogPost.title,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline1!
-                                .copyWith(fontSize: 20),
-                          ),
-                        ),
-                        SizedBox(
-                          height: height * 1 / 60,
-                        ),
-                        Container(
-                            child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Html(
-                                  data: widget.blogPost.text.toString(),
-                                )))
-                      ],
+                      ),
                     ),
                   ),
-                ),
+                  SizedBox(
+                    height: height * 1 / 60,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 38.0),
+                    child: Text(
+                      widget.blogPost.title,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline1!
+                          .copyWith(fontSize: 20),
+                    ),
+                  ),
+                  SizedBox(
+                    height: height * 1 / 60,
+                  ),
+                  Html(
+                    data: widget.blogPost.text,
+                  )
+                ],
               )
             ],
           ))

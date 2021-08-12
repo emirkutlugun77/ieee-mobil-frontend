@@ -7,6 +7,7 @@ import 'package:line_icons/line_icon.dart';
 
 import 'package:my_app/Functions/committee.dart';
 import 'package:my_app/UI/article/article_page.dart';
+import 'package:my_app/UI/article/articles.dart';
 import 'package:my_app/UI/commitee_page/commitee.dart';
 
 import 'package:my_app/UI/home/home_widgets/article_container.dart';
@@ -14,6 +15,7 @@ import 'package:my_app/UI/home/home_widgets/article_container.dart';
 import 'package:my_app/UI/models/blogposts.dart';
 import 'package:my_app/UI/models/commitee.dart';
 import 'package:my_app/UI/models/user.dart';
+import 'package:my_app/UI/splash/splash.dart';
 
 // ignore: must_be_immutable
 class Home1 extends StatefulWidget {
@@ -105,6 +107,7 @@ class _Home1State extends State<Home1> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => ComiteePage(
+                                      user: widget.user,
                                       commitee: widget.committees[index],
                                     )));
                       },
@@ -163,11 +166,21 @@ class _Home1State extends State<Home1> {
                         .headline2!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
-                  Text(
-                    'Daha Fazla',
-                    style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                        color: Theme.of(context).primaryColor,
-                        fontSize: 14 * height / 700),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Articles(
+                                    blogPosts: widget.blogPosts,
+                                  )));
+                    },
+                    child: Text(
+                      'Daha Fazla',
+                      style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 14 * height / 700),
+                    ),
                   )
                 ],
               )),
@@ -177,7 +190,9 @@ class _Home1State extends State<Home1> {
           Flexible(
             child: ListView.builder(
                 padding: EdgeInsets.zero,
-                itemCount: widget.blogPosts.length,
+                itemCount: widget.blogPosts.length >= 5 != true
+                    ? widget.blogPosts.length
+                    : 5,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: EdgeInsets.symmetric(vertical: 8.0),

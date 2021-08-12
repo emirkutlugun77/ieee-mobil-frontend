@@ -27,9 +27,11 @@ Future<dynamic> loginUser(String email, String password) async {
     var errorMessage;
     await translator
         .translate(
-            jsonDecode(response.body)['errors'][0] != null
-                ? jsonDecode(response.body)['errors'][0]
-                : 'Böyle bir hesap bulunamadı',
+            jsonDecode(response.body)['errors'] != null
+                ? jsonDecode(response.body)['errors'].length >= 1
+                    ? jsonDecode(response.body)['errors'][0]
+                    : 'Böyle bir hesap bulunamadı'
+                : 'Giriş Hatası',
             from: 'en',
             to: 'tr')
         .then((value) => errorMessage = value.text);
