@@ -58,79 +58,81 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: SizedBox.expand(
-          child: PageView(
-            controller: _pageController,
-            onPageChanged: (index) {
-              setState(() => _currentIndex = index);
-            },
-            children: <Widget>[
-              Home1(
+    return SafeArea(
+      child: Scaffold(
+          body: SizedBox.expand(
+            child: PageView(
+              controller: _pageController,
+              onPageChanged: (index) {
+                setState(() => _currentIndex = index);
+              },
+              children: <Widget>[
+                Home1(
+                    user: widget.user,
+                    committees: widget.committees,
+                    blogPosts: widget.blogPosts),
+                SocialFeed(
+                  posts: widget.posts.reversed.toList(),
+                  token: widget.token,
+                ),
+                SearchBar(),
+                Events(
                   user: widget.user,
-                  committees: widget.committees,
-                  blogPosts: widget.blogPosts),
-              SocialFeed(
-                posts: widget.posts.reversed.toList(),
-                token: widget.token,
-              ),
-              SearchBar(),
-              Events(
-                user: widget.user,
-                events: widget.events,
-              ),
-              ProfilePage(
-                  user: widget.user,
-                  minCommittees: widget.minCommittees,
-                  minEvents: widget.minEvents,
-                  minnCerts: widget.minnCerts,
-                  userPosts: widget.userPosts)
-            ],
+                  events: widget.events,
+                ),
+                ProfilePage(
+                    user: widget.user,
+                    minCommittees: widget.minCommittees,
+                    minEvents: widget.minEvents,
+                    minnCerts: widget.minnCerts,
+                    userPosts: widget.userPosts)
+              ],
+            ),
           ),
-        ),
-        bottomNavigationBar: GNav(
-            backgroundColor: Theme.of(context).backgroundColor,
-            selectedIndex: _currentIndex,
-            rippleColor: Colors.grey, // tab button ripple color when pressed
-            hoverColor: Colors.grey, // tab button hover color
-            haptic: true, // haptic feedback
-            onTabChange: (index) {
-              setState(() {
-                _currentIndex = index;
-                _pageController.jumpToPage(
-                  index,
-                );
-              });
-            },
-            curve: Curves.ease, // tab animation curves
-            duration: Duration(milliseconds: 365), // tab animation duration
+          bottomNavigationBar: GNav(
+              backgroundColor: Theme.of(context).backgroundColor,
+              selectedIndex: _currentIndex,
+              rippleColor: Colors.grey, // tab button ripple color when pressed
+              hoverColor: Colors.grey, // tab button hover color
+              haptic: true, // haptic feedback
+              onTabChange: (index) {
+                setState(() {
+                  _currentIndex = index;
+                  _pageController.jumpToPage(
+                    index,
+                  );
+                });
+              },
+              curve: Curves.ease, // tab animation curves
+              duration: Duration(milliseconds: 365), // tab animation duration
 
-            color: Colors.grey[800], // unselected icon color
-            activeColor:
-                Theme.of(context).primaryColor, // selected icon and text color
-            iconSize: 30, // tab button icon size
-            // selected tab background color
-            padding: EdgeInsets.symmetric(
-                horizontal: 15,
-                vertical: 15 *
-                    MediaQuery.of(context).size.width /
-                    500), // navigation bar padding
-            tabs: [
-              GButton(
-                icon: LineIcons.home,
-              ),
-              GButton(
-                icon: LineIcons.hashtag,
-              ),
-              GButton(
-                icon: LineIcons.search,
-              ),
-              GButton(
-                icon: LineIcons.layerGroup,
-              ),
-              GButton(
-                icon: LineIcons.user,
-              ),
-            ]));
+              color: Colors.grey[800], // unselected icon color
+              activeColor: Theme.of(context)
+                  .primaryColor, // selected icon and text color
+              iconSize: 30, // tab button icon size
+              // selected tab background color
+              padding: EdgeInsets.symmetric(
+                  horizontal: 15,
+                  vertical: 15 *
+                      MediaQuery.of(context).size.width /
+                      500), // navigation bar padding
+              tabs: [
+                GButton(
+                  icon: LineIcons.home,
+                ),
+                GButton(
+                  icon: LineIcons.hashtag,
+                ),
+                GButton(
+                  icon: LineIcons.search,
+                ),
+                GButton(
+                  icon: LineIcons.layerGroup,
+                ),
+                GButton(
+                  icon: LineIcons.user,
+                ),
+              ])),
+    );
   }
 }

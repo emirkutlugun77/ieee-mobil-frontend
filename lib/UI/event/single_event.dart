@@ -9,8 +9,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_app/scan.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
-import 'package:my_app/UI/article/article_widgets/chip.dart';
+
 import 'package:my_app/UI/article/article_widgets/chip_for_event.dart';
 import 'package:my_app/UI/models/event.dart';
 import 'package:my_app/UI/models/user.dart';

@@ -36,7 +36,15 @@ class _SocialFeedState extends State<SocialFeed> {
         floatingActionButton: GestureDetector(
           onTap: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => AddToFeed()));
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AddToFeed(
+                          postList: widget.posts,
+                        ))).then((value) {
+              setState(() {
+                widget.posts = value;
+              });
+            });
           },
           child: Container(
             width: width * 1 / 5,

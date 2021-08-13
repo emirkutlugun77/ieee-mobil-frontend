@@ -423,67 +423,40 @@ class _ProfilePageState extends State<ProfilePage> {
                                   itemCount: widget.userPosts.length,
                                   itemBuilder: (context, index) {
                                     return GFListTile(
-                                        avatar: GFAvatar(
-                                          backgroundImage: NetworkImage(widget
-                                                      .userPosts[index]
-                                                      .userId
-                                                      .photo !=
-                                                  ''
-                                              ? widget
-                                                  .userPosts[index].userId.photo
-                                              : 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png'),
-                                          shape: GFAvatarShape.standard,
-                                        ),
-                                        title: Text(
-                                          widget.userPosts[index].userId.name +
-                                              ' ' +
-                                              widget.userPosts[index].userId
-                                                  .surname,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText2,
-                                        ),
-                                        description: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              widget.userPosts[index].date
-                                                  .format('M j, H:i'),
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .subtitle1!
-                                                  .copyWith(
-                                                      fontSize:
-                                                          12 * height / 800),
-                                            ),
-                                          ],
-                                        ),
-                                        subTitle: Text(
-                                          widget.userPosts[index].text,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1,
-                                        ),
-                                        icon: LikeButton(
-                                          likeCount:
-                                              widget.userPosts[index].likeCount,
-                                          isLiked:
-                                              widget.userPosts[index].liked,
-                                          bubblesColor: BubblesColor(
-                                            dotPrimaryColor: Colors.red,
-                                            dotSecondaryColor: Colors.redAccent,
+                                      avatar: GFAvatar(
+                                        backgroundImage: NetworkImage(widget
+                                                    .userPosts[index]
+                                                    .userId
+                                                    .photo !=
+                                                ''
+                                            ? widget
+                                                .userPosts[index].userId.photo
+                                            : 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png'),
+                                        shape: GFAvatarShape.standard,
+                                      ),
+                                      description: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            widget.userPosts[index].date
+                                                .format('M j, H:i'),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .subtitle1!
+                                                .copyWith(
+                                                    fontSize:
+                                                        12 * height / 800),
                                           ),
-                                          likeBuilder: (bool isLiked) {
-                                            return Icon(
-                                              FontAwesomeIcons.solidHeart,
-                                              color: isLiked
-                                                  ? Colors.red
-                                                  : Colors.grey,
-                                              size: 30,
-                                            );
-                                          },
-                                        ));
+                                        ],
+                                      ),
+                                      subTitle: Text(
+                                        widget.userPosts[index].text,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1,
+                                      ),
+                                    );
                                   }),
                             )
                           : Padding(

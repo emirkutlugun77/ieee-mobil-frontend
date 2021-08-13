@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
+
 import 'package:my_app/UI/models/post.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -28,4 +30,22 @@ Future<bool> onLikeButtonTapped(bool isLiked, String id, String token) async {
   }
   print('working');
   return !isLiked;
+}
+
+Future writePost(
+  File? image,
+  String text,
+  String token,
+) async {
+  var formData = FormData.fromMap({
+    'text': text,
+    'photo': image != null ? await MultipartFile.fromFile(image.path) : null
+  });
+  var response = await Dio().post(
+      'https://ancient-falls-28306.herokuapp.com/v1/post',
+      data: formData,
+      options:
+          Options(headers: {HttpHeaders.authorizationHeader: 'Bearer $token'}));
+
+  return response.data['post']['_doc'];
 }

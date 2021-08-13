@@ -42,7 +42,7 @@ class LoginPage extends StatefulWidget {
 
 User? user;
 bool logging = false;
-dynamic userVariable = '';
+dynamic userVariable = 'Lütfen Bekleyin';
 String email = '';
 String password = '';
 String token = '';
