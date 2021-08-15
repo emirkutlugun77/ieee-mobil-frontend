@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:my_app/Functions/announce.dart';
 
 import 'package:my_app/Functions/auth_functions.dart';
 import 'package:my_app/Functions/blog.dart';
@@ -12,6 +13,7 @@ import 'package:my_app/MinimizedModels/MinCertificate.dart';
 import 'package:my_app/MinimizedModels/MinCommittee.dart';
 import 'package:my_app/MinimizedModels/MinEvent.dart';
 import 'package:my_app/UI/home/home.dart';
+import 'package:my_app/UI/models/announcement.dart';
 import 'package:my_app/UI/models/blogposts.dart';
 import 'package:my_app/UI/models/commitee.dart';
 import 'package:my_app/UI/models/event.dart';
@@ -35,17 +37,19 @@ List<MinCommittee> minCommittees = [];
 List<Commitee> commiteeList = [];
 List<Post> userPosts = [];
 List<BlogPost> blogPosts = [];
+List<Announcement> announcementList = [];
 List<Event> events = [];
 bool logging = true;
 List<Post> posts = [];
 String token = '';
 String? id;
+int? seenAnnouncements;
 Future futureOperation(context) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   id = prefs.getString('id');
   token = prefs.getString('token')!;
   user = await getUser(id!);
-
+  seenAnnouncements = prefs.getInt('seen') != null ? prefs.getInt('seen') : 0;
   await getUserData(id!, minCommittees, minnCerts, minEvents, userPosts, token);
 
   logging = false;
@@ -71,13 +75,16 @@ class _SplashScreenState extends State<SplashScreen> {
       getAllCommittees(commiteeList),
       getAllEvents(0).then((value) => events = value),
       getAllPosts(posts),
-      futureOperation(context)
+      futureOperation(context),
+      getAnnouncements(token).then((value) => announcementList = value)
     ])
         .then((value) => Future.delayed(Duration(milliseconds: 1500)))
         .then((value) => Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => MyHomePage(
+                      seenAnnouncements: seenAnnouncements!,
+                      announcements: announcementList,
                       events: events,
                       user: user!,
                       committees: commiteeList,

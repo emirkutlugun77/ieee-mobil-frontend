@@ -173,56 +173,6 @@ class _AddToFeedState extends State<AddToFeed> {
                 ),
               ],
             ),
-            SlidingUpPanel(
-              controller: _panelController,
-              minHeight: 0,
-              slideDirection: SlideDirection.UP,
-              maxHeight: height / 4,
-              panel: Container(
-                height: height / 4,
-                width: MediaQuery.of(context).size.width,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          _panelController.close();
-
-                          getImageFromCamera().then((value) {
-                            setState(() {
-                              imageFile = value;
-                            });
-                          });
-                        },
-                        child: Icon(
-                          FontAwesomeIcons.camera,
-                          color: Theme.of(context).primaryColor,
-                          size: 60 * height / 1000,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          _panelController.close();
-
-                          getImageFromGallery().then((value) {
-                            setState(() {
-                              imageFile = value;
-                            });
-                          });
-                        },
-                        child: Icon(
-                          FontAwesomeIcons.image,
-                          color: Theme.of(context).primaryColor,
-                          size: 60 * height / 1000,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            )
           ],
         ),
       ),

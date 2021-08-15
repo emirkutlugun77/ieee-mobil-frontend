@@ -9,34 +9,34 @@ class Announcement {
   Announcement({
     required this.id,
     required this.title,
-    required this.committeeId,
+    required this.committeeName,
     required this.text,
     required this.date,
     required this.v,
   });
 
-  final Id id;
+  final String id;
   final String title;
-  final Id committeeId;
+  final String committeeName;
   final String text;
-  final Date date;
+  final DateTime date;
   final int v;
 
   factory Announcement.fromJson(Map<String, dynamic> json) => Announcement(
-        id: Id.fromJson(json["_id"]),
+        id: json["_id"],
         title: json["title"],
-        committeeId: Id.fromJson(json["committeeId"]),
+        committeeName: json["committeeId"]['name'],
         text: json["text"],
-        date: Date.fromJson(json["date"]),
+        date: DateTime.parse((json["date"])),
         v: json["__v"],
       );
 
   Map<String, dynamic> toJson() => {
-        "_id": id.toJson(),
+        "_id": id,
         "title": title,
-        "committeeId": committeeId.toJson(),
+        "committeeId": committeeName,
         "text": text,
-        "date": date.toJson(),
+        "date": date,
         "__v": v,
       };
 }

@@ -153,7 +153,7 @@ class _ComiteePageState extends State<ComiteePage> {
               child: Wrap(children: [
                 Text(
                     widget.commitee.description.length >= 300
-                        ? widget.commitee.description.substring(0, 300) + '...'
+                        ? widget.commitee.description.substring(0, 150) + '...'
                         : widget.commitee.description,
                     style: Theme.of(context).textTheme.bodyText1),
                 GestureDetector(
@@ -189,7 +189,9 @@ class _ComiteePageState extends State<ComiteePage> {
               height: MediaQuery.of(context).size.height * 1 / 40,
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 28.0),
+              padding: EdgeInsets.symmetric(
+                  horizontal: 28.0 * MediaQuery.of(context).size.height / 1000,
+                  vertical: MediaQuery.of(context).size.width / 20),
               child: Row(
                 children: [
                   Text('Etkinlikler:',
@@ -233,7 +235,7 @@ class _ComiteePageState extends State<ComiteePage> {
                                       1 /
                                       4,
                                   child: Hero(
-                                    tag: 'event${index + 1}',
+                                    tag: snapshot.data![index].photo,
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(15),
                                       child: CachedNetworkImage(

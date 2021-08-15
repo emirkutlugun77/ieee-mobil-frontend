@@ -5,6 +5,9 @@ import 'package:my_app/UI/splash/splash.dart';
 import 'package:my_app/constants.dart';
 import 'package:my_app/html.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:socket_io_client/socket_io_client.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

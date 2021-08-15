@@ -10,6 +10,7 @@ import 'package:my_app/UI/home/home_sections/home1.dart';
 
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:my_app/UI/models/announcement.dart';
 
 import 'package:my_app/UI/models/blogposts.dart';
 import 'package:my_app/UI/models/commitee.dart';
@@ -22,7 +23,9 @@ import 'package:my_app/UI/search/search_page.dart';
 // ignore: must_be_immutable
 class MyHomePage extends StatefulWidget {
   MyHomePage(
-      {required this.user,
+      {required this.seenAnnouncements,
+      required this.announcements,
+      required this.user,
       required this.committees,
       required this.blogPosts,
       required this.events,
@@ -32,6 +35,8 @@ class MyHomePage extends StatefulWidget {
       required this.minEvents,
       required this.minnCerts,
       required this.userPosts});
+  int seenAnnouncements;
+  List<Announcement> announcements;
   User user;
   String token;
   List<Commitee> committees;
@@ -58,81 +63,81 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-          body: SizedBox.expand(
-            child: PageView(
-              controller: _pageController,
-              onPageChanged: (index) {
-                setState(() => _currentIndex = index);
-              },
-              children: <Widget>[
-                Home1(
-                    user: widget.user,
-                    committees: widget.committees,
-                    blogPosts: widget.blogPosts),
-                SocialFeed(
-                  posts: widget.posts.reversed.toList(),
-                  token: widget.token,
-                ),
-                SearchBar(),
-                Events(
+    return Scaffold(
+        body: SizedBox.expand(
+          child: PageView(
+            controller: _pageController,
+            onPageChanged: (index) {
+              setState(() => _currentIndex = index);
+            },
+            children: <Widget>[
+              Home1(
+                  seenAnnouncements: widget.seenAnnouncements,
+                  announcements: widget.announcements,
                   user: widget.user,
-                  events: widget.events,
-                ),
-                ProfilePage(
-                    user: widget.user,
-                    minCommittees: widget.minCommittees,
-                    minEvents: widget.minEvents,
-                    minnCerts: widget.minnCerts,
-                    userPosts: widget.userPosts)
-              ],
-            ),
+                  committees: widget.committees,
+                  blogPosts: widget.blogPosts),
+              SocialFeed(
+                posts: widget.posts.reversed.toList(),
+                token: widget.token,
+              ),
+              SearchBar(),
+              Events(
+                user: widget.user,
+                events: widget.events,
+              ),
+              ProfilePage(
+                  user: widget.user,
+                  minCommittees: widget.minCommittees,
+                  minEvents: widget.minEvents,
+                  minnCerts: widget.minnCerts,
+                  userPosts: widget.userPosts)
+            ],
           ),
-          bottomNavigationBar: GNav(
-              backgroundColor: Theme.of(context).backgroundColor,
-              selectedIndex: _currentIndex,
-              rippleColor: Colors.grey, // tab button ripple color when pressed
-              hoverColor: Colors.grey, // tab button hover color
-              haptic: true, // haptic feedback
-              onTabChange: (index) {
-                setState(() {
-                  _currentIndex = index;
-                  _pageController.jumpToPage(
-                    index,
-                  );
-                });
-              },
-              curve: Curves.ease, // tab animation curves
-              duration: Duration(milliseconds: 365), // tab animation duration
+        ),
+        bottomNavigationBar: GNav(
+            backgroundColor: Theme.of(context).backgroundColor,
+            selectedIndex: _currentIndex,
+            rippleColor: Colors.grey, // tab button ripple color when pressed
+            hoverColor: Colors.grey, // tab button hover color
+            haptic: true, // haptic feedback
+            onTabChange: (index) {
+              setState(() {
+                _currentIndex = index;
+                _pageController.jumpToPage(
+                  index,
+                );
+              });
+            },
+            curve: Curves.ease, // tab animation curves
+            duration: Duration(milliseconds: 365), // tab animation duration
 
-              color: Colors.grey[800], // unselected icon color
-              activeColor: Theme.of(context)
-                  .primaryColor, // selected icon and text color
-              iconSize: 30, // tab button icon size
-              // selected tab background color
-              padding: EdgeInsets.symmetric(
-                  horizontal: 15,
-                  vertical: 15 *
-                      MediaQuery.of(context).size.width /
-                      500), // navigation bar padding
-              tabs: [
-                GButton(
-                  icon: LineIcons.home,
-                ),
-                GButton(
-                  icon: LineIcons.hashtag,
-                ),
-                GButton(
-                  icon: LineIcons.search,
-                ),
-                GButton(
-                  icon: LineIcons.layerGroup,
-                ),
-                GButton(
-                  icon: LineIcons.user,
-                ),
-              ])),
-    );
+            color: Colors.grey[800], // unselected icon color
+            activeColor:
+                Theme.of(context).primaryColor, // selected icon and text color
+            iconSize: 30, // tab button icon size
+            // selected tab background color
+            padding: EdgeInsets.symmetric(
+                horizontal: 15,
+                vertical: 15 *
+                    MediaQuery.of(context).size.width /
+                    500), // navigation bar padding
+            tabs: [
+              GButton(
+                icon: LineIcons.home,
+              ),
+              GButton(
+                icon: LineIcons.hashtag,
+              ),
+              GButton(
+                icon: LineIcons.search,
+              ),
+              GButton(
+                icon: LineIcons.layerGroup,
+              ),
+              GButton(
+                icon: LineIcons.user,
+              ),
+            ]));
   }
 }

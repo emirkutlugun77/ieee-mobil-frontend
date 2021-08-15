@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:my_app/Functions/announce.dart';
 import 'package:my_app/Functions/post_functions.dart';
 import 'package:my_app/Functions/user.dart';
 import 'package:my_app/MinimizedModels/MinCertificate.dart';
 import 'package:my_app/MinimizedModels/MinCommittee.dart';
 import 'package:my_app/MinimizedModels/MinEvent.dart';
 import 'package:my_app/UI/auth/auth.dart';
+import 'package:my_app/UI/models/announcement.dart';
 import 'package:my_app/UI/models/event.dart';
 import 'package:my_app/UI/models/post.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -48,6 +50,7 @@ String password = '';
 String token = '';
 
 //USER VARIABLES
+List<Announcement> announcements = [];
 List<Post> userPosts = [];
 List<MinEvent> minEvents = [];
 List<MinCertificate> minnCerts = [];
@@ -157,36 +160,47 @@ class _LoginPageState extends State<LoginPage> {
                               user = result;
                               SharedPreferences prefs =
                                   await SharedPreferences.getInstance();
+                              int? seenAnnouncements =
+                                  prefs.getInt('seen') != null
+                                      ? prefs.getInt('seen')
+                                      : 0;
                               prefs.setBool('logged', true);
                               prefs.setString('id', user!.id);
                               token = prefs.getString('token')!;
                               getUserData(user!.id, minCommittees, minnCerts,
                                       minEvents, userPosts, token)
-                                  .then((value) =>
-                                      getAllPosts(posts).then((value) {
-                                        setState(() {
-                                          logging = false;
-                                        });
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    MyHomePage(
-                                                      events: events,
-                                                      user: user!,
-                                                      committees:
-                                                          widget.commiteeList,
-                                                      blogPosts:
-                                                          widget.blogPosts,
-                                                      posts: posts,
-                                                      token: token,
-                                                      minCommittees:
-                                                          minCommittees,
-                                                      minEvents: minEvents,
-                                                      minnCerts: minnCerts,
-                                                      userPosts: userPosts,
-                                                    )));
-                                      }));
+                                  .then((value) => getAllPosts(posts).then(
+                                      (value) => getAnnouncements(token)
+                                              .then((value) =>
+                                                  announcements = value)
+                                              .then((value) {
+                                            setState(() {
+                                              logging = false;
+                                            });
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        MyHomePage(
+                                                          seenAnnouncements:
+                                                              seenAnnouncements!,
+                                                          announcements:
+                                                              announcements,
+                                                          events: events,
+                                                          user: user!,
+                                                          committees: widget
+                                                              .commiteeList,
+                                                          blogPosts:
+                                                              widget.blogPosts,
+                                                          posts: posts,
+                                                          token: token,
+                                                          minCommittees:
+                                                              minCommittees,
+                                                          minEvents: minEvents,
+                                                          minnCerts: minnCerts,
+                                                          userPosts: userPosts,
+                                                        )));
+                                          })));
                             }
                           },
                           child: Container(
