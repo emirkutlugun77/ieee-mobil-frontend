@@ -23,11 +23,11 @@ class SlidingWidget extends StatelessWidget {
       controller: _panelController,
       defaultPanelState: PanelState.CLOSED,
       minHeight: 0,
-      maxHeight: height * 1 / 8,
+      maxHeight: height * 1 / 7,
       panel: Padding(
-        padding: EdgeInsets.all(30.0 * height / 1000),
+        padding: EdgeInsets.all(45.0 * height / 1000),
         child: Container(
-          height: height * 1 / 8,
+          height: height * 1 / 5,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
             color: backgroundColor,

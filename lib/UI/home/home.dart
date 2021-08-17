@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_app/MinimizedModels/MinCertificate.dart';
 import 'package:my_app/MinimizedModels/MinCommittee.dart';
 import 'package:my_app/MinimizedModels/MinEvent.dart';
+import 'package:my_app/UI/article/articles.dart';
 
 import 'package:my_app/UI/event/event_page.dart';
 import 'package:my_app/UI/feed/social_feed.dart';
@@ -81,7 +82,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 posts: widget.posts.reversed.toList(),
                 token: widget.token,
               ),
-              SearchBar(),
+              Articles(
+                blogPosts: widget.blogPosts,
+              ),
               Events(
                 user: widget.user,
                 events: widget.events,
@@ -118,8 +121,8 @@ class _MyHomePageState extends State<MyHomePage> {
             iconSize: 30, // tab button icon size
             // selected tab background color
             padding: EdgeInsets.symmetric(
-                horizontal: 15,
-                vertical: 15 *
+                horizontal: 25,
+                vertical: 25 *
                     MediaQuery.of(context).size.width /
                     500), // navigation bar padding
             tabs: [
@@ -130,7 +133,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 icon: LineIcons.hashtag,
               ),
               GButton(
-                icon: LineIcons.search,
+                icon: LineIcons.pen,
               ),
               GButton(
                 icon: LineIcons.layerGroup,

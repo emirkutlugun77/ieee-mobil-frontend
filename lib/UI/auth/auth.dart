@@ -12,7 +12,9 @@ import 'package:my_app/UI/models/event.dart';
 import 'package:my_app/UI/models/post.dart';
 
 class AuthPage extends StatefulWidget {
-  const AuthPage({Key? key}) : super(key: key);
+  AuthPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _AuthPageState createState() => _AuthPageState();
@@ -25,16 +27,19 @@ List<Post> posts = [];
 
 class _AuthPageState extends State<AuthPage> {
   late Future future;
-
+  bool login = true;
   @override
   void initState() {
     super.initState();
+    commiteeList.clear();
+    blogPosts.clear();
+    events.clear();
+    posts.clear();
     future = getAllCommittees(commiteeList)
         .then((value) => getMost5(blogPosts))
         .then((value) => getAllEvents(0).then((value) => events = value));
   }
 
-  bool login = true;
   PageController _pageController = PageController(initialPage: 0);
   @override
   Widget build(BuildContext context) {
@@ -93,7 +98,12 @@ class _AuthPageState extends State<AuthPage> {
                                   commiteeList: commiteeList,
                                   pageController: _pageController,
                                 ),
-                                SignInPage(),
+                                SignInPage(
+                                  events: events,
+                                  blogPosts: blogPosts,
+                                  commiteeList: commiteeList,
+                                  pageController: _pageController,
+                                ),
                                 ForgotPassword(
                                   pageController: _pageController,
                                 ),
@@ -111,7 +121,10 @@ class _AuthPageState extends State<AuthPage> {
         });
   }
 
-  Row _headerRow(double height, BuildContext context) {
+  Row _headerRow(
+    double height,
+    BuildContext context,
+  ) {
     return Row(
       children: [
         Expanded(

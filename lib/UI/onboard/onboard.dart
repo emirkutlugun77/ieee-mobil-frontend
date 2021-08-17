@@ -62,9 +62,10 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
 
       pages: [
         PageViewModel(
-          title: "Social Artık Mobilde!",
+          title: "Ufak bir not", //"Social Artık Mobilde!",
           body:
-              "Socialdaki birçok özellik artık mobil uygulamamızda, isterseniz komiteler hakkında bilgi alın, isterseniz makale okuyun!",
+              "Profil ve arama kısmında çıkan sonuçlara basınca oraya gitme olayını yapıcam aklımda, kayıt kısmının da çoğunu hallettim ama kullanma yine de ",
+          //"Socialdaki birçok özellik artık mobil uygulamamızda, isterseniz komiteler hakkında bilgi alın, isterseniz makale okuyun!",
           image: Image.asset('images/ob1.png'),
           decoration: pageDecoration.copyWith(
               imagePadding: EdgeInsets.only(bottom: 32)),

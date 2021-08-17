@@ -19,15 +19,22 @@ Future getUserSubscriptions(
         Uri.parse(baseUri + 'v1/users/$userId/subscriptions'),
         headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
     var decodedData = await jsonDecode(response.body);
-    await decodedData['subscriptions']
-        .forEach((e) => userCommites.add(MinCommittee(
-              id: e['committeeId']['_id'],
-              photo: e['committeeId']['photo'],
-              subCount: e['committeeId']['subscriptionCount'],
-              name: e['committeeId']['name'],
-              instaUrl: e['committeeId']['instaUrl'],
-            )));
-    return userCommites;
+    print(decodedData);
+    if (decodedData['subscriptions'] != null) {
+      await decodedData['subscriptions']
+          .forEach((e) => userCommites.add(MinCommittee(
+                id: e['committeeId']['_id'],
+                photo: e['committeeId']['photo'],
+                subCount: e['committeeId']['subscriptionCount'],
+                name: e['committeeId']['name'],
+                instaUrl: e['committeeId']['instaUrl'] != null
+                    ? e['committeeId']['instaUrl']
+                    : 'Instagram Linki Yok',
+              )));
+      return userCommites;
+    } else {
+      return [];
+    }
   } catch (e) {
     throw new Exception(e);
   }
@@ -40,16 +47,20 @@ Future checkCertificates(
         Uri.parse(baseUri + 'v1/users/me/certificates/?userId=' + userId),
         headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
     var decodedData = await jsonDecode(response.body);
-    await decodedData['certificates']
-        .forEach((e) => certificates.add(MinCertificate(
-              fontSize: e['fontSize'],
-              id: e['_id'],
-              x: e['x'],
-              y: e['y'],
-              photo: e['photo'],
-              fontUrl: e['googleFontUrl'],
-            )));
-    return certificates;
+    if (decodedData['certificates'] != null) {
+      await decodedData['certificates']
+          .forEach((e) => certificates.add(MinCertificate(
+                fontSize: e['fontSize'],
+                id: e['_id'],
+                x: e['x'],
+                y: e['y'],
+                photo: e['photo'],
+                fontUrl: e['googleFontUrl'],
+              )));
+      return certificates;
+    } else {
+      return [];
+    }
   } catch (e) {
     throw new Exception(e);
   }
@@ -62,13 +73,17 @@ Future getUserAttendedEvents(
         Uri.parse(baseUri + 'v1/event-sessions/users/' + userId),
         headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
     var decodedData = await jsonDecode(response.body);
-    await decodedData['eventSessions'].forEach((e) => events.add(MinEvent(
-        photo: e['eventId']['photo'],
-        committeeColor: e['eventId']['committeeId']['color'],
-        committeeName: e['eventId']['committeeId']['name'],
-        id: e['eventId']['_id'],
-        name: e['eventId']['name'])));
-    return events;
+    if (decodedData['eventSessions'] != null) {
+      await decodedData['eventSessions'].forEach((e) => events.add(MinEvent(
+          photo: e['eventId']['photo'],
+          committeeColor: e['eventId']['committeeId']['color'],
+          committeeName: e['eventId']['committeeId']['name'],
+          id: e['eventId']['_id'],
+          name: e['eventId']['name'])));
+      return events;
+    } else {
+      return [];
+    }
   } catch (e) {
     throw new Exception(e);
   }
@@ -81,9 +96,12 @@ Future getAllPostsByUserId(
         Uri.parse(baseUri + 'v1/post?userId=' + userId),
         headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
     var decodedData = await jsonDecode(response.body);
-
-    await decodedData['posts'].forEach((e) => posts.add(Post.fromJson(e)));
-    return posts;
+    if (decodedData['posts'] != null) {
+      await decodedData['posts'].forEach((e) => posts.add(Post.fromJson(e)));
+      return posts;
+    } else {
+      return [];
+    }
   } catch (e) {
     throw new Exception(e);
   }

@@ -49,7 +49,7 @@ class User {
         bio: json["bio"],
         photo: json["photo"] == null ? '' : json["photo"],
         phoneNo: json["phoneNo"] == null ? '' : json['phoneNo'],
-        committeeId: json['committeeId'],
+        committeeId: json['committeeId'] != null ? json['committeeId'] : '',
         title: json["title"] != null ? json["title"] : 'Üye',
         role: json["role"],
         name: json["name"],
@@ -89,7 +89,7 @@ class Education {
     required this.year,
   });
 
-  final String university;
+  late final String university;
   final String department;
   final int year;
 

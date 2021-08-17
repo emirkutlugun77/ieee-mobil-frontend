@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 import 'package:my_app/UI/models/user.dart';
 import 'package:my_app/UI/splash/splash.dart';
@@ -7,6 +8,7 @@ import 'package:my_app/UI/splash/splash.dart';
 class ProfileContainer extends StatelessWidget {
   const ProfileContainer({
     Key? key,
+    required this.pageController,
     required this.user,
     required this.width,
     required this.height,
@@ -14,6 +16,7 @@ class ProfileContainer extends StatelessWidget {
     required this.committeCount,
     required this.eventCount,
   }) : super(key: key);
+  final PageController pageController;
   final int blogCount;
   final int committeCount;
   final int eventCount;
@@ -138,7 +141,7 @@ class ProfileContainer extends StatelessWidget {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              width: width * 1 / 2,
+              width: width * 1 / 1.6,
               height: width * 1 / 6,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -147,75 +150,129 @@ class ProfileContainer extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
-                      child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Theme.of(context).primaryColorDark,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          eventCount.toString(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline1!
-                              .copyWith(color: Colors.white, fontSize: 20),
-                        ),
-                        Text(
-                          'Etkinlik',
-                          style: Theme.of(context)
-                              .textTheme
-                              .subtitle1!
-                              .copyWith(color: Colors.white, fontSize: 15),
-                        )
-                      ],
-                    ),
-                  )),
-                  Expanded(
-                      child: Container(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          committeCount.toString(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline1!
-                              .copyWith(color: Colors.white, fontSize: 20),
-                        ),
-                        Text(
-                          'Komite',
-                          style: Theme.of(context)
-                              .textTheme
-                              .subtitle1!
-                              .copyWith(color: Colors.white, fontSize: 15),
-                        )
-                      ],
+                      child: GestureDetector(
+                    onTap: () {
+                      pageController.animateToPage(0,
+                          duration: Duration(milliseconds: 200),
+                          curve: Curves.easeIn);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Theme.of(context).primaryColorDark,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            eventCount.toString(),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline1!
+                                .copyWith(color: Colors.white, fontSize: 20),
+                          ),
+                          Text(
+                            'Etkinlik',
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle1!
+                                .copyWith(color: Colors.white, fontSize: 15),
+                          )
+                        ],
+                      ),
                     ),
                   )),
                   Expanded(
-                      child: Container(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          blogCount.toString(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline1!
-                              .copyWith(color: Colors.white, fontSize: 20),
-                        ),
-                        Text(
-                          'Sertifika',
-                          style: Theme.of(context)
-                              .textTheme
-                              .subtitle1!
-                              .copyWith(color: Colors.white, fontSize: 15),
-                        )
-                      ],
+                      child: GestureDetector(
+                    onTap: () {
+                      pageController.animateToPage(1,
+                          duration: Duration(milliseconds: 200),
+                          curve: Curves.easeIn);
+                    },
+                    child: Container(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            committeCount.toString(),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline1!
+                                .copyWith(color: Colors.white, fontSize: 20),
+                          ),
+                          Text(
+                            'Komite',
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle1!
+                                .copyWith(color: Colors.white, fontSize: 15),
+                          )
+                        ],
+                      ),
                     ),
-                  ))
+                  )),
+                  Expanded(
+                      child: GestureDetector(
+                    onTap: () {
+                      pageController.animateToPage(2,
+                          duration: Duration(milliseconds: 200),
+                          curve: Curves.easeIn);
+                    },
+                    child: Container(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            blogCount.toString(),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline1!
+                                .copyWith(color: Colors.white, fontSize: 20),
+                          ),
+                          Text(
+                            'Sertifika',
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle1!
+                                .copyWith(color: Colors.white, fontSize: 13),
+                          )
+                        ],
+                      ),
+                    ),
+                  )),
+                  Expanded(
+                      child: GestureDetector(
+                    onTap: () {
+                      pageController.animateToPage(3,
+                          duration: Duration(milliseconds: 200),
+                          curve: Curves.easeIn);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Theme.of(context).primaryColorDark,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            blogCount.toString(),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline1!
+                                .copyWith(color: Colors.white, fontSize: 20),
+                          ),
+                          Text(
+                            'Pano',
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle1!
+                                .copyWith(color: Colors.white, fontSize: 15),
+                          )
+                        ],
+                      ),
+                    ),
+                  )),
                 ],
               ),
             ),

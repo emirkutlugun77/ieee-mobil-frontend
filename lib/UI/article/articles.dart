@@ -39,23 +39,20 @@ class _ArticlesState extends State<Articles> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Container(
         color: Colors.white,
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 58.0, left: 18, right: 58),
+              padding: EdgeInsets.only(
+                  top: 58.0 * height / 1000,
+                  left: 58 * height / 1000,
+                  right: 58 * height / 1000),
               child: Row(
                 children: [
-                  GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Icon(FontAwesomeIcons.chevronLeft)),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 20,
-                  ),
                   Text(
                     'Makaleler',
                     style: Theme.of(context).textTheme.headline1,

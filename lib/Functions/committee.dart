@@ -35,3 +35,11 @@ Future<List<Event>> getCommitteeEvents(String committeeId) async {
   decodedData['events'].forEach((e) => committeeEvents.add(Event.fromJson(e)));
   return committeeEvents;
 }
+
+Future getCommitteeById(String id) async {
+  var response = await http.get(Uri.parse(baseUri + 'v1/committees/$id'));
+
+  var decodedData = jsonDecode(response.body);
+  Commitee committee = Commitee.fromJson(decodedData['committee']);
+  return committee;
+}

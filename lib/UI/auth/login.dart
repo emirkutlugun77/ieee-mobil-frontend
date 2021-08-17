@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:loading_animations/loading_animations.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+
 import 'package:my_app/Functions/announce.dart';
 import 'package:my_app/Functions/post_functions.dart';
 import 'package:my_app/Functions/user.dart';
@@ -19,7 +20,6 @@ import 'package:my_app/Functions/auth_functions.dart';
 
 import 'package:my_app/UI/auth/auth_widgets/slidingUpPanel.dart';
 import 'package:my_app/UI/home/home.dart';
-
 import 'package:my_app/UI/models/blogposts.dart';
 import 'package:my_app/UI/models/commitee.dart';
 import 'package:my_app/UI/models/user.dart';
@@ -44,22 +44,28 @@ class LoginPage extends StatefulWidget {
 
 User? user;
 bool logging = false;
-dynamic userVariable = 'Lütfen Bekleyin';
+const userVariable = 'E-mail veya Şifre Hatalı';
 String email = '';
 String password = '';
 String token = '';
 
 //USER VARIABLES
-List<Announcement> announcements = [];
-List<Post> userPosts = [];
-List<MinEvent> minEvents = [];
-List<MinCertificate> minnCerts = [];
-List<MinCommittee> minCommittees = [];
 
 //USER VARIABLES
 class _LoginPageState extends State<LoginPage> {
+  List<Announcement> announcements = [];
+  List<Post> userPosts = [];
+  List<MinEvent> minEvents = [];
+  List<MinCertificate> minnCerts = [];
+  List<MinCommittee> minCommittees = [];
   bool obsPass = true;
   PanelController _panelController = PanelController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    announcements = [];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,192 +75,188 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.transparent,
-      body: ModalProgressHUD(
-        opacity: 0,
-        inAsyncCall: logging,
-        progressIndicator: LoadingBouncingGrid.circle(
-          backgroundColor: Theme.of(context).primaryColor,
-        ),
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: width / 25, horizontal: width / 25),
-                child: Container(
-                  height: height / 1.5,
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).backgroundColor,
-                      borderRadius: BorderRadius.circular(35)),
-                  child: Padding(
-                    padding: EdgeInsets.all(width * 1 / 9),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              'Hoşgeldin',
-                              style: Theme.of(context).textTheme.headline1,
-                            ),
-                          ],
-                        ),
-                        verticalSpace(height / 2),
-                        Row(
-                          children: [
-                            Text(
-                              'Hesabınızla hemen giriş yapın',
-                              style: Theme.of(context).textTheme.subtitle1,
-                            ),
-                          ],
-                        ),
-                        verticalSpace(height * 2.4),
-                        Row(
-                          children: [
-                            Text(
-                              'Kullanıcı Adı',
-                              style: Theme.of(context).textTheme.subtitle2,
-                            )
-                          ],
-                        ),
-                        verticalSpace(height / 1.5),
-                        Center(
-                          child: usernameTextField(
-                            context,
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                  vertical: width / 25, horizontal: width / 25),
+              child: Container(
+                height: height / 1.5,
+                decoration: BoxDecoration(
+                    color: Theme.of(context).backgroundColor,
+                    borderRadius: BorderRadius.circular(35)),
+                child: Padding(
+                  padding: EdgeInsets.all(width * 1 / 9),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            'Hoşgeldin',
+                            style: Theme.of(context).textTheme.headline1,
                           ),
+                        ],
+                      ),
+                      verticalSpace(height / 2),
+                      Row(
+                        children: [
+                          Text(
+                            'Hesabınızla hemen giriş yapın',
+                            style: Theme.of(context).textTheme.subtitle1,
+                          ),
+                        ],
+                      ),
+                      verticalSpace(height * 2.4),
+                      Row(
+                        children: [
+                          Text(
+                            'E-mail',
+                            style: Theme.of(context).textTheme.subtitle2,
+                          )
+                        ],
+                      ),
+                      verticalSpace(height / 1.5),
+                      Center(
+                        child: usernameTextField(
+                          context,
                         ),
-                        verticalSpace(height * 1.5),
-                        Row(
-                          children: [
-                            Text(
-                              'Şifre',
-                              style: Theme.of(context).textTheme.subtitle2,
-                            )
-                          ],
-                        ),
-                        verticalSpace(height / 1.5),
-                        Center(
-                          child: passwordTextField(context),
-                        ),
-                        verticalSpace(height * 1.5),
-                        GestureDetector(
-                          onTap: () async {
-                            setState(() {
-                              logging = true;
+                      ),
+                      verticalSpace(height * 1.5),
+                      Row(
+                        children: [
+                          Text(
+                            'Şifre',
+                            style: Theme.of(context).textTheme.subtitle2,
+                          )
+                        ],
+                      ),
+                      verticalSpace(height / 1.5),
+                      Center(
+                        child: passwordTextField(context),
+                      ),
+                      verticalSpace(height * 1.5),
+                      GestureDetector(
+                        onTap: () async {
+                          EasyLoading.instance
+                            ..loadingStyle = EasyLoadingStyle.light
+                            ..indicatorSize = 45.0
+                            ..radius = 10.0
+                            ..backgroundColor = Colors.transparent
+                            ..textColor = Colors.yellow
+                            ..maskColor = Colors.blue.withOpacity(0.5)
+                            ..dismissOnTap = false;
+                          EasyLoading.show(
+                              indicator: LoadingBouncingGrid.square(
+                            backgroundColor: Theme.of(context).primaryColor,
+                          ));
+                          var result = await loginUser(email, password);
+
+                          if (!(result is User)) {
+                            _panelController.open();
+
+                            Future.delayed(Duration(seconds: 1)).then((value) {
+                              EasyLoading.dismiss();
+
+                              _panelController.close();
                             });
-                            var result = await loginUser(email, password);
-
-                            if (!(result is User)) {
-                              userVariable = result;
-                              _panelController.open();
-
-                              Future.delayed(Duration(seconds: 1))
-                                  .then((value) {
-                                print('panel');
-                                setState(() {
-                                  logging = false;
-                                });
-                                _panelController.close();
-                              });
-                            } else {
-                              user = result;
-                              SharedPreferences prefs =
-                                  await SharedPreferences.getInstance();
-                              int? seenAnnouncements =
-                                  prefs.getInt('seen') != null
-                                      ? prefs.getInt('seen')
-                                      : 0;
-                              prefs.setBool('logged', true);
-                              prefs.setString('id', user!.id);
-                              token = prefs.getString('token')!;
-                              getUserData(user!.id, minCommittees, minnCerts,
-                                      minEvents, userPosts, token)
-                                  .then((value) => getAllPosts(posts).then(
-                                      (value) => getAnnouncements(token)
-                                              .then((value) =>
-                                                  announcements = value)
-                                              .then((value) {
-                                            setState(() {
-                                              logging = false;
-                                            });
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        MyHomePage(
-                                                          seenAnnouncements:
-                                                              seenAnnouncements!,
-                                                          announcements:
-                                                              announcements,
-                                                          events: events,
-                                                          user: user!,
-                                                          committees: widget
-                                                              .commiteeList,
-                                                          blogPosts:
-                                                              widget.blogPosts,
-                                                          posts: posts,
-                                                          token: token,
-                                                          minCommittees:
-                                                              minCommittees,
-                                                          minEvents: minEvents,
-                                                          minnCerts: minnCerts,
-                                                          userPosts: userPosts,
-                                                        )));
-                                          })));
-                            }
-                          },
-                          child: Container(
-                            height: height * 1 / 14,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                color: Theme.of(context).primaryColor),
-                            child: Center(
-                              child: Text(
-                                'Giriş Yap',
-                                style: Theme.of(context).textTheme.headline3,
-                              ),
+                          } else {
+                            user = result;
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            int? seenAnnouncements =
+                                prefs.getInt('seen') != null
+                                    ? prefs.getInt('seen')
+                                    : 0;
+                            prefs.setBool('logged', true);
+                            prefs.setString('id', user!.id);
+                            token = prefs.getString('token')!;
+                            getUserData(user!.id, minCommittees, minnCerts,
+                                    minEvents, userPosts, token)
+                                .then((value) => getAllPosts(posts).then(
+                                    (value) => getAnnouncements(token)
+                                            .then((value) =>
+                                                announcements = value)
+                                            .then((value) {
+                                          EasyLoading.dismiss();
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      MyHomePage(
+                                                        seenAnnouncements:
+                                                            seenAnnouncements!,
+                                                        announcements:
+                                                            announcements,
+                                                        events: events,
+                                                        user: user!,
+                                                        committees:
+                                                            widget.commiteeList,
+                                                        blogPosts:
+                                                            widget.blogPosts,
+                                                        posts: posts,
+                                                        token: token,
+                                                        minCommittees:
+                                                            minCommittees,
+                                                        minEvents: minEvents,
+                                                        minnCerts: minnCerts,
+                                                        userPosts: userPosts,
+                                                      )));
+                                        })));
+                          }
+                        },
+                        child: Container(
+                          height: height * 1 / 14,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: Theme.of(context).primaryColor),
+                          child: Center(
+                            child: Text(
+                              'Giriş Yap',
+                              style: Theme.of(context).textTheme.headline3,
                             ),
                           ),
                         ),
-                        verticalSpace(height),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Şifreni mi Unuttun?',
-                              style: Theme.of(context).textTheme.subtitle1,
+                      ),
+                      verticalSpace(height),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Şifreni mi Unuttun?',
+                            style: Theme.of(context).textTheme.subtitle1,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              widget.pageController.animateToPage(2,
+                                  duration: Duration(milliseconds: 750),
+                                  curve: Curves.ease);
+                            },
+                            child: Text(
+                              ' Burdan Yenile',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1!
+                                  .copyWith(
+                                      color: Theme.of(context).primaryColor),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                widget.pageController.animateToPage(2,
-                                    duration: Duration(milliseconds: 750),
-                                    curve: Curves.ease);
-                              },
-                              child: Text(
-                                ' Burdan Yenile',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle1!
-                                    .copyWith(
-                                        color: Theme.of(context).primaryColor),
-                              ),
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
+                          )
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
-            SlidingWidget(
-              panelController: _panelController,
-              height: height,
-              message: userVariable,
-              backgroundColor: Theme.of(context).errorColor,
-            )
-          ],
-        ),
+          ),
+          SlidingWidget(
+            panelController: _panelController,
+            height: height,
+            message: userVariable,
+            backgroundColor: Theme.of(context).errorColor,
+          )
+        ],
       ),
     );
   }
@@ -288,18 +290,19 @@ class _LoginPageState extends State<LoginPage> {
               borderSide:
                   BorderSide(color: Theme.of(context).primaryColorDark)),
           suffix: GestureDetector(
-            onTapDown: (_) {
-              setState(() {
-                obsPass = false;
-              });
-            },
-            onTapCancel: () {
-              setState(() {
-                obsPass = true;
-              });
+            onTap: () {
+              if (obsPass) {
+                setState(() {
+                  obsPass = false;
+                });
+              } else {
+                setState(() {
+                  obsPass = true;
+                });
+              }
             },
             child: Text(
-              'Göster',
+              obsPass ? 'Göster' : 'Gizle',
               style: Theme.of(context)
                   .textTheme
                   .bodyText2!
