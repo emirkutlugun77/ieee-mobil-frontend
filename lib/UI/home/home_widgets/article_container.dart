@@ -105,6 +105,7 @@ class _ArticleContainerState extends State<ArticleContainer> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         LikeButton(
+                          circleSize: 10,
                           likeCount: widget.blogPost.likeCount,
                           onTap: (isLiked) async {
                             likeBlog(isLiked, widget.token, widget.blogPost);
@@ -127,14 +128,10 @@ class _ArticleContainerState extends State<ArticleContainer> {
                           },
                         ),
                         SizedBox(
-                          width: widget.width * 1 / 120,
-                        ),
-                        LineIcon.clock(
-                          color: Theme.of(context).cardColor,
-                          size: widget.height / 25,
+                          width: widget.width * 1 / 20,
                         ),
                         Text(
-                          widget.blogPost.date.format('m/j/y , H:i'),
+                          'Tarih: ' + widget.blogPost.date.format('m/j/y  H:i'),
                           style: Theme.of(context)
                               .textTheme
                               .subtitle1!

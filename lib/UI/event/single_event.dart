@@ -5,8 +5,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:getwidget/getwidget.dart';
+import 'package:loading_animations/loading_animations.dart';
+import 'package:my_app/Functions/events.dart';
+import 'package:my_app/UI/models/comment.dart';
 import 'package:my_app/scan.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -30,6 +35,8 @@ class SingleEvent extends StatefulWidget {
 const List<String> choices = <String>['QR Kod Oku'];
 bool commentOrSession = false;
 PanelController _panelController = PanelController();
+PanelController _panelController1 = PanelController();
+List<Comment> comments = [];
 
 class _SingleEventState extends State<SingleEvent> {
   bool showUsers = false;
@@ -55,7 +62,14 @@ class _SingleEventState extends State<SingleEvent> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-
+    EasyLoading.instance
+      ..loadingStyle = EasyLoadingStyle.light
+      ..indicatorSize = 45.0
+      ..radius = 10.0
+      ..backgroundColor = Colors.transparent
+      ..textColor = Colors.yellow
+      ..maskColor = Colors.blue.withOpacity(0.5)
+      ..dismissOnTap = false;
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: Stack(
@@ -115,6 +129,7 @@ class _SingleEventState extends State<SingleEvent> {
                         children: [
                           GestureDetector(
                             onTap: () {
+                              comments.clear();
                               Navigator.pop(context);
                             },
                             child: Icon(
@@ -196,8 +211,24 @@ class _SingleEventState extends State<SingleEvent> {
                                   Padding(
                                     padding:
                                         EdgeInsets.all(8.0 * height / 1000),
-                                    child: CustomChipForEvent(
-                                      tag: 'Yorumlar',
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        comments.clear();
+                                        EasyLoading.show(
+                                            indicator:
+                                                LoadingBouncingGrid.square(
+                                          backgroundColor:
+                                              Theme.of(context).primaryColor,
+                                        ));
+                                        await findEventComments(
+                                            comments, widget.event.id);
+                                        setState(() {});
+                                        EasyLoading.dismiss();
+                                        _panelController1.open();
+                                      },
+                                      child: CustomChipForEvent(
+                                        tag: 'Yorumlar',
+                                      ),
                                     ),
                                   ),
                                   Padding(
@@ -232,129 +263,229 @@ class _SingleEventState extends State<SingleEvent> {
               ),
             ],
           ),
-          SlidingUpPanel(
-            slideDirection: SlideDirection.UP,
-            minHeight: 0,
-            maxHeight: height,
-            defaultPanelState: PanelState.CLOSED,
-            controller: _panelController,
-            panel: Padding(
-              padding: EdgeInsets.all(58.0 * height / 1000),
-              child: SingleChildScrollView(
-                physics: ScrollPhysics(),
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      children: [
-                        GestureDetector(
-                            onTap: () {
-                              _panelController.close();
-                            },
-                            child: Icon(Icons.clear))
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Oturumlar',
-                          style: Theme.of(context).textTheme.headline1,
-                        )
-                      ],
-                    ),
-                    ListView.builder(
-                        padding: EdgeInsets.all(3),
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: widget.event.sessions.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: EdgeInsets.all(8.0 * height / 1000),
-                            child: Container(
-                              width: width,
-                              height: width / 4,
-                              decoration: BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(
-                                        color: Colors.black, width: 0.5)),
-                                color: Theme.of(context).backgroundColor,
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
+          slidingForSessions(height, context, width),
+          slidingForComments(
+            height,
+            context,
+            width,
+          )
+        ],
+      ),
+    );
+  }
+
+  SlidingUpPanel slidingForSessions(
+      double height, BuildContext context, double width) {
+    return SlidingUpPanel(
+      slideDirection: SlideDirection.UP,
+      minHeight: 0,
+      maxHeight: height,
+      defaultPanelState: PanelState.CLOSED,
+      controller: _panelController,
+      panel: Padding(
+        padding: EdgeInsets.all(58.0 * height / 1000),
+        child: SingleChildScrollView(
+          physics: ScrollPhysics(),
+          child: Column(
+            children: <Widget>[
+              Row(
+                children: [
+                  GestureDetector(
+                      onTap: () {
+                        _panelController.close();
+                      },
+                      child: Icon(Icons.clear))
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Oturumlar',
+                    style: Theme.of(context).textTheme.headline1,
+                  )
+                ],
+              ),
+              ListView.builder(
+                  padding: EdgeInsets.all(3),
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: widget.event.sessions.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: EdgeInsets.all(8.0 * height / 1000),
+                      child: Container(
+                        width: width,
+                        height: width / 4,
+                        decoration: BoxDecoration(
+                          border: Border(
+                              bottom:
+                                  BorderSide(color: Colors.black, width: 0.5)),
+                          color: Theme.of(context).backgroundColor,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SingleChildScrollView(
+                              child: Column(
                                 children: [
-                                  SingleChildScrollView(
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          width: width / 1.7,
-                                          child: Text(
-                                              widget
-                                                  .event.sessions[index].title,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyText1),
-                                        ),
-                                        Container(
-                                            width: width / 2,
-                                            child: Text(
-                                              widget.event.sessions[index].time
-                                                  .format('m/j/y , H:i'),
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyText1!
-                                                  .copyWith(
-                                                      color: Theme.of(context)
-                                                          .primaryColor),
-                                            )),
-                                      ],
-                                    ),
+                                  Container(
+                                    width: width / 1.7,
+                                    child: Text(
+                                        widget.event.sessions[index].title,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1),
                                   ),
-                                  widget.user.role == 0
-                                      ? PopupMenuButton<String>(
-                                          color: Colors.white,
-                                          icon:
-                                              Icon(FontAwesomeIcons.ellipsisH),
-                                          itemBuilder: (BuildContext context) {
-                                            return choices.map((String choice) {
-                                              return PopupMenuItem<String>(
-                                                value: choice,
-                                                child: GestureDetector(
-                                                    onTap: () async {
-                                                      if (choice ==
-                                                          'QR Kod Oku') {
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        ScanViewPage(
-                                                                          eventId: widget
-                                                                              .event
-                                                                              .id,
-                                                                          sessionId: widget
-                                                                              .event
-                                                                              .sessions[index]
-                                                                              .id,
-                                                                        )));
-                                                      }
-                                                    },
-                                                    child: Text(choice)),
-                                              );
-                                            }).toList();
-                                          },
-                                        )
-                                      : SizedBox()
+                                  Container(
+                                      width: width / 2,
+                                      child: Text(
+                                        widget.event.sessions[index].time
+                                            .format('m/j/y , H:i'),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .copyWith(
+                                                color: Theme.of(context)
+                                                    .primaryColor),
+                                      )),
                                 ],
                               ),
                             ),
-                          );
-                        })
-                  ],
-                ),
-              ),
-            ),
+                            widget.user.role == 0
+                                ? PopupMenuButton<String>(
+                                    color: Colors.white,
+                                    icon: Icon(FontAwesomeIcons.ellipsisH),
+                                    itemBuilder: (BuildContext context) {
+                                      return choices.map((String choice) {
+                                        return PopupMenuItem<String>(
+                                          value: choice,
+                                          child: GestureDetector(
+                                              onTap: () async {
+                                                if (choice == 'QR Kod Oku') {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ScanViewPage(
+                                                                eventId: widget
+                                                                    .event.id,
+                                                                sessionId: widget
+                                                                    .event
+                                                                    .sessions[
+                                                                        index]
+                                                                    .id,
+                                                              )));
+                                                }
+                                              },
+                                              child: Text(choice)),
+                                        );
+                                      }).toList();
+                                    },
+                                  )
+                                : SizedBox()
+                          ],
+                        ),
+                      ),
+                    );
+                  })
+            ],
           ),
-        ],
+        ),
+      ),
+    );
+  }
+
+  SlidingUpPanel slidingForComments(
+    double height,
+    BuildContext context,
+    double width,
+  ) {
+    return SlidingUpPanel(
+      slideDirection: SlideDirection.UP,
+      minHeight: 0,
+      maxHeight: height,
+      defaultPanelState: PanelState.CLOSED,
+      controller: _panelController1,
+      panel: Padding(
+        padding: EdgeInsets.all(38.0 * height / 1000),
+        child: SingleChildScrollView(
+          physics: ScrollPhysics(),
+          child: Column(
+            children: <Widget>[
+              Row(
+                children: [
+                  GestureDetector(
+                      onTap: () {
+                        _panelController1.close();
+                      },
+                      child: Icon(Icons.clear))
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Yorumlar',
+                    style: Theme.of(context).textTheme.headline1,
+                  )
+                ],
+              ),
+              comments.length == 0
+                  ? Center(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 100.0 * height / 1000),
+                        child: Text(
+                          'Henüz Yorum Yok',
+                          style: Theme.of(context).textTheme.headline1,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    )
+                  : ListView.builder(
+                      padding: EdgeInsets.all(3),
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: comments.length,
+                      itemBuilder: (context, index) {
+                        return GFListTile(
+                          avatar: GFAvatar(
+                            backgroundImage: NetworkImage(comments[index]
+                                        .userId
+                                        .photo !=
+                                    ''
+                                ? comments[index].userId.photo
+                                : 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png'),
+                            shape: GFAvatarShape.standard,
+                          ),
+                          title: Text(
+                            comments[index].userId.name +
+                                ' ' +
+                                comments[index].userId.surname,
+                            style: Theme.of(context).textTheme.bodyText2,
+                          ),
+                          description: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                comments[index].date.format('m/j/y , H:i'),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .subtitle1!
+                                    .copyWith(fontSize: 12 * height / 800),
+                              ),
+                            ],
+                          ),
+                          subTitle: Text(
+                            comments[index].text,
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                        );
+                      })
+            ],
+          ),
+        ),
       ),
     );
   }

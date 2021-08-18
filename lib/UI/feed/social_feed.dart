@@ -110,137 +110,9 @@ class _SocialFeedState extends State<SocialFeed> {
                       itemCount: widget.posts.length,
                       itemBuilder: (context, index) {
                         if (widget.posts[index].photo == '') {
-                          return GFListTile(
-                              avatar: GFAvatar(
-                                backgroundImage: NetworkImage(widget
-                                            .posts[index].userId.photo !=
-                                        ''
-                                    ? widget.posts[index].userId.photo
-                                    : 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png'),
-                                shape: GFAvatarShape.standard,
-                              ),
-                              title: Text(
-                                widget.posts[index].userId.name +
-                                    ' ' +
-                                    widget.posts[index].userId.surname,
-                                style: Theme.of(context).textTheme.bodyText2,
-                              ),
-                              description: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    widget.posts[index].date
-                                        .format('m/j/y , H:i'),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .subtitle1!
-                                        .copyWith(fontSize: 12 * height / 800),
-                                  ),
-                                  GFButtonBadge(
-                                    color: Color(0xFFF8FAFF),
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  SingleComment()));
-                                    },
-                                  ),
-                                ],
-                              ),
-                              subTitle: Text(
-                                widget.posts[index].text,
-                                style: Theme.of(context).textTheme.bodyText1,
-                              ),
-                              icon: LikeButton(
-                                likeCount: widget.posts[index].likeCount,
-                                onTap: (isLiked) async {
-                                  onLikeButtonTapped(isLiked,
-                                      widget.posts[index].id, widget.token);
-                                  return !isLiked;
-                                },
-                                isLiked: widget.posts[index].liked,
-                                bubblesColor: BubblesColor(
-                                  dotPrimaryColor: Colors.red,
-                                  dotSecondaryColor: Colors.redAccent,
-                                ),
-                                likeBuilder: (bool isLiked) {
-                                  return Icon(
-                                    FontAwesomeIcons.solidHeart,
-                                    color: isLiked ? Colors.red : Colors.grey,
-                                    size: 30,
-                                  );
-                                },
-                              ));
+                          return postBox(index, context, height);
                         } else {
-                          return Column(
-                            children: [
-                              GFListTile(
-                                  avatar: GFAvatar(
-                                    backgroundImage: NetworkImage(widget
-                                                .posts[index].userId.photo !=
-                                            ''
-                                        ? widget.posts[index].userId.photo
-                                        : 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png'),
-                                    shape: GFAvatarShape.standard,
-                                  ),
-                                  title: Text(
-                                    widget.posts[index].userId.name +
-                                        ' ' +
-                                        widget.posts[index].userId.surname,
-                                    style:
-                                        Theme.of(context).textTheme.bodyText2,
-                                  ),
-                                  description: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        widget.posts[index].date
-                                            .format('m/j/y , H:i'),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle1!
-                                            .copyWith(
-                                                fontSize: 12 * height / 800),
-                                      ),
-                                    ],
-                                  ),
-                                  subTitle: Text(
-                                    widget.posts[index].text,
-                                    style:
-                                        Theme.of(context).textTheme.bodyText1,
-                                  ),
-                                  icon: LikeButton(
-                                    onTap: (isLiked) async {
-                                      onLikeButtonTapped(isLiked,
-                                          widget.posts[index].id, widget.token);
-                                      return !isLiked;
-                                    },
-                                    isLiked: widget.posts[index].liked,
-                                    bubblesColor: BubblesColor(
-                                      dotPrimaryColor: Colors.red,
-                                      dotSecondaryColor: Colors.redAccent,
-                                    ),
-                                    likeBuilder: (bool isLiked) {
-                                      return Icon(
-                                        FontAwesomeIcons.solidHeart,
-                                        color:
-                                            isLiked ? Colors.red : Colors.grey,
-                                        size: 30,
-                                      );
-                                    },
-                                  )),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    bottom: 18.0, left: 18.0, right: 18),
-                                child: CachedNetworkImage(
-                                  imageUrl: widget.posts[index].photo,
-                                ),
-                              )
-                            ],
-                          );
+                          return postBoxWithImage(index, context, height);
                         }
                       }),
                 )
@@ -401,5 +273,125 @@ class _SocialFeedState extends State<SocialFeed> {
         )
       ],
     );
+  }
+
+  Column postBoxWithImage(int index, BuildContext context, double height) {
+    return Column(
+      children: [
+        GFListTile(
+            avatar: GFAvatar(
+              backgroundImage: NetworkImage(widget.posts[index].userId.photo !=
+                      ''
+                  ? widget.posts[index].userId.photo
+                  : 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png'),
+              shape: GFAvatarShape.standard,
+            ),
+            title: Text(
+              widget.posts[index].userId.name +
+                  ' ' +
+                  widget.posts[index].userId.surname,
+              style: Theme.of(context).textTheme.bodyText2,
+            ),
+            description: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  widget.posts[index].date.format('m/j/y , H:i'),
+                  style: Theme.of(context)
+                      .textTheme
+                      .subtitle1!
+                      .copyWith(fontSize: 12 * height / 800),
+                ),
+              ],
+            ),
+            subTitle: Text(
+              widget.posts[index].text,
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+            icon: LikeButton(
+              onTap: (isLiked) async {
+                onLikeButtonTapped(
+                    isLiked, widget.posts[index].id, widget.token);
+                return !isLiked;
+              },
+              isLiked: widget.posts[index].liked,
+              bubblesColor: BubblesColor(
+                dotPrimaryColor: Colors.red,
+                dotSecondaryColor: Colors.redAccent,
+              ),
+              likeBuilder: (bool isLiked) {
+                return Icon(
+                  FontAwesomeIcons.solidHeart,
+                  color: isLiked ? Colors.red : Colors.grey,
+                  size: 30,
+                );
+              },
+            )),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 18.0, left: 18.0, right: 18),
+          child: CachedNetworkImage(
+            imageUrl: widget.posts[index].photo,
+          ),
+        )
+      ],
+    );
+  }
+
+  GFListTile postBox(int index, BuildContext context, double height) {
+    return GFListTile(
+        avatar: GFAvatar(
+          backgroundImage: NetworkImage(widget.posts[index].userId.photo != ''
+              ? widget.posts[index].userId.photo
+              : 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png'),
+          shape: GFAvatarShape.standard,
+        ),
+        title: Text(
+          widget.posts[index].userId.name +
+              ' ' +
+              widget.posts[index].userId.surname,
+          style: Theme.of(context).textTheme.bodyText2,
+        ),
+        description: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              widget.posts[index].date.format('m/j/y , H:i'),
+              style: Theme.of(context)
+                  .textTheme
+                  .subtitle1!
+                  .copyWith(fontSize: 12 * height / 800),
+            ),
+            GFButtonBadge(
+              color: Color(0xFFF8FAFF),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SingleComment()));
+              },
+            ),
+          ],
+        ),
+        subTitle: Text(
+          widget.posts[index].text,
+          style: Theme.of(context).textTheme.bodyText1,
+        ),
+        icon: LikeButton(
+          likeCount: widget.posts[index].likeCount,
+          onTap: (isLiked) async {
+            onLikeButtonTapped(isLiked, widget.posts[index].id, widget.token);
+            return !isLiked;
+          },
+          isLiked: widget.posts[index].liked,
+          bubblesColor: BubblesColor(
+            dotPrimaryColor: Colors.red,
+            dotSecondaryColor: Colors.redAccent,
+          ),
+          likeBuilder: (bool isLiked) {
+            return Icon(
+              FontAwesomeIcons.solidHeart,
+              color: isLiked ? Colors.red : Colors.grey,
+              size: 30,
+            );
+          },
+        ));
   }
 }

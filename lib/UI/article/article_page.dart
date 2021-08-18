@@ -1,9 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:like_button/like_button.dart';
 
 import 'package:line_icons/line_icon.dart';
 import 'package:date_time_format/date_time_format.dart';
+import 'package:my_app/Functions/blog.dart';
 import 'package:my_app/UI/article/article_widgets/chip.dart';
 import 'package:my_app/UI/models/blogposts.dart';
 
@@ -54,23 +57,6 @@ class _ArticlePageState extends State<ArticlePage> {
                     size: 30,
                   ),
                 ),
-                PopupMenuButton<dynamic>(
-                  color: Colors.white,
-                  icon: LineIcon.horizontalEllipsis(),
-                  itemBuilder: (BuildContext context) {
-                    return choices.map((Html choice) {
-                      return PopupMenuItem(
-                        value: choice,
-                        child: GestureDetector(
-                            onTap: () async {
-                              if (choice == 'QR Kodum') {
-                              } else if (choice == 'Çıkış Yap') {}
-                            },
-                            child: choice),
-                      );
-                    }).toList();
-                  },
-                ),
               ],
             ),
           ),
@@ -96,10 +82,10 @@ class _ArticlePageState extends State<ArticlePage> {
             children: [
               Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: 58.0 * height / 1000,
+                  horizontal: 88.0 * height / 1000,
                 ),
                 child: Wrap(
-                  spacing: 1,
+                  spacing: 4,
                   children: [
                     CustomChip(
                       tag: widget.blogPost.blogCategoryId.name,
@@ -154,13 +140,28 @@ class _ArticlePageState extends State<ArticlePage> {
                     SizedBox(
                       width: width * 1 / 14,
                     ),
-                    LineIcon.telegramPlane(
-                      size: 30,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    LineIcon.bookmark(
-                      color: Theme.of(context).primaryColor,
-                      size: 30,
+                    LikeButton(
+                      circleSize: 10,
+                      likeCount: widget.blogPost.likeCount,
+                      onTap: (isLiked) async {
+                        likeBlog(isLiked, widget.token, widget.blogPost);
+
+                        widget.blogPost.liked = !isLiked;
+
+                        return !isLiked;
+                      },
+                      isLiked: widget.blogPost.liked,
+                      bubblesColor: BubblesColor(
+                        dotPrimaryColor: Colors.red,
+                        dotSecondaryColor: Colors.redAccent,
+                      ),
+                      likeBuilder: (bool isLiked) {
+                        return Icon(
+                          FontAwesomeIcons.solidHeart,
+                          color: isLiked ? Colors.red : Colors.grey,
+                          size: 30,
+                        );
+                      },
                     ),
                   ],
                 ),

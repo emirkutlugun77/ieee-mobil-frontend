@@ -107,6 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
         bottomNavigationBar: GNav(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             backgroundColor: Theme.of(context).backgroundColor,
             selectedIndex: _currentIndex,
             rippleColor: Colors.grey, // tab button ripple color when pressed
@@ -129,10 +130,10 @@ class _MyHomePageState extends State<MyHomePage> {
             iconSize: 30, // tab button icon size
             // selected tab background color
             padding: EdgeInsets.symmetric(
-                horizontal: 25,
+                horizontal: 25 * MediaQuery.of(context).size.height / 1000,
                 vertical: 25 *
-                    MediaQuery.of(context).size.width /
-                    500), // navigation bar padding
+                    MediaQuery.of(context).size.height /
+                    1300), // navigation bar padding
             tabs: [
               GButton(
                 icon: LineIcons.home,

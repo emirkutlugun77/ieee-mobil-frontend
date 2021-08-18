@@ -4,21 +4,27 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:date_time_format/date_time_format.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getwidget/components/badge/gf_badge.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:line_icons/line_icon.dart';
+import 'package:loading_animations/loading_animations.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
+import 'package:my_app/Functions/committee.dart';
+import 'package:my_app/Functions/events.dart';
 
 import 'package:my_app/Functions/search.dart';
 import 'package:my_app/UI/article/article_page.dart';
 import 'package:my_app/UI/article/articles.dart';
 import 'package:my_app/UI/commitee_page/commitee.dart';
+import 'package:my_app/UI/event/single_event.dart';
 
 import 'package:my_app/UI/models/announcement.dart';
 
 import 'package:my_app/UI/models/blogposts.dart';
 import 'package:my_app/UI/models/commitee.dart';
+import 'package:my_app/UI/models/event.dart';
 import 'package:my_app/UI/models/user.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,13 +35,15 @@ ListBox result = ListBox(events: [], committees: []);
 
 // ignore: must_be_immutable
 class Home1 extends StatefulWidget {
-  Home1(
-      {required this.seenAnnouncements,
-      required this.announcements,
-      required this.user,
-      required this.committees,
-      required this.blogPosts});
+  Home1({
+    required this.seenAnnouncements,
+    required this.announcements,
+    required this.user,
+    required this.committees,
+    required this.blogPosts,
+  });
   int seenAnnouncements;
+
   User user;
   List<Commitee> committees;
   List<BlogPost> blogPosts;
@@ -53,6 +61,14 @@ class _Home1State extends State<Home1> {
 
   @override
   Widget build(BuildContext context) {
+    EasyLoading.instance
+      ..loadingStyle = EasyLoadingStyle.light
+      ..indicatorSize = 45.0
+      ..radius = 10.0
+      ..backgroundColor = Colors.transparent
+      ..textColor = Colors.yellow
+      ..maskColor = Colors.blue.withOpacity(0.5)
+      ..dismissOnTap = false;
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Stack(
@@ -370,43 +386,64 @@ class _Home1State extends State<Home1> {
                                   padding: EdgeInsets.zero,
                                   itemCount: result.committees.length,
                                   itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8.0, horizontal: 28),
-                                      child: Container(
-                                        color: Colors.white,
-                                        child: GFListTile(
-                                            avatar: CachedNetworkImage(
-                                              imageUrl: result
-                                                  .committees[index].photo,
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                  7,
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                  7,
-                                              progressIndicatorBuilder:
-                                                  (context, url,
-                                                          downloadProgress) =>
-                                                      CircularProgressIndicator(
-                                                          value:
-                                                              downloadProgress
-                                                                  .progress),
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                      Icon(Icons.error),
-                                            ),
-                                            title: Text(
-                                                result.committees[index].name,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline1!
-                                                    .copyWith(
-                                                        color: Colors.black)),
-                                            icon: Icon(
-                                                FontAwesomeIcons.chevronRight)),
+                                    return GestureDetector(
+                                      onTap: () async {
+                                        EasyLoading.show(
+                                            indicator:
+                                                LoadingBouncingGrid.square(
+                                          backgroundColor:
+                                              Theme.of(context).primaryColor,
+                                        ));
+                                        Commitee com = await getCommitteeById(
+                                            result.committees[index].id);
+                                        EasyLoading.dismiss();
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ComiteePage(
+                                                      commitee: com,
+                                                      user: widget.user,
+                                                    )));
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8.0, horizontal: 28),
+                                        child: Container(
+                                          color: Colors.white,
+                                          child: GFListTile(
+                                              avatar: CachedNetworkImage(
+                                                imageUrl: result
+                                                    .committees[index].photo,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    7,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    7,
+                                                progressIndicatorBuilder:
+                                                    (context, url,
+                                                            downloadProgress) =>
+                                                        CircularProgressIndicator(
+                                                            value:
+                                                                downloadProgress
+                                                                    .progress),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Icon(Icons.error),
+                                              ),
+                                              title: Text(
+                                                  result.committees[index].name,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline1!
+                                                      .copyWith(
+                                                          color: Colors.black)),
+                                              icon: Icon(FontAwesomeIcons
+                                                  .chevronRight)),
+                                        ),
                                       ),
                                     );
                                   }),
@@ -453,43 +490,64 @@ class _Home1State extends State<Home1> {
                                   padding: EdgeInsets.zero,
                                   itemCount: result.events.length,
                                   itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8.0, horizontal: 28),
-                                      child: Container(
-                                        color: Colors.white,
-                                        child: GFListTile(
-                                            avatar: CachedNetworkImage(
-                                              imageUrl:
-                                                  result.events[index].photo,
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                  7,
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                  7,
-                                              progressIndicatorBuilder:
-                                                  (context, url,
-                                                          downloadProgress) =>
-                                                      CircularProgressIndicator(
-                                                          value:
-                                                              downloadProgress
-                                                                  .progress),
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                      Icon(Icons.error),
-                                            ),
-                                            title: Text(
-                                                result.events[index].name,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline1!
-                                                    .copyWith(
-                                                        color: Colors.black)),
-                                            icon: Icon(
-                                                FontAwesomeIcons.chevronRight)),
+                                    return GestureDetector(
+                                      onTap: () async {
+                                        EasyLoading.show(
+                                            indicator:
+                                                LoadingBouncingGrid.square(
+                                          backgroundColor:
+                                              Theme.of(context).primaryColor,
+                                        ));
+                                        Event event = await getEventById(
+                                            result.events[index].id);
+                                        EasyLoading.dismiss();
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    SingleEvent(
+                                                      event: event,
+                                                      user: widget.user,
+                                                    )));
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8.0, horizontal: 28),
+                                        child: Container(
+                                          color: Colors.white,
+                                          child: GFListTile(
+                                              avatar: CachedNetworkImage(
+                                                imageUrl:
+                                                    result.events[index].photo,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    7,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    7,
+                                                progressIndicatorBuilder:
+                                                    (context, url,
+                                                            downloadProgress) =>
+                                                        CircularProgressIndicator(
+                                                            value:
+                                                                downloadProgress
+                                                                    .progress),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Icon(Icons.error),
+                                              ),
+                                              title: Text(
+                                                  result.events[index].name,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline1!
+                                                      .copyWith(
+                                                          color: Colors.black)),
+                                              icon: Icon(FontAwesomeIcons
+                                                  .chevronRight)),
+                                        ),
                                       ),
                                     );
                                   }),

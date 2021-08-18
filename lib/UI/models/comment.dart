@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:my_app/UI/models/post.dart';
+
 Comment commentFromJson(String str) => Comment.fromJson(json.decode(str));
 
 String commentToJson(Comment data) => json.encode(data.toJson());
@@ -7,7 +9,6 @@ String commentToJson(Comment data) => json.encode(data.toJson());
 class Comment {
   Comment({
     required this.id,
-    required this.likedBy,
     required this.text,
     required this.userId,
     required this.eventId,
@@ -15,31 +16,36 @@ class Comment {
     required this.v,
   });
 
-  final Id id;
-  final List<Id> likedBy;
+  final String id;
+
   final String text;
-  final Id userId;
-  final Id eventId;
-  final Date date;
+  final UserModelForPost userId;
+  final String eventId;
+  final DateTime date;
   final int v;
 
   factory Comment.fromJson(Map<String, dynamic> json) => Comment(
-        id: Id.fromJson(json["_id"]),
-        likedBy: List<Id>.from(json["likedBy"].map((x) => Id.fromJson(x))),
+        id: json["_id"],
         text: json["text"],
-        userId: Id.fromJson(json["userId"]),
-        eventId: Id.fromJson(json["eventId"]),
-        date: Date.fromJson(json["date"]),
+        userId: UserModelForPost(
+            photo: json["userId"]['photoXs'] != null
+                ? json["userId"]['photoXs']
+                : '',
+            id: json["userId"]['_id'],
+            name: json["userId"]['name'],
+            surname: json["userId"]['surname'],
+            username: json["userId"]['username']),
+        eventId: json["eventId"],
+        date: DateTime.parse(json["date"]),
         v: json["__v"],
       );
 
   Map<String, dynamic> toJson() => {
-        "_id": id.toJson(),
-        "likedBy": List<dynamic>.from(likedBy.map((x) => x.toJson())),
+        "_id": id,
         "text": text,
         "userId": userId.toJson(),
-        "eventId": eventId.toJson(),
-        "date": date.toJson(),
+        "eventId": eventId,
+        "date": date,
         "__v": v,
       };
 }

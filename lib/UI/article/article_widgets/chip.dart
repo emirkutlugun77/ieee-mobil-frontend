@@ -11,12 +11,14 @@ class CustomChip extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             border: Border.all(
-              color: constants.blogCategoryColors[tag]!,
+              color: constants.blogCategoryColors[tag] != null
+                  ? constants.blogCategoryColors[tag]!
+                  : Theme.of(context).primaryColor,
             ),
             borderRadius: BorderRadius.circular(8)),
         child: Padding(
           padding:
-              EdgeInsets.all(6.00 * MediaQuery.of(context).size.height / 1000),
+              EdgeInsets.all(6.00 * MediaQuery.of(context).size.height / 800),
           child: Text(
             tag,
             style: Theme.of(context)
