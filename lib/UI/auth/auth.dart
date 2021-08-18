@@ -36,7 +36,6 @@ class _AuthPageState extends State<AuthPage> {
     events.clear();
     posts.clear();
     future = getAllCommittees(commiteeList)
-        .then((value) => getMost5(blogPosts))
         .then((value) => getAllEvents(0).then((value) => events = value));
   }
 
@@ -94,13 +93,11 @@ class _AuthPageState extends State<AuthPage> {
                               children: [
                                 LoginPage(
                                   events: events,
-                                  blogPosts: blogPosts,
                                   commiteeList: commiteeList,
                                   pageController: _pageController,
                                 ),
                                 SignInPage(
                                   events: events,
-                                  blogPosts: blogPosts,
                                   commiteeList: commiteeList,
                                   pageController: _pageController,
                                 ),

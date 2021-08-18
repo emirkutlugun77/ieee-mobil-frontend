@@ -70,32 +70,31 @@ class _SplashScreenState extends State<SplashScreen> {
         });
       }
     });
-    Future.wait([
-      getMost5(blogPosts),
-      getAllCommittees(commiteeList),
-      getAllEvents(0).then((value) => events = value),
-      getAllPosts(posts),
-      futureOperation(context),
-      getAnnouncements(token).then((value) => announcementList = value)
-    ])
-        .then((value) => Future.delayed(Duration(milliseconds: 1500)))
-        .then((value) => Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MyHomePage(
-                      seenAnnouncements: seenAnnouncements!,
-                      announcements: announcementList,
-                      events: events,
-                      user: user!,
-                      committees: commiteeList,
-                      blogPosts: blogPosts,
-                      posts: posts,
-                      token: token,
-                      minCommittees: minCommittees,
-                      minEvents: minEvents,
-                      minnCerts: minnCerts,
-                      userPosts: userPosts,
-                    ))));
+    futureOperation(context).then((value) => Future.wait([
+          getMost5(blogPosts, token, 0),
+          getAllCommittees(commiteeList),
+          getAllEvents(0).then((value) => events = value),
+          getAllPosts(posts),
+          getAnnouncements(token).then((value) => announcementList = value)
+        ])
+            .then((value) => Future.delayed(Duration(milliseconds: 1500)))
+            .then((value) => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MyHomePage(
+                          seenAnnouncements: seenAnnouncements!,
+                          announcements: announcementList,
+                          events: events,
+                          user: user!,
+                          committees: commiteeList,
+                          blogPosts: blogPosts,
+                          posts: posts,
+                          token: token,
+                          minCommittees: minCommittees,
+                          minEvents: minEvents,
+                          minnCerts: minnCerts,
+                          userPosts: userPosts,
+                        )))));
   }
 
   double opacityValue = 1;

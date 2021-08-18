@@ -11,7 +11,8 @@ const Map<String, Color> blogCategoryColors = {
   'Bilim': Color(0xFF33b9db),
   'Seyahat': Color(0xFFa21a1a),
   'Kulüp Haberleri': Color(0xFF0f0f0f),
-  'Röportaj': Color(0xFF73a441)
+  'Röportaj': Color(0xFF73a441),
+  'Tarih': Color(0xFF2DAE31)
 };
 
 ThemeData whiteTheme = ThemeData(

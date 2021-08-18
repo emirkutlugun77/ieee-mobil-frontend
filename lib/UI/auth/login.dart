@@ -3,6 +3,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:loading_animations/loading_animations.dart';
 
 import 'package:my_app/Functions/announce.dart';
+import 'package:my_app/Functions/blog.dart';
 import 'package:my_app/Functions/post_functions.dart';
 import 'package:my_app/Functions/user.dart';
 import 'package:my_app/MinimizedModels/MinCertificate.dart';
@@ -27,13 +28,12 @@ import 'package:my_app/UI/models/user.dart';
 // ignore: must_be_immutable
 class LoginPage extends StatefulWidget {
   List<Commitee> commiteeList = [];
-  List<BlogPost> blogPosts = [];
+
   List<Event> events = [];
   PageController pageController;
   LoginPage(
       {Key? key,
       required this.commiteeList,
-      required this.blogPosts,
       required this.pageController,
       required this.events})
       : super(key: key);
@@ -53,6 +53,7 @@ String token = '';
 
 //USER VARIABLES
 class _LoginPageState extends State<LoginPage> {
+  List<BlogPost> blogPosts = [];
   List<Announcement> announcements = [];
   List<Post> userPosts = [];
   List<MinEvent> minEvents = [];
@@ -172,38 +173,42 @@ class _LoginPageState extends State<LoginPage> {
                             prefs.setBool('logged', true);
                             prefs.setString('id', user!.id);
                             token = prefs.getString('token')!;
-                            getUserData(user!.id, minCommittees, minnCerts,
-                                    minEvents, userPosts, token)
-                                .then((value) => getAllPosts(posts).then(
-                                    (value) => getAnnouncements(token)
-                                            .then((value) =>
-                                                announcements = value)
-                                            .then((value) {
-                                          EasyLoading.dismiss();
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      MyHomePage(
-                                                        seenAnnouncements:
-                                                            seenAnnouncements!,
-                                                        announcements:
-                                                            announcements,
-                                                        events: events,
-                                                        user: user!,
-                                                        committees:
-                                                            widget.commiteeList,
-                                                        blogPosts:
-                                                            widget.blogPosts,
-                                                        posts: posts,
-                                                        token: token,
-                                                        minCommittees:
-                                                            minCommittees,
-                                                        minEvents: minEvents,
-                                                        minnCerts: minnCerts,
-                                                        userPosts: userPosts,
-                                                      )));
-                                        })));
+                            getMost5(blogPosts, token, 0).then((value) =>
+                                getUserData(user!.id, minCommittees, minnCerts,
+                                        minEvents, userPosts, token)
+                                    .then((value) => getAllPosts(posts).then(
+                                        (value) => getAnnouncements(token)
+                                                .then((value) =>
+                                                    announcements = value)
+                                                .then((value) {
+                                              EasyLoading.dismiss();
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          MyHomePage(
+                                                            seenAnnouncements:
+                                                                seenAnnouncements!,
+                                                            announcements:
+                                                                announcements,
+                                                            events: events,
+                                                            user: user!,
+                                                            committees: widget
+                                                                .commiteeList,
+                                                            blogPosts:
+                                                                blogPosts,
+                                                            posts: posts,
+                                                            token: token,
+                                                            minCommittees:
+                                                                minCommittees,
+                                                            minEvents:
+                                                                minEvents,
+                                                            minnCerts:
+                                                                minnCerts,
+                                                            userPosts:
+                                                                userPosts,
+                                                          )));
+                                            }))));
                           }
                         },
                         child: Container(

@@ -63,6 +63,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print(widget.token);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: SizedBox.expand(
@@ -83,6 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 token: widget.token,
               ),
               Articles(
+                token: widget.token,
                 blogPosts: widget.blogPosts,
               ),
               Events(

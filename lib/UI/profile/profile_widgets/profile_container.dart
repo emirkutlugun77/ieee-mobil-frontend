@@ -5,17 +5,19 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:my_app/UI/models/user.dart';
 import 'package:my_app/UI/splash/splash.dart';
 
-class ProfileContainer extends StatelessWidget {
-  const ProfileContainer({
-    Key? key,
-    required this.pageController,
-    required this.user,
-    required this.width,
-    required this.height,
-    required this.blogCount,
-    required this.committeCount,
-    required this.eventCount,
-  }) : super(key: key);
+class ProfileContainer extends StatefulWidget {
+  ProfileContainer(
+      {Key? key,
+      required this.pageController,
+      required this.user,
+      required this.width,
+      required this.height,
+      required this.blogCount,
+      required this.committeCount,
+      required this.eventCount,
+      required this.containerInt})
+      : super(key: key);
+  int containerInt;
   final PageController pageController;
   final int blogCount;
   final int committeCount;
@@ -25,39 +27,44 @@ class ProfileContainer extends StatelessWidget {
   final double height;
 
   @override
+  _ProfileContainerState createState() => _ProfileContainerState();
+}
+
+class _ProfileContainerState extends State<ProfileContainer> {
+  @override
   Widget build(BuildContext context) {
     return Container(
-      width: width * 3 / 4,
-      height: height * 1.9 / 5,
+      width: widget.width * 3 / 4,
+      height: widget.height * 1.9 / 5,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10), color: Colors.transparent),
       child: Stack(
         children: [
           Container(
-            width: width * 3 / 4,
-            height: height * 1.7 / 5,
+            width: widget.width * 3 / 4,
+            height: widget.height * 1.7 / 5,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10), color: Colors.white),
             child: Padding(
-              padding: EdgeInsets.all(8.0 * height / 700),
+              padding: EdgeInsets.all(8.0 * widget.height / 700),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    height: height * 1 / 40,
+                    height: widget.height * 1 / 40,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 18.0),
                     child: Row(
                       children: [
                         Container(
-                          width: width * 1 / 5,
-                          height: width * 1 / 5,
+                          width: widget.width * 1 / 5,
+                          height: widget.width * 1 / 5,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: CachedNetworkImage(
-                              imageUrl: user.photoXs != ''
-                                  ? user.photoXs
+                              imageUrl: widget.user.photoXs != ''
+                                  ? widget.user.photoXs
                                   : 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
                               fit: BoxFit.fill,
                             ),
@@ -69,17 +76,17 @@ class ProfileContainer extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                user.name + ' ' + user.surname,
+                                widget.user.name + ' ' + widget.user.surname,
                                 style: Theme.of(context)
                                     .textTheme
                                     .headline1!
                                     .copyWith(fontSize: 16),
                               ),
                               SizedBox(
-                                height: height * 1 / 120,
+                                height: widget.height * 1 / 120,
                               ),
                               Text(
-                                user.title,
+                                widget.user.title,
                                 style: Theme.of(context)
                                     .textTheme
                                     .subtitle1!
@@ -94,22 +101,22 @@ class ProfileContainer extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(
-                        horizontal: 18.0, vertical: 4 * height / 700),
+                        horizontal: 18.0, vertical: 4 * widget.height / 700),
                     child: Text('Okul',
                         style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                            fontSize: 14 * height / 700,
+                            fontSize: 14 * widget.height / 700,
                             fontWeight: FontWeight.bold)),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 18.0),
                     child: Container(
-                      width: width * 5 / 6,
+                      width: widget.width * 5 / 6,
                       child: Text(
-                        user.education.university,
+                        widget.user.education.university,
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1!
-                            .copyWith(fontSize: 14 * height / 700),
+                            .copyWith(fontSize: 14 * widget.height / 700),
                       ),
                     ),
                   ),
@@ -118,19 +125,19 @@ class ProfileContainer extends StatelessWidget {
                         horizontal: 18.0, vertical: 8),
                     child: Text('Bölüm',
                         style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                            fontSize: 14 * height / 700,
+                            fontSize: 14 * widget.height / 700,
                             fontWeight: FontWeight.bold)),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 18.0),
                     child: Container(
-                      width: width * 5 / 6,
+                      width: widget.width * 5 / 6,
                       child: Text(
-                        user.education.department,
+                        widget.user.education.department,
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1!
-                            .copyWith(fontSize: 14 * height / 700),
+                            .copyWith(fontSize: 14 * widget.height / 700),
                       ),
                     ),
                   )
@@ -141,8 +148,8 @@ class ProfileContainer extends StatelessWidget {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              width: width * 1 / 1.6,
-              height: width * 1 / 6,
+              width: widget.width * 1 / 1.6,
+              height: widget.width * 1 / 6,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 color: Theme.of(context).primaryColor,
@@ -152,20 +159,25 @@ class ProfileContainer extends StatelessWidget {
                   Expanded(
                       child: GestureDetector(
                     onTap: () {
-                      pageController.animateToPage(0,
+                      setState(() {
+                        widget.containerInt = 0;
+                      });
+                      widget.pageController.animateToPage(0,
                           duration: Duration(milliseconds: 200),
                           curve: Curves.easeIn);
                     },
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Theme.of(context).primaryColorDark,
+                        color: widget.containerInt == 0
+                            ? Theme.of(context).primaryColorDark
+                            : Theme.of(context).primaryColor,
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            eventCount.toString(),
+                            widget.eventCount.toString(),
                             style: Theme.of(context)
                                 .textTheme
                                 .headline1!
@@ -185,16 +197,25 @@ class ProfileContainer extends StatelessWidget {
                   Expanded(
                       child: GestureDetector(
                     onTap: () {
-                      pageController.animateToPage(1,
+                      setState(() {
+                        widget.containerInt = 1;
+                      });
+                      widget.pageController.animateToPage(1,
                           duration: Duration(milliseconds: 200),
                           curve: Curves.easeIn);
                     },
                     child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: widget.containerInt == 1
+                            ? Theme.of(context).primaryColorDark
+                            : Theme.of(context).primaryColor,
+                      ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            committeCount.toString(),
+                            widget.committeCount.toString(),
                             style: Theme.of(context)
                                 .textTheme
                                 .headline1!
@@ -214,16 +235,25 @@ class ProfileContainer extends StatelessWidget {
                   Expanded(
                       child: GestureDetector(
                     onTap: () {
-                      pageController.animateToPage(2,
+                      setState(() {
+                        widget.containerInt = 2;
+                      });
+                      widget.pageController.animateToPage(2,
                           duration: Duration(milliseconds: 200),
                           curve: Curves.easeIn);
                     },
                     child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: widget.containerInt == 2
+                            ? Theme.of(context).primaryColorDark
+                            : Theme.of(context).primaryColor,
+                      ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            blogCount.toString(),
+                            widget.blogCount.toString(),
                             style: Theme.of(context)
                                 .textTheme
                                 .headline1!
@@ -243,20 +273,25 @@ class ProfileContainer extends StatelessWidget {
                   Expanded(
                       child: GestureDetector(
                     onTap: () {
-                      pageController.animateToPage(3,
+                      setState(() {
+                        widget.containerInt = 3;
+                      });
+                      widget.pageController.animateToPage(3,
                           duration: Duration(milliseconds: 200),
                           curve: Curves.easeIn);
                     },
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Theme.of(context).primaryColorDark,
+                        color: widget.containerInt == 3
+                            ? Theme.of(context).primaryColorDark
+                            : Theme.of(context).primaryColor,
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            blogCount.toString(),
+                            widget.blogCount.toString(),
                             style: Theme.of(context)
                                 .textTheme
                                 .headline1!

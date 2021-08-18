@@ -38,6 +38,8 @@ class SocialFeed extends StatefulWidget {
 }
 
 class _SocialFeedState extends State<SocialFeed> {
+  List<Post> postList = [];
+
   PanelController _panelController = PanelController();
   DateTime date = DateTime.now();
   FeedState state = FeedState.INITIAL;
@@ -46,6 +48,15 @@ class _SocialFeedState extends State<SocialFeed> {
     // TODO: implement initState
     super.initState();
     print(widget.posts.first.date.toString());
+    getAllPosts(postList).then((value) {
+      value.forEach((post) {
+        if (!widget.posts.contains(post)) {
+          setState(() {
+            widget.posts.insert(0, post);
+          });
+        }
+      });
+    });
   }
 
   @override
@@ -280,9 +291,7 @@ class _SocialFeedState extends State<SocialFeed> {
                     ),
                     v: value['__v'],
                   );
-                  setState(() {
-                    widget.posts.insert(0, newPost);
-                  });
+                  widget.posts.insert(0, newPost);
                   setState(() {
                     sendingPost = false;
 

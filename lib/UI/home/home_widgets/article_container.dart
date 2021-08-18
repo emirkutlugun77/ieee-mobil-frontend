@@ -1,28 +1,36 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:like_button/like_button.dart';
 import 'package:line_icons/line_icon.dart';
+import 'package:my_app/Functions/blog.dart';
 import 'package:my_app/UI/article/article_widgets/chip.dart';
 import 'package:my_app/UI/models/blogposts.dart';
 
-class ArticleContainer extends StatelessWidget {
-  final BlogPost blogPost;
-
-  const ArticleContainer({
-    Key? key,
+class ArticleContainer extends StatefulWidget {
+  String token;
+  BlogPost blogPost;
+  ArticleContainer({
+    required this.token,
     required this.blogPost,
     required this.width,
     required this.height,
-  }) : super(key: key);
+  });
 
   final double width;
   final double height;
 
   @override
+  _ArticleContainerState createState() => _ArticleContainerState();
+}
+
+class _ArticleContainerState extends State<ArticleContainer> {
+  @override
   Widget build(BuildContext context) {
     return Container(
-      width: width,
-      height: height * 1 / 5.5,
+      width: widget.width,
+      height: widget.height * 1 / 5.5,
       decoration: BoxDecoration(
           color: Theme.of(context).backgroundColor,
           borderRadius: BorderRadius.circular(15)),
@@ -30,7 +38,7 @@ class ArticleContainer extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Hero(
-            tag: blogPost.id,
+            tag: widget.blogPost.id,
             child: ClipRRect(
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),
@@ -39,53 +47,56 @@ class ArticleContainer extends StatelessWidget {
                   errorWidget: (context, url, error) => Image.asset(
                     'images/resim.png',
                     fit: BoxFit.fill,
-                    width: width * 1 / 4.5,
-                    height: height * 1 / 4,
+                    width: widget.width * 1 / 4.5,
+                    height: widget.height * 1 / 4,
                   ),
-                  imageUrl: blogPost.photo != ''
-                      ? blogPost.photo
+                  imageUrl: widget.blogPost.photo != ''
+                      ? widget.blogPost.photo
                       : 'https://ae01.alicdn.com/kf/HTB1kBs1IFXXXXXuXXXXq6xXFXXXD/Fine-oil-painting-on-canvas-Vincent-Van-Gogh-The-Starry-Night-moon-landscape-canvas.jpg_Q90.jpg_.webp',
                   fit: BoxFit.fill,
-                  width: width * 1 / 4.5,
-                  height: height * 1 / 4,
+                  width: widget.width * 1 / 4.5,
+                  height: widget.height * 1 / 4,
                 )),
           ),
           Padding(
-            padding: EdgeInsets.all(18.0 * height / 1200),
+            padding: EdgeInsets.all(18.0 * widget.height / 1200),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: Container(
-                    width: width * 1 / 2,
+                    width: widget.width * 1 / 2,
                     child: Text(
-                        blogPost.title.length >= 21
-                            ? blogPost.title.substring(0, 21) + '...'
-                            : blogPost.title,
+                        widget.blogPost.title.length >= 21
+                            ? widget.blogPost.title.substring(0, 21) + '...'
+                            : widget.blogPost.title,
                         style: Theme.of(context).textTheme.headline1!.copyWith(
-                            fontSize: 14 * height / 700,
+                            fontSize: 14 * widget.height / 700,
                             color: Theme.of(context).primaryColor,
                             fontWeight: FontWeight.w100)),
                   ),
                 ),
                 SizedBox(
-                  height: height * 1 / 100,
+                  height: widget.height * 1 / 100,
                 ),
                 Text(
-                  blogPost.userId.name + ' ' + blogPost.userId.surname,
+                  widget.blogPost.userId.name +
+                      ' ' +
+                      widget.blogPost.userId.surname,
                   style: Theme.of(context)
                       .textTheme
                       .subtitle1!
-                      .copyWith(fontSize: 13 * height / 700),
+                      .copyWith(fontSize: 13 * widget.height / 700),
                 ),
                 SizedBox(
-                  height: height * 1 / 100,
+                  height: widget.height * 1 / 100,
                 ),
                 Container(
-                    height: height * 1 / 25,
-                    child: CustomChip(tag: blogPost.blogCategoryId.name)),
+                    height: widget.height * 1 / 25,
+                    child:
+                        CustomChip(tag: widget.blogPost.blogCategoryId.name)),
                 SizedBox(
-                  height: height * 1 / 70,
+                  height: widget.height * 1 / 70,
                 ),
                 Flexible(
                   child: Center(
@@ -93,30 +104,41 @@ class ArticleContainer extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        LineIcon.thumbsUp(
-                          color: Theme.of(context).cardColor,
-                          size: height / 25,
-                        ),
-                        Text(
-                          blogPost.likedBy.length.toString(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .subtitle1!
-                              .copyWith(fontSize: 14 * height / 700),
+                        LikeButton(
+                          likeCount: widget.blogPost.likeCount,
+                          onTap: (isLiked) async {
+                            likeBlog(isLiked, widget.token, widget.blogPost);
+
+                            widget.blogPost.liked = !isLiked;
+
+                            return !isLiked;
+                          },
+                          isLiked: widget.blogPost.liked,
+                          bubblesColor: BubblesColor(
+                            dotPrimaryColor: Colors.red,
+                            dotSecondaryColor: Colors.redAccent,
+                          ),
+                          likeBuilder: (bool isLiked) {
+                            return Icon(
+                              FontAwesomeIcons.solidHeart,
+                              color: isLiked ? Colors.red : Colors.grey,
+                              size: 30,
+                            );
+                          },
                         ),
                         SizedBox(
-                          width: width * 1 / 120,
+                          width: widget.width * 1 / 120,
                         ),
                         LineIcon.clock(
                           color: Theme.of(context).cardColor,
-                          size: height / 25,
+                          size: widget.height / 25,
                         ),
                         Text(
-                          blogPost.date.format(' M j, H:i'),
+                          widget.blogPost.date.format(' M j, H:i'),
                           style: Theme.of(context)
                               .textTheme
                               .subtitle1!
-                              .copyWith(fontSize: 14 * height / 700),
+                              .copyWith(fontSize: 14 * widget.height / 700),
                         ),
                       ],
                     ),

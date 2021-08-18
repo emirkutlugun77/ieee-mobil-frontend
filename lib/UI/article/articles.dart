@@ -1,22 +1,20 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:my_app/Functions/blog.dart';
-import 'package:my_app/Functions/events.dart';
+
 import 'package:my_app/UI/article/article_page.dart';
-import 'package:my_app/UI/event/single_event.dart';
+
 import 'package:my_app/UI/home/home_widgets/article_container.dart';
 import 'package:my_app/UI/models/blogposts.dart';
 
-import 'package:my_app/UI/models/user.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class Articles extends StatefulWidget {
-  final List<BlogPost> blogPosts;
-
+  List<BlogPost> blogPosts;
+  final String token;
   Articles({
+    required this.token,
     required this.blogPosts,
   });
   @override
@@ -30,8 +28,8 @@ class _ArticlesState extends State<Articles> {
   @override
   void initState() {
     super.initState();
-    page = widget.blogPosts.length ~/ 6;
-    print(page);
+    print(widget.token);
+    print(widget.blogPosts[0].liked);
   }
 
   RefreshController _refreshController =
@@ -79,10 +77,12 @@ class _ArticlesState extends State<Articles> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => ArticlePage(
+                                          token: widget.token,
                                           blogPost: widget.blogPosts[index],
                                         )));
                           },
                           child: ArticleContainer(
+                              token: widget.token,
                               blogPost: widget.blogPosts[index],
                               width: MediaQuery.of(context).size.width,
                               height: MediaQuery.of(context).size.height)),
@@ -100,11 +100,9 @@ class _ArticlesState extends State<Articles> {
   void _onLoading() async {
     page++;
     // monitor network fetch
-    await getAllBlogs(page).then((value) => value.forEach((e) {
-          if (!widget.blogPosts.contains(e)) {
-            widget.blogPosts.add(e);
-          }
-        }));
+
+    await getMost5(widget.blogPosts, widget.token, page);
+
     // if failed,use loadFailed(),if no data return,use LoadNodata()
 
     if (mounted) setState(() {});

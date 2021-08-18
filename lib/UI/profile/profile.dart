@@ -61,6 +61,7 @@ class _ProfilePageState extends State<ProfilePage> {
     print(widget.minCommittees.length);
   }
 
+  int containerInt = 0;
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -125,6 +126,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 height: height * 1 / 40,
               ),
               ProfileContainer(
+                containerInt: containerInt,
                 pageController: _pageController,
                 width: width,
                 height: height,
@@ -142,6 +144,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   onPageChanged: (pageNum) {
                     setState(() {
                       checkNum = pageNum;
+                      containerInt = pageNum;
                     });
                   },
                   children: [
@@ -246,108 +249,116 @@ class _ProfilePageState extends State<ProfilePage> {
                                             ],
                                           ),
                                         ))))
-                            : Center(
-                                child: Text(
-                                  'Katıldığınız Etkinlik Yok',
-                                  style: Theme.of(context).textTheme.headline1,
-                                  textAlign: TextAlign.center,
+                            : Padding(
+                                padding: EdgeInsets.all(48.0 * height / 1000),
+                                child: Center(
+                                  child: Text(
+                                    'Henüz Etkinlik Yok',
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline1!
+                                        .copyWith(fontSize: 20 * height / 600),
+                                  ),
                                 ),
                               )),
                     ProfileSection(
                         height: height,
                         width: width,
                         title: 'Komite Üyeliklerim',
-                        child: Flexible(
-                            child: ListView.builder(
-                                padding: EdgeInsets.zero,
-                                itemCount: widget.minCommittees.length,
-                                itemBuilder: (context, index) =>
-                                    GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          loadingCom = true;
-                                        });
+                        child: widget.minCommittees.length > 0
+                            ? Flexible(
+                                child: ListView.builder(
+                                    padding: EdgeInsets.zero,
+                                    itemCount: widget.minCommittees.length,
+                                    itemBuilder: (context, index) =>
+                                        GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              loadingCom = true;
+                                            });
 
-                                        getCommitteeById(
-                                                widget.minCommittees[index].id)
-                                            .then((value) {
-                                          setState(() {
-                                            loadingCom = false;
-                                          });
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ComiteePage(
-                                                        commitee: value,
-                                                        user: widget.user,
-                                                      )));
-                                        });
-                                      },
-                                      child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              bottom: 12.0),
-                                          child: Container(
-                                            width: width,
-                                            height: height * 1 / 6.5,
-                                            decoration: BoxDecoration(
-                                                color: Theme.of(context)
-                                                    .backgroundColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(15)),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                ClipRRect(
+                                            getCommitteeById(widget
+                                                    .minCommittees[index].id)
+                                                .then((value) {
+                                              setState(() {
+                                                loadingCom = false;
+                                              });
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ComiteePage(
+                                                            commitee: value,
+                                                            user: widget.user,
+                                                          )));
+                                            });
+                                          },
+                                          child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 12.0),
+                                              child: Container(
+                                                width: width,
+                                                height: height * 1 / 6.5,
+                                                decoration: BoxDecoration(
+                                                    color: Theme.of(context)
+                                                        .backgroundColor,
                                                     borderRadius:
-                                                        BorderRadius.only(
-                                                            topLeft: Radius
-                                                                .circular(20),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    20)),
-                                                    child: Image.network(
-                                                      widget
+                                                        BorderRadius.circular(
+                                                            15)),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        20),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        20)),
+                                                        child: Image.network(
+                                                          widget
+                                                                      .minCommittees[
+                                                                          index]
+                                                                      .photo !=
+                                                                  ''
+                                                              ? widget
                                                                   .minCommittees[
                                                                       index]
-                                                                  .photo !=
-                                                              ''
-                                                          ? widget
-                                                              .minCommittees[
-                                                                  index]
-                                                              .photo
-                                                          : 'https://ae01.alicdn.com/kf/HTB1kBs1IFXXXXXuXXXXq6xXFXXXD/Fine-oil-painting-on-canvas-Vincent-Van-Gogh-The-Starry-Night-moon-landscape-canvas.jpg_Q90.jpg_.webp',
-                                                      fit: BoxFit.fill,
-                                                      width: width * 1 / 4.5,
-                                                      height: height * 1 / 4,
-                                                    )),
-                                                Padding(
-                                                  padding: EdgeInsets.all(
-                                                      8.0 * height / 1000),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
+                                                                  .photo
+                                                              : 'https://ae01.alicdn.com/kf/HTB1kBs1IFXXXXXuXXXXq6xXFXXXD/Fine-oil-painting-on-canvas-Vincent-Van-Gogh-The-Starry-Night-moon-landscape-canvas.jpg_Q90.jpg_.webp',
+                                                          fit: BoxFit.fill,
+                                                          width:
+                                                              width * 1 / 4.5,
+                                                          height:
+                                                              height * 1 / 4,
+                                                        )),
+                                                    Padding(
+                                                      padding: EdgeInsets.all(
+                                                          8.0 * height / 1000),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
                                                                 .start,
                                                         children: [
-                                                          Container(
-                                                            width:
-                                                                width * 1 / 3.2,
-                                                            child: Text(
-                                                                widget
-                                                                    .minCommittees[
-                                                                        index]
-                                                                    .name,
-                                                                style: Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .headline1!
-                                                                    .copyWith(
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Container(
+                                                                width: width *
+                                                                    1 /
+                                                                    3.2,
+                                                                child: Text(
+                                                                    widget
+                                                                        .minCommittees[
+                                                                            index]
+                                                                        .name,
+                                                                    style: Theme.of(context).textTheme.headline1!.copyWith(
                                                                         fontSize: 14 *
                                                                             height /
                                                                             700,
@@ -355,54 +366,67 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                             .primaryColor,
                                                                         fontWeight:
                                                                             FontWeight.w100)),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          SizedBox(
+                                                            height: height / 30,
+                                                          ),
+                                                          Row(
+                                                            children: [
+                                                              Icon(
+                                                                FontAwesomeIcons
+                                                                    .instagram,
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .primaryColor,
+                                                              ),
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        2.0),
+                                                                child:
+                                                                    Container(
+                                                                  width: width *
+                                                                      1 /
+                                                                      3,
+                                                                  child: Text(
+                                                                      widget
+                                                                          .minCommittees[
+                                                                              index]
+                                                                          .instaUrl,
+                                                                      style: Theme.of(
+                                                                              context)
+                                                                          .textTheme
+                                                                          .bodyText1!
+                                                                          .copyWith(
+                                                                              fontSize: 9 * height / 700,
+                                                                              fontWeight: FontWeight.w100)),
+                                                                ),
+                                                              ),
+                                                            ],
                                                           ),
                                                         ],
                                                       ),
-                                                      SizedBox(
-                                                        height: height / 30,
-                                                      ),
-                                                      Row(
-                                                        children: [
-                                                          Icon(
-                                                            FontAwesomeIcons
-                                                                .instagram,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .primaryColor,
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(2.0),
-                                                            child: Container(
-                                                              width:
-                                                                  width * 1 / 3,
-                                                              child: Text(
-                                                                  widget
-                                                                      .minCommittees[
-                                                                          index]
-                                                                      .instaUrl,
-                                                                  style: Theme.of(
-                                                                          context)
-                                                                      .textTheme
-                                                                      .bodyText1!
-                                                                      .copyWith(
-                                                                          fontSize: 9 *
-                                                                              height /
-                                                                              700,
-                                                                          fontWeight:
-                                                                              FontWeight.w100)),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          )),
-                                    )))),
+                                                    )
+                                                  ],
+                                                ),
+                                              )),
+                                        )))
+                            : Padding(
+                                padding: EdgeInsets.all(48.0 * height / 1000),
+                                child: Center(
+                                  child: Text(
+                                    'Henüz Komite Yok',
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline1!
+                                        .copyWith(fontSize: 20 * height / 600),
+                                  ),
+                                ),
+                              )),
                     ProfileSection(
                         height: height,
                         width: width,

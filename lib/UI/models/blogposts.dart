@@ -6,9 +6,10 @@ String blogPostToJson(BlogPost data) => json.encode(data.toJson());
 
 class BlogPost {
   BlogPost({
+    required this.liked,
     required this.id,
     required this.blogCategoryId,
-    required this.likedBy,
+    required this.likeCount,
     required this.tags,
     required this.userId,
     required this.text,
@@ -20,20 +21,22 @@ class BlogPost {
     required this.v,
   });
 
-  final String id;
-  final BlogCategoryId blogCategoryId;
-  final List<String> likedBy;
-  final List<String> tags;
-  final UserId userId;
-  final String text;
-  final String title;
-  final String photo;
-  final String slug;
-  final int viewCount;
-  final DateTime date;
-  final int v;
+  String id;
+  BlogCategoryId blogCategoryId;
+  int likeCount;
+  bool liked;
+  List<String> tags;
+  UserId userId;
+  String text;
+  String title;
+  String photo;
+  String slug;
+  int viewCount;
+  DateTime date;
+  int v;
 
   factory BlogPost.fromJson(Map<String, dynamic> json) => BlogPost(
+        liked: json['liked'],
         id: json["_id"],
         blogCategoryId: BlogCategoryId(
           id: json['blogCategoryId'][0]['_id'],
@@ -41,9 +44,7 @@ class BlogPost {
           color: json['blogCategoryId'][0]['color'],
           description: json['blogCategoryId'][0]['description'],
         ),
-        likedBy: json["likedBy"] != null
-            ? List<String>.from(json["likedBy"].map((x) => x.toString()))
-            : [],
+        likeCount: json["likeCount"],
         tags: List<String>.from(json["tags"].map((x) => x.toString())),
         userId: UserId.fromJson(json["userId"]),
         text: json["text"],
@@ -56,9 +57,10 @@ class BlogPost {
       );
 
   Map<String, dynamic> toJson() => {
+        'liked': liked,
         "_id": id,
         "blogCategoryId": blogCategoryId,
-        "likedBy": List<dynamic>.from(likedBy.map((x) => x)),
+        "likedBy": likeCount,
         "tags": List<dynamic>.from(tags.map((x) => x)),
         "userId": userId,
         "text": text,

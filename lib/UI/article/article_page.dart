@@ -8,13 +8,20 @@ import 'package:my_app/UI/article/article_widgets/chip.dart';
 import 'package:my_app/UI/models/blogposts.dart';
 
 class ArticlePage extends StatefulWidget {
-  final BlogPost blogPost;
-  ArticlePage({required this.blogPost});
+  final String token;
+  BlogPost blogPost;
+  ArticlePage({required this.token, required this.blogPost});
   @override
   _ArticlePageState createState() => _ArticlePageState();
 }
 
 class _ArticlePageState extends State<ArticlePage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -96,8 +103,8 @@ class _ArticlePageState extends State<ArticlePage> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: Image.network(
-                          widget.blogPost.userId.photoSm != ''
-                              ? widget.blogPost.userId.photoSm
+                          widget.blogPost.userId.photoXs != ''
+                              ? widget.blogPost.userId.photoXs
                               : 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png',
                           fit: BoxFit.fill,
                         ),
@@ -147,7 +154,7 @@ class _ArticlePageState extends State<ArticlePage> {
                     tag: widget.blogPost.id,
                     child: Container(
                       width: double.infinity,
-                      height: height * 1 / 3,
+                      height: height * 1 / 4,
                       child: ClipRRect(
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(20),

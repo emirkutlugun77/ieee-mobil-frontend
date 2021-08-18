@@ -8,6 +8,7 @@ import 'package:loading_animations/loading_animations.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:my_app/Functions/announce.dart';
 import 'package:my_app/Functions/auth_functions.dart';
+import 'package:my_app/Functions/blog.dart';
 import 'package:my_app/Functions/committee.dart';
 import 'package:my_app/Functions/json_converter.dart';
 import 'package:my_app/Functions/post_functions.dart';
@@ -30,7 +31,7 @@ import 'package:alphabet_list_scroll_view/alphabet_list_scroll_view.dart';
 
 class SignInPage extends StatefulWidget {
   List<Commitee> commiteeList = [];
-  List<BlogPost> blogPosts = [];
+
   List<Event> events = [];
   PageController pageController;
 
@@ -38,7 +39,6 @@ class SignInPage extends StatefulWidget {
       {Key? key,
       required this.pageController,
       required this.commiteeList,
-      required this.blogPosts,
       required this.events})
       : super(key: key);
 
@@ -60,7 +60,7 @@ String email = '';
 int year = 0;
 String surname = '';
 String token = '';
-
+List<BlogPost> blogPosts = [];
 //USER VARIABLES
 List<Announcement> announcements = [];
 
@@ -406,29 +406,29 @@ class _SignInPageState extends State<SignInPage> {
                         getMe(token)
                             .then((value) => user = value)
                             .then((value) => prefs.setString('id', user!.id));
-
-                        getAnnouncements(token)
-                            .then((value) => announcements = value)
-                            .then((value) {
-                          EasyLoading.dismiss();
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MyHomePage(
-                                        seenAnnouncements: 0,
-                                        announcements: announcements,
-                                        events: widget.events,
-                                        user: user!,
-                                        committees: widget.commiteeList,
-                                        blogPosts: widget.blogPosts,
-                                        posts: posts,
-                                        token: token,
-                                        minCommittees: [],
-                                        minEvents: [],
-                                        minnCerts: [],
-                                        userPosts: [],
-                                      )));
-                        });
+                        getMost5(blogPosts, token, 0).then((value) =>
+                            getAnnouncements(token)
+                                .then((value) => announcements = value)
+                                .then((value) {
+                              EasyLoading.dismiss();
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MyHomePage(
+                                            seenAnnouncements: 0,
+                                            announcements: announcements,
+                                            events: widget.events,
+                                            user: user!,
+                                            committees: widget.commiteeList,
+                                            blogPosts: blogPosts,
+                                            posts: posts,
+                                            token: token,
+                                            minCommittees: [],
+                                            minEvents: [],
+                                            minnCerts: [],
+                                            userPosts: [],
+                                          )));
+                            }));
                       } else {
                         EasyLoading.dismiss();
                         openPanel('Bu E-mail Kullanımda');
