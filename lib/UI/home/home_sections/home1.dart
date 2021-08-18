@@ -277,8 +277,7 @@ class _Home1State extends State<Home1> {
                                                           .announcements[index]
                                                           .date
                                                           .format(
-                                                        'M j, H:i',
-                                                      ),
+                                                              'm/j/y , H:i'),
                                                       style: Theme.of(context)
                                                           .textTheme
                                                           .bodyText1!
