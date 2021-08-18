@@ -22,6 +22,12 @@ class _ArticlePageState extends State<ArticlePage> {
     super.initState();
   }
 
+  static List<Html> choices = <Html>[
+    Html(
+      data:
+          '<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>',
+    ),
+  ];
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -48,8 +54,22 @@ class _ArticlePageState extends State<ArticlePage> {
                     size: 30,
                   ),
                 ),
-                LineIcon.horizontalEllipsis(
-                  size: 30,
+                PopupMenuButton<dynamic>(
+                  color: Colors.white,
+                  icon: LineIcon.horizontalEllipsis(),
+                  itemBuilder: (BuildContext context) {
+                    return choices.map((Html choice) {
+                      return PopupMenuItem(
+                        value: choice,
+                        child: GestureDetector(
+                            onTap: () async {
+                              if (choice == 'QR Kodum') {
+                              } else if (choice == 'Çıkış Yap') {}
+                            },
+                            child: choice),
+                      );
+                    }).toList();
+                  },
                 ),
               ],
             ),
@@ -59,14 +79,14 @@ class _ArticlePageState extends State<ArticlePage> {
             child: Container(
               height: widget.blogPost.title.length >= 22
                   ? height / 10
-                  : height / 14,
+                  : height / 16,
               width: width,
               child: Text(
                 widget.blogPost.title,
                 style: Theme.of(context).textTheme.headline1!.copyWith(
                     fontSize: widget.blogPost.title.length >= 32
                         ? 20 * height / 700
-                        : 25 * height / 700),
+                        : 21 * height / 700),
               ),
             ),
           ),
