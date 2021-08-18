@@ -1,6 +1,8 @@
 import 'dart:convert';
-
+import 'dart:io';
+import 'package:my_app/constants.dart' as constant;
 import 'package:flip_card/flip_card_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -374,6 +376,47 @@ class _SignInPageState extends State<SignInPage> {
                     });
                   },
                   label: classes[sliderValue.toInt()],
+                ),
+                Row(
+                  children: [
+                    Text('Kayıt olarak ',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText1!
+                            .copyWith(fontSize: 13 * height / 1000)),
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              if (Platform.isIOS) {
+                                return CupertinoAlertDialog(
+                                  content: SingleChildScrollView(
+                                      child: Text(constant.privacyPolicy)),
+                                );
+                              } else {
+                                return AlertDialog(
+                                  content: SingleChildScrollView(
+                                      child: Text(constant.privacyPolicy)),
+                                );
+                              }
+                            });
+                      },
+                      child: Text('Kullanıcı Sözleşmesini',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText1!
+                              .copyWith(
+                                  color: Theme.of(context).primaryColor,
+                                  decoration: TextDecoration.underline,
+                                  fontSize: 13.5 * height / 1000)),
+                    ),
+                    Text(' kabul ediyorum. ',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText1!
+                            .copyWith(fontSize: 13 * height / 1000)),
+                  ],
                 ),
                 verticalSpace(height * 1.3),
                 GestureDetector(

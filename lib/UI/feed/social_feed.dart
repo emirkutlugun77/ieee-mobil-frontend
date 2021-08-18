@@ -130,7 +130,8 @@ class _SocialFeedState extends State<SocialFeed> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    widget.posts[index].date.format('M j, H:i'),
+                                    widget.posts[index].date
+                                        .format('m/j/y , H:i'),
                                     style: Theme.of(context)
                                         .textTheme
                                         .subtitle1!
@@ -197,7 +198,7 @@ class _SocialFeedState extends State<SocialFeed> {
                                     children: [
                                       Text(
                                         widget.posts[index].date
-                                            .format('M j, H:i'),
+                                            .format('m/j/y , H:i'),
                                         style: Theme.of(context)
                                             .textTheme
                                             .subtitle1!

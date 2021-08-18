@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:loading_animations/loading_animations.dart';
 import 'package:my_app/Functions/auth_functions.dart';
 import 'package:my_app/UI/auth/auth_widgets/slidingUpPanel.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -61,6 +64,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   @override
   Widget build(BuildContext context) {
+    EasyLoading.instance
+      ..loadingStyle = EasyLoadingStyle.light
+      ..indicatorSize = 45.0
+      ..radius = 10.0
+      ..backgroundColor = Colors.transparent
+      ..textColor = Colors.yellow
+      ..maskColor = Colors.blue.withOpacity(0.5)
+      ..dismissOnTap = false;
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
@@ -126,6 +137,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       onTap: () async {
                         if (current == resetState.CHECKING_TOKEN) {
                           //res password
+                          EasyLoading.show(
+                              indicator: LoadingBouncingGrid.square(
+                            backgroundColor: Theme.of(context).primaryColor,
+                          ));
                           await checkMailToken(variable).then((value) => {
                                 setState(() {
                                   if (value) {
@@ -139,12 +154,16 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                   checkIfSucceeded = value;
                                   _textEditingController.clear();
                                 }),
+                                EasyLoading.dismiss(),
                                 _panelController.open(),
                                 Future.delayed(Duration(milliseconds: 1500))
                                     .then((value) => _panelController.close())
                               });
                         } else if (current == resetState.INITIAL) {
-                          //send code
+                          EasyLoading.show(
+                              indicator: LoadingBouncingGrid.square(
+                            backgroundColor: Theme.of(context).primaryColor,
+                          ));
                           await forgotPassword(variable).then((value) {
                             setState(() {
                               if (value) {
@@ -156,11 +175,16 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                               checkIfSucceeded = value;
                               _textEditingController.clear();
                             });
+                            EasyLoading.dismiss();
                             _panelController.open();
                             Future.delayed(Duration(milliseconds: 1500))
                                 .then((value) => _panelController.close());
                           });
                         } else {
+                          EasyLoading.show(
+                              indicator: LoadingBouncingGrid.square(
+                            backgroundColor: Theme.of(context).primaryColor,
+                          ));
                           await resetPassword(
                                   _textEditingController.text, token)
                               .then((value) {
@@ -184,6 +208,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                               Future.delayed(Duration(milliseconds: 1500))
                                   .then((value) => _panelController.close());
                             }
+                            EasyLoading.dismiss();
                           });
                         }
                       },

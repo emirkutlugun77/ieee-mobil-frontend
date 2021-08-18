@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getwidget/components/avatar/gf_avatar.dart';
 
@@ -274,16 +275,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                     itemBuilder: (context, index) =>
                                         GestureDetector(
                                           onTap: () {
-                                            setState(() {
-                                              loadingCom = true;
-                                            });
+                                            EasyLoading.init();
 
                                             getCommitteeById(widget
                                                     .minCommittees[index].id)
                                                 .then((value) {
-                                              setState(() {
-                                                loadingCom = false;
-                                              });
+                                              EasyLoading.dismiss();
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
@@ -514,7 +511,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           children: [
                                             Text(
                                               widget.userPosts[index].date
-                                                  .format('M j, H:i'),
+                                                  .format('m/j/y , H:i'),
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .subtitle1!

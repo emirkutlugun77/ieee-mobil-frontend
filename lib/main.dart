@@ -27,6 +27,7 @@ void main() async {
     ..dismissOnTap = false;
 
   runApp(MaterialApp(
+      debugShowCheckedModeBanner: false,
       builder: EasyLoading.init(),
       title: 'Flutter Demo',
       theme: whiteTheme,

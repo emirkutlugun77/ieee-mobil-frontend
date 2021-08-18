@@ -143,7 +143,7 @@ class _ArticlePageState extends State<ArticlePage> {
                           height: height * 1 / 180,
                         ),
                         Text(
-                          widget.blogPost.date.format(' M j, H:i'),
+                          widget.blogPost.date.format('m/j/y , H:i'),
                           style: Theme.of(context)
                               .textTheme
                               .subtitle1!

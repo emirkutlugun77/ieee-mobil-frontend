@@ -39,7 +39,7 @@ class SingleComment extends StatelessWidget {
                         Container(
                           width: width * 1 / 2,
                           child: Text(
-                            'Emir Kutlugün  ${DateTime.now().format('M j, H:i')}',
+                            'Emir Kutlugün  ${DateTime.now().format('m/j/y , H:i')}',
                             style: Theme.of(context).textTheme.headline1,
                           ),
                         ),
@@ -103,7 +103,7 @@ class SingleComment extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          DateTime.now().format('M j, H:i'),
+                          DateTime.now().format('m/j/y , H:i'),
                           style: Theme.of(context)
                               .textTheme
                               .subtitle1!
