@@ -62,9 +62,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
 
       pages: [
         PageViewModel(
-          title: "Ufak bir not", //"Social Artık Mobilde!",
+          title: "Social Mobilde!", //"Social Artık Mobilde!",
           body:
-              "Profil ve arama kısmında çıkan sonuçlara basınca oraya gitme olayını yapıcam aklımda, kayıt kısmının da çoğunu hallettim ama kullanma yine de ",
+              "Socialdaki birçok özellik artık mobil uygulamamızda, isterseniz komiteler hakkında bilgi alın, isterseniz makale okuyun!",
           //"Socialdaki birçok özellik artık mobil uygulamamızda, isterseniz komiteler hakkında bilgi alın, isterseniz makale okuyun!",
           image: Image.asset('images/ob1.png'),
           decoration: pageDecoration.copyWith(
@@ -81,7 +81,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         PageViewModel(
           title: "Sertifikalar",
           body:
-              "Artık sertifikalarınız cebinizde! \n Social mobil ile dilediğiniz zamann sertifikalarınıza bakabilirsiniz",
+              "Artık sertifikalarınız cebinizde! \n Social mobil ile dilediğiniz zaman sertifikalarınıza bakabilirsiniz",
           image: Image.asset('images/ob2.png'),
           decoration: pageDecoration.copyWith(
               imagePadding: EdgeInsets.only(bottom: 18)),
