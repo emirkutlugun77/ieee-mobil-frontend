@@ -3,21 +3,20 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:getwidget/getwidget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:line_icons/line_icon.dart';
 
 import 'package:like_button/like_button.dart';
-import 'package:loading_animations/loading_animations.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:my_app/Functions/image_picker.dart';
+
 import 'package:my_app/Functions/post_functions.dart';
 import 'package:my_app/UI/feed/add_to_feed.dart';
 import 'package:my_app/UI/feed/single_comment.dart';
 import 'package:my_app/UI/models/post.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 enum FeedState { INITIAL, SENDING, DONE }
@@ -38,9 +37,9 @@ class SocialFeed extends StatefulWidget {
 }
 
 class _SocialFeedState extends State<SocialFeed> {
-  List<Post> postList = [];
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
 
-  PanelController _panelController = PanelController();
   DateTime date = DateTime.now();
   FeedState state = FeedState.INITIAL;
   @override
@@ -48,230 +47,80 @@ class _SocialFeedState extends State<SocialFeed> {
     // TODO: implement initState
     super.initState();
     print(widget.posts.first.date.toString());
-    getAllPosts(postList).then((value) {
-      value.forEach((post) {
-        if (!widget.posts.contains(post)) {
-          setState(() {
-            widget.posts.insert(0, post);
-          });
-        }
-      });
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return Stack(
-      children: [
-        Container(
-          color: Color(0xFFF8FAFF),
-          child: Scaffold(
-            floatingActionButton: GestureDetector(
-              onTap: () {
-                _panelController.open();
-              },
-              child: Container(
-                width: width * 1 / 5,
-                height: height * 1 / 20,
-                decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(10)),
-                child: Center(
-                  child: state == FeedState.INITIAL
-                      ? LineIcon.plus(
-                          color: Theme.of(context).backgroundColor,
-                        )
-                      : Icon(FontAwesomeIcons.chevronLeft),
-                ),
-              ),
-            ),
-            body: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: 58.0 * height / 1000,
-                    left: 58.0 * height / 1000,
-                    right: 58.0 * height / 1000,
-                  ),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Pano',
-                        style: Theme.of(context).textTheme.headline1,
-                      )
-                    ],
-                  ),
-                ),
-                Flexible(
-                  child: ListView.builder(
-                      padding: EdgeInsets.zero,
-                      itemCount: widget.posts.length,
-                      itemBuilder: (context, index) {
-                        if (widget.posts[index].photo == '') {
-                          return postBox(index, context, height);
-                        } else {
-                          return postBoxWithImage(index, context, height);
-                        }
-                      }),
-                )
-              ],
+    return Container(
+      color: Color(0xFFF8FAFF),
+      child: Scaffold(
+        floatingActionButton: GestureDetector(
+          onTap: () async {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        AddToFeed(postList: widget.posts))).then((value) {
+              setState(() {
+                widget.posts = value;
+              });
+            });
+          },
+          child: Container(
+            width: width * 1 / 5,
+            height: height * 1 / 20,
+            decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: BorderRadius.circular(10)),
+            child: Center(
+              child: state == FeedState.INITIAL
+                  ? LineIcon.plus(
+                      color: Theme.of(context).backgroundColor,
+                    )
+                  : Icon(FontAwesomeIcons.chevronLeft),
             ),
           ),
         ),
-        SlidingUpPanel(
-          onPanelClosed: () {
-            setState(() {
-              imageFile = null;
-            });
-          },
-          controller: _panelController,
-          minHeight: 0,
-          slideDirection: SlideDirection.UP,
-          maxHeight: height / 2,
-          panel: Scaffold(
-            floatingActionButton: FloatingActionButton(
-              backgroundColor: Theme.of(context).primaryColor,
-              child: Icon(FontAwesomeIcons.chevronRight, color: Colors.white),
-              onPressed: () async {
-                setState(() {
-                  sendingPost = true;
-                });
-                var prefs = await SharedPreferences.getInstance();
-                String token = (prefs.getString('token'))!;
-
-                await writePost(
-                        imageFile != null ? File(imageFile!.path) : null,
-                        text,
-                        token)
-                    .then((value) {
-                  Post newPost = new Post(
-                    date: DateTime.parse(value['date']),
-                    id: value['_id'],
-                    likeCount: 0,
-                    liked: false,
-                    photo: value["photo"] != null ? value['photo'] : '',
-                    text: value['text'],
-                    userId: UserModelForPost(
-                      id: value['userId']['_id'],
-                      photo: value['userId']['photoXs'] != null
-                          ? value['userId']['photoXs']
-                          : '',
-                      name: value['userId']['name'],
-                      surname: value['userId']['surname'],
-                      username: value['userId']['username'],
-                    ),
-                    v: value['__v'],
-                  );
-                  widget.posts.insert(0, newPost);
-                  setState(() {
-                    sendingPost = false;
-
-                    _panelController.close();
-                  });
-                });
-              },
-            ),
-            body: ModalProgressHUD(
-              opacity: 0,
-              progressIndicator: Center(
-                child: LoadingBouncingGrid.circle(
-                  backgroundColor: Theme.of(context).primaryColor,
-                ),
+        body: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(
+                top: 58.0 * height / 1000,
+                left: 58.0 * height / 1000,
+                right: 58.0 * height / 1000,
               ),
-              inAsyncCall: sendingPost,
-              child: Container(
-                height: height / 2,
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          height: height / 3.5,
-                          width: width,
-                          child: Padding(
-                            padding: EdgeInsets.all(38.0 * height / 1000),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Yazı',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline1!
-                                      .copyWith(
-                                          color:
-                                              Theme.of(context).primaryColor),
-                                ),
-                                TextField(
-                                  keyboardType: TextInputType.text,
-                                  inputFormatters: [
-                                    new LengthLimitingTextInputFormatter(180),
-                                  ],
-                                  onChanged: (value) => text = value,
-                                  maxLines: 4,
-                                  style: TextStyle(fontSize: 17 * height / 700),
-                                  textAlignVertical: TextAlignVertical.center,
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    imageFile != null
-                        ? Center(
-                            child: Image.file(
-                                File(
-                                  imageFile!.path,
-                                ),
-                                height: height / 4),
-                          )
-                        : Row(
-                            children: [
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    getImageFromCamera().then((value) {
-                                      setState(() {
-                                        imageFile = value;
-                                      });
-                                    });
-                                  },
-                                  child: Icon(
-                                    FontAwesomeIcons.camera,
-                                    color: Theme.of(context).primaryColor,
-                                    size: 60 * height / 1000,
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    getImageFromGallery().then((value) {
-                                      setState(() {
-                                        imageFile = value;
-                                      });
-                                    });
-                                  },
-                                  child: Icon(
-                                    FontAwesomeIcons.image,
-                                    color: Theme.of(context).primaryColor,
-                                    size: 60 * height / 1000,
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                  ],
-                ),
+              child: Row(
+                children: [
+                  Text(
+                    'Pano',
+                    style: Theme.of(context).textTheme.headline1,
+                  )
+                ],
               ),
             ),
-          ),
-        )
-      ],
+            Expanded(
+              child: SmartRefresher(
+                header: WaterDropMaterialHeader(),
+                controller: _refreshController,
+                onRefresh: _onRefresh,
+                enablePullDown: true,
+                child: ListView.builder(
+                    padding: EdgeInsets.zero,
+                    itemCount: widget.posts.length,
+                    itemBuilder: (context, index) {
+                      if (widget.posts[index].photo == '') {
+                        return postBox(index, context, height);
+                      } else {
+                        return postBoxWithImage(index, context, height);
+                      }
+                    }),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 
@@ -300,7 +149,7 @@ class _SocialFeedState extends State<SocialFeed> {
                   style: Theme.of(context)
                       .textTheme
                       .subtitle1!
-                      .copyWith(fontSize: 12 * height / 800),
+                      .copyWith(fontSize: 15 * height / 800),
                 ),
               ],
             ),
@@ -393,5 +242,23 @@ class _SocialFeedState extends State<SocialFeed> {
             );
           },
         ));
+  }
+
+  void _onRefresh() async {
+    // monitor network fetch
+    List<Post> postList = [];
+    // monitor network fetch
+    await getAllPosts(postList).then((value) {
+      print('aaa');
+      value.forEach((post) {
+        if (!widget.posts.contains(post)) {
+          setState(() {
+            widget.posts.insert(0, post);
+          });
+        }
+      });
+    });
+    // if failed,use refreshFailed()
+    _refreshController.refreshCompleted();
   }
 }

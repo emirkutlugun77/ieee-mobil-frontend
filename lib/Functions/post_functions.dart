@@ -11,6 +11,7 @@ const baseUri = 'https://ancient-falls-28306.herokuapp.com/';
 
 Future getAllPosts(List<Post> posts) async {
   String token;
+  print('aaa');
   var prefs = await SharedPreferences.getInstance();
   token = (prefs.getString('token'))!;
   var response = await http.get(Uri.parse(baseUri + 'v1/post/'),

@@ -352,7 +352,9 @@ class _SingleEventState extends State<SingleEvent> {
                                 ],
                               ),
                             ),
-                            widget.user.role == 0
+                            widget.user.role == 0 ||
+                                    widget.user.role == 1 ||
+                                    widget.user.role == 4
                                 ? PopupMenuButton<String>(
                                     color: Colors.white,
                                     icon: Icon(FontAwesomeIcons.ellipsisH),

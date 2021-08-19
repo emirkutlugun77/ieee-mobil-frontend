@@ -26,6 +26,7 @@ class _ScanViewPageState extends State<ScanViewPage> {
   PanelController _panelController = PanelController();
   String message = '';
   Color color = Color(0xFF57B665);
+  bool toggled = false;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -59,17 +60,35 @@ class _ScanViewPageState extends State<ScanViewPage> {
           GestureDetector(
             onTap: () {
               controller.toggleTorchMode();
+              setState(() {
+                toggled = !toggled;
+              });
             },
             child: Padding(
               padding: EdgeInsets.all(
                   38.0 * MediaQuery.of(context).size.height / 1000),
-              child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Icon(
-                    FontAwesomeIcons.lightbulb,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Icon(
+                      FontAwesomeIcons.chevronLeft,
+                      color: Colors.black,
+                      size: 40,
+                    ),
+                  ),
+                  Icon(
+                    toggled
+                        ? FontAwesomeIcons.solidLightbulb
+                        : FontAwesomeIcons.lightbulb,
                     color: Colors.yellow,
                     size: 40,
-                  )),
+                  ),
+                ],
+              ),
             ),
           ),
           SlidingWidget(
