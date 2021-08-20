@@ -10,6 +10,7 @@ import 'package:my_app/UI/models/blogposts.dart';
 
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+// ignore: must_be_immutable
 class Articles extends StatefulWidget {
   List<BlogPost> blogPosts;
   final String token;
@@ -38,7 +39,7 @@ class _ArticlesState extends State<Articles> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: Container(
         color: Colors.white,

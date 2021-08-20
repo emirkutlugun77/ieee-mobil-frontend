@@ -5,18 +5,21 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:line_icons/line_icon.dart';
-import 'package:my_app/Functions/image_picker.dart';
+
 import 'package:my_app/Functions/post_functions.dart';
 import 'package:my_app/UI/models/post.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 XFile? imageFile;
 String text = '';
 
+// ignore: must_be_immutable
 class AddToFeed extends StatefulWidget {
-  AddToFeed({required this.postList});
+  AddToFeed({required this.postList, required this.socket});
   List<Post> postList;
+  IO.Socket socket;
   @override
   _AddToFeedState createState() => _AddToFeedState();
 }
@@ -64,7 +67,7 @@ class _AddToFeedState extends State<AddToFeed> {
               v: value['__v'],
             );
             setState(() {
-              widget.postList.insert(0, newPost);
+              widget.socket.emit('post-created', newPost);
             });
 
             Navigator.pop(context, widget.postList);

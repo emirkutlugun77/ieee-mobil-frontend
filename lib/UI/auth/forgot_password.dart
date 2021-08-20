@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+
 import 'package:loading_animations/loading_animations.dart';
 import 'package:my_app/Functions/auth_functions.dart';
 import 'package:my_app/UI/auth/auth_widgets/slidingUpPanel.dart';
@@ -31,7 +31,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   PanelController _panelController = PanelController();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     current = resetState.INITIAL;
   }

@@ -3,11 +3,12 @@ import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:like_button/like_button.dart';
-import 'package:line_icons/line_icon.dart';
+
 import 'package:my_app/Functions/blog.dart';
 import 'package:my_app/UI/article/article_widgets/chip.dart';
 import 'package:my_app/UI/models/blogposts.dart';
 
+// ignore: must_be_immutable
 class ArticleContainer extends StatefulWidget {
   String token;
   BlogPost blogPost;

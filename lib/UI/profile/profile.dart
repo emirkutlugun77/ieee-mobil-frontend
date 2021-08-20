@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getwidget/components/avatar/gf_avatar.dart';
 
@@ -8,10 +8,6 @@ import 'package:getwidget/shape/gf_avatar_shape.dart';
 
 import 'package:line_icons/line_icon.dart';
 
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:my_app/Functions/committee.dart';
-
-import 'package:my_app/UI/commitee_page/commitee.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:date_time_format/date_time_format.dart';
 import 'package:my_app/MinimizedModels/MinCertificate.dart';
@@ -56,7 +52,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     print(widget.minCommittees.length);
   }

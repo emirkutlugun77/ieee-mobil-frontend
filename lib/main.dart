@@ -9,7 +9,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  List<MapEntry<String, dynamic>> universities = [];
+
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
   bool? logged =

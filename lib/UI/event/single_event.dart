@@ -48,7 +48,6 @@ class _SingleEventState extends State<SingleEvent> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     Future.delayed(Duration(milliseconds: 450)).then((value) {

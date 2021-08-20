@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:my_app/MinimizedModels/MinCertificate.dart';
 import 'package:my_app/MinimizedModels/MinCommittee.dart';
@@ -5,7 +7,7 @@ import 'package:my_app/MinimizedModels/MinEvent.dart';
 import 'package:my_app/UI/article/articles.dart';
 
 import 'package:my_app/UI/event/event_page.dart';
-import 'package:my_app/UI/feed/social_feed.dart';
+import 'package:my_app/UI/feed/social_feed.dart' as feed;
 
 import 'package:my_app/UI/home/home_sections/home1.dart';
 
@@ -19,7 +21,10 @@ import 'package:my_app/UI/models/event.dart';
 import 'package:my_app/UI/models/post.dart';
 import 'package:my_app/UI/models/user.dart';
 import 'package:my_app/UI/profile/profile.dart';
-import 'package:my_app/UI/search/search_page.dart';
+
+import 'package:socket_io_client/socket_io_client.dart' as IO;
+
+import 'package:socket_io_client/socket_io_client.dart';
 
 // ignore: must_be_immutable
 class MyHomePage extends StatefulWidget {
@@ -53,7 +58,37 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<Event> events = [];
+  List<Post> userPosts = [];
+  IO.Socket? socket;
+  void connectAndListen() {
+    socket = IO.io(
+        'https://ancient-falls-28306.herokuapp.com/',
+        OptionBuilder().setTransports(['websocket']).setExtraHeaders({
+          HttpHeaders.authorizationHeader: 'Bearer ${widget.token}'
+        }).build());
+    socket!.on('post-created', (data) {
+      Post newPost = Post(
+        date: DateTime.now(),
+        id: data['_id'].toString(),
+        likeCount: 0,
+        liked: false,
+        photo: data["photo"] != null ? data['photo'] : '',
+        text: data['text'],
+        userId: UserModelForPost.fromJson(data['userId']),
+        v: 0,
+      );
+      setState(() {
+        feed.posts.insert(0, newPost);
+        print('inserted');
+      });
+    });
+    socket!.onConnect((_) {
+      print('connect');
+    });
+
+    socket!.onDisconnect((_) => print('disconnect'));
+  }
+
   int _currentIndex = 0;
   PageController _pageController = PageController();
 
@@ -64,9 +99,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    print(widget.token);
+    feed.posts = widget.posts.reversed.toList();
+    connectAndListen();
   }
 
   @override
@@ -85,8 +120,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   user: widget.user,
                   committees: widget.committees,
                   blogPosts: widget.blogPosts),
-              SocialFeed(
-                posts: widget.posts.reversed.toList(),
+              feed.SocialFeed(
+                socket: socket!,
+                posts: userPosts.reversed.toList(),
                 token: widget.token,
               ),
               Articles(

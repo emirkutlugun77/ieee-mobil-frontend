@@ -21,14 +21,17 @@ Future getAllPosts(List<Post> posts) async {
   return posts;
 }
 
-Future<bool> onLikeButtonTapped(bool isLiked, String id, String token) async {
+Future<bool> onLikeButtonTapped(bool isLiked, Post post, String token) async {
   if (isLiked) {
-    await http.put(Uri.parse(baseUri + 'v1/post/$id/unlike'),
+    post.likeCount--;
+    await http.put(Uri.parse(baseUri + 'v1/post/${post.id}/unlike'),
         headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
   } else {
-    await http.put(Uri.parse(baseUri + 'v1/post/$id/like'),
+    post.likeCount++;
+    await http.put(Uri.parse(baseUri + 'v1/post/${post.id}/like'),
         headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
   }
+
   print('working');
   return !isLiked;
 }

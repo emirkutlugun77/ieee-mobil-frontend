@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/constants.dart' as constants;
 
 class CustomChipForEvent extends StatelessWidget {
   final String tag;

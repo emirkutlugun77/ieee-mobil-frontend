@@ -10,6 +10,7 @@ import 'package:my_app/Functions/blog.dart';
 import 'package:my_app/UI/article/article_widgets/chip.dart';
 import 'package:my_app/UI/models/blogposts.dart';
 
+// ignore: must_be_immutable
 class ArticlePage extends StatefulWidget {
   final String token;
   BlogPost blogPost;
@@ -19,18 +20,6 @@ class ArticlePage extends StatefulWidget {
 }
 
 class _ArticlePageState extends State<ArticlePage> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  static List<Html> choices = <Html>[
-    Html(
-      data:
-          '<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>',
-    ),
-  ];
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;

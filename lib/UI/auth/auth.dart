@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/Functions/blog.dart';
+
 import 'package:my_app/Functions/committee.dart';
 import 'package:my_app/Functions/events.dart';
-import 'package:my_app/Functions/post_functions.dart';
+
 import 'package:my_app/UI/auth/forgot_password.dart';
 import 'package:my_app/UI/auth/login.dart';
 import 'package:my_app/UI/auth/sign_in.dart';

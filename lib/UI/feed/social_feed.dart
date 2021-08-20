@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
@@ -12,13 +10,14 @@ import 'package:like_button/like_button.dart';
 
 import 'package:my_app/Functions/post_functions.dart';
 import 'package:my_app/UI/feed/add_to_feed.dart';
-import 'package:my_app/UI/feed/single_comment.dart';
+
 import 'package:my_app/UI/models/post.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
+List<Post> posts = [];
 enum FeedState { INITIAL, SENDING, DONE }
 XFile? imageFile;
 String text = '';
@@ -26,9 +25,11 @@ bool sendingPost = false;
 
 // ignore: must_be_immutable
 class SocialFeed extends StatefulWidget {
+  IO.Socket socket;
   List<Post> posts;
   String token;
   SocialFeed({
+    required this.socket,
     required this.posts,
     required this.token,
   });
@@ -44,9 +45,8 @@ class _SocialFeedState extends State<SocialFeed> {
   FeedState state = FeedState.INITIAL;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    print(widget.posts.first.date.toString());
+    print(posts.first.date.toString());
   }
 
   @override
@@ -59,12 +59,13 @@ class _SocialFeedState extends State<SocialFeed> {
         floatingActionButton: GestureDetector(
           onTap: () async {
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        AddToFeed(postList: widget.posts))).then((value) {
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            AddToFeed(socket: widget.socket, postList: posts)))
+                .then((value) {
               setState(() {
-                widget.posts = value;
+                posts = value;
               });
             });
           },
@@ -108,9 +109,9 @@ class _SocialFeedState extends State<SocialFeed> {
                 enablePullDown: true,
                 child: ListView.builder(
                     padding: EdgeInsets.zero,
-                    itemCount: widget.posts.length,
+                    itemCount: posts.length,
                     itemBuilder: (context, index) {
-                      if (widget.posts[index].photo == '') {
+                      if (posts[index].photo == '') {
                         return postBox(index, context, height);
                       } else {
                         return postBoxWithImage(index, context, height);
@@ -129,23 +130,20 @@ class _SocialFeedState extends State<SocialFeed> {
       children: [
         GFListTile(
             avatar: GFAvatar(
-              backgroundImage: NetworkImage(widget.posts[index].userId.photo !=
-                      ''
-                  ? widget.posts[index].userId.photo
+              backgroundImage: NetworkImage(posts[index].userId.photo != ''
+                  ? posts[index].userId.photo
                   : 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png'),
               shape: GFAvatarShape.standard,
             ),
             title: Text(
-              widget.posts[index].userId.name +
-                  ' ' +
-                  widget.posts[index].userId.surname,
+              posts[index].userId.name + ' ' + posts[index].userId.surname,
               style: Theme.of(context).textTheme.bodyText2,
             ),
             description: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  widget.posts[index].date.format('m/j/y , H:i'),
+                  posts[index].date.format('m/j/y , H:i'),
                   style: Theme.of(context)
                       .textTheme
                       .subtitle1!
@@ -154,16 +152,16 @@ class _SocialFeedState extends State<SocialFeed> {
               ],
             ),
             subTitle: Text(
-              widget.posts[index].text,
+              posts[index].text,
               style: Theme.of(context).textTheme.bodyText1,
             ),
             icon: LikeButton(
               onTap: (isLiked) async {
-                onLikeButtonTapped(
-                    isLiked, widget.posts[index].id, widget.token);
+                onLikeButtonTapped(isLiked, posts[index], widget.token);
+
                 return !isLiked;
               },
-              isLiked: widget.posts[index].liked,
+              isLiked: posts[index].liked,
               bubblesColor: BubblesColor(
                 dotPrimaryColor: Colors.red,
                 dotSecondaryColor: Colors.redAccent,
@@ -179,7 +177,7 @@ class _SocialFeedState extends State<SocialFeed> {
         Padding(
           padding: const EdgeInsets.only(bottom: 18.0, left: 18.0, right: 18),
           child: CachedNetworkImage(
-            imageUrl: widget.posts[index].photo,
+            imageUrl: posts[index].photo,
           ),
         )
       ],
@@ -189,47 +187,41 @@ class _SocialFeedState extends State<SocialFeed> {
   GFListTile postBox(int index, BuildContext context, double height) {
     return GFListTile(
         avatar: GFAvatar(
-          backgroundImage: NetworkImage(widget.posts[index].userId.photo != ''
-              ? widget.posts[index].userId.photo
+          backgroundImage: NetworkImage(posts[index].userId.photo != ''
+              ? posts[index].userId.photo
               : 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png'),
           shape: GFAvatarShape.standard,
         ),
         title: Text(
-          widget.posts[index].userId.name +
-              ' ' +
-              widget.posts[index].userId.surname,
+          posts[index].userId.name + ' ' + posts[index].userId.surname,
           style: Theme.of(context).textTheme.bodyText2,
         ),
         description: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              widget.posts[index].date.format('m/j/y , H:i'),
+              posts[index].date.format('m/j/y , H:i'),
               style: Theme.of(context)
                   .textTheme
                   .subtitle1!
                   .copyWith(fontSize: 12 * height / 800),
             ),
-            GFButtonBadge(
-              color: Color(0xFFF8FAFF),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SingleComment()));
-              },
-            ),
           ],
         ),
         subTitle: Text(
-          widget.posts[index].text,
+          posts[index].text,
           style: Theme.of(context).textTheme.bodyText1,
         ),
         icon: LikeButton(
-          likeCount: widget.posts[index].likeCount,
+          likeCount: posts[index].likeCount,
           onTap: (isLiked) async {
-            onLikeButtonTapped(isLiked, widget.posts[index].id, widget.token);
+            onLikeButtonTapped(isLiked, posts[index], widget.token);
+            setState(() {
+              posts[index].liked = !isLiked;
+            });
             return !isLiked;
           },
-          isLiked: widget.posts[index].liked,
+          isLiked: posts[index].liked,
           bubblesColor: BubblesColor(
             dotPrimaryColor: Colors.red,
             dotSecondaryColor: Colors.redAccent,
@@ -251,9 +243,9 @@ class _SocialFeedState extends State<SocialFeed> {
     await getAllPosts(postList).then((value) {
       print('aaa');
       value.forEach((post) {
-        if (!widget.posts.contains(post)) {
+        if (!posts.contains(post)) {
           setState(() {
-            widget.posts.insert(0, post);
+            posts.insert(0, post);
           });
         }
       });

@@ -15,8 +15,7 @@ import 'package:my_app/Functions/committee.dart';
 import 'package:my_app/Functions/events.dart';
 
 import 'package:my_app/Functions/search.dart';
-import 'package:my_app/UI/article/article_page.dart';
-import 'package:my_app/UI/article/articles.dart';
+
 import 'package:my_app/UI/commitee_page/commitee.dart';
 import 'package:my_app/UI/event/single_event.dart';
 

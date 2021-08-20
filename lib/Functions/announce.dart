@@ -2,11 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
-import 'package:my_app/UI/auth/login.dart';
+
 import 'package:my_app/UI/models/announcement.dart';
-import 'package:my_app/UI/models/user.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:translator/translator.dart';
 
 const baseUri = 'https://ancient-falls-28306.herokuapp.com/';
 

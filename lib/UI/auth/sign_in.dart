@@ -11,13 +11,9 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:my_app/Functions/announce.dart';
 import 'package:my_app/Functions/auth_functions.dart';
 import 'package:my_app/Functions/blog.dart';
-import 'package:my_app/Functions/committee.dart';
+
 import 'package:my_app/Functions/json_converter.dart';
-import 'package:my_app/Functions/post_functions.dart';
-import 'package:my_app/Functions/user.dart';
-import 'package:my_app/MinimizedModels/MinCertificate.dart';
-import 'package:my_app/MinimizedModels/MinCommittee.dart';
-import 'package:my_app/MinimizedModels/MinEvent.dart';
+
 import 'package:my_app/UI/auth/auth_widgets/slidingUpPanel.dart';
 import 'package:my_app/UI/home/home.dart';
 import 'package:my_app/UI/models/announcement.dart';
@@ -29,8 +25,8 @@ import 'package:my_app/UI/models/post.dart';
 import 'package:my_app/UI/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:alphabet_list_scroll_view/alphabet_list_scroll_view.dart';
 
+// ignore: must_be_immutable
 class SignInPage extends StatefulWidget {
   List<Commitee> commiteeList = [];
 
@@ -563,6 +559,7 @@ class _SignInPageState extends State<SignInPage> {
                                         : university = universities[index].key;
                                   });
                                   choosingUni
+                                      // ignore: unnecessary_statements
                                       ? null
                                       : universities[index]
                                           .value

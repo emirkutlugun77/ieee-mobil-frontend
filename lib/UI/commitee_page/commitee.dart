@@ -11,6 +11,7 @@ import 'package:my_app/UI/models/commitee.dart';
 import 'package:my_app/UI/models/event.dart';
 import 'package:my_app/UI/models/user.dart';
 
+// ignore: must_be_immutable
 class ComiteePage extends StatefulWidget {
   final Commitee commitee;
   User user;

@@ -63,7 +63,6 @@ class _LoginPageState extends State<LoginPage> {
   PanelController _panelController = PanelController();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     announcements = [];
   }

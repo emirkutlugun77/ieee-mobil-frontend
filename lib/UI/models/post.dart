@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
-
 Post postFromJson(String str) => Post.fromJson(json.decode(str));
 
 String postToJson(Post data) => json.encode(data.toJson());
@@ -18,13 +16,13 @@ class Post {
       required this.likeCount});
 
   final String id;
-  late final bool liked;
+  bool liked;
   final UserModelForPost userId;
   final String text;
   final String photo;
   final DateTime date;
   final int v;
-  final int likeCount;
+  int likeCount;
 
   factory Post.fromJson(Map<String, dynamic> json) => Post(
         id: json["_id"],
@@ -49,7 +47,7 @@ class Post {
         "userId": userId,
         "text": text,
         "photo": photo,
-        "date": date,
+        "date": jsonEncode(date.toIso8601String()),
         "__v": v,
         "liked": liked,
       };

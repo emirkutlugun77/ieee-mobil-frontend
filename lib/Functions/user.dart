@@ -8,8 +8,6 @@ import 'package:my_app/MinimizedModels/MinEvent.dart';
 
 import 'package:my_app/UI/models/post.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
-
 const baseUri = 'https://ancient-falls-28306.herokuapp.com/';
 
 Future getUserSubscriptions(

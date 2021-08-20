@@ -1,10 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 
 import 'package:my_app/UI/models/user.dart';
-import 'package:my_app/UI/splash/splash.dart';
 
+// ignore: must_be_immutable
 class ProfileContainer extends StatefulWidget {
   ProfileContainer(
       {Key? key,
