@@ -183,8 +183,9 @@ class _SingleEventState extends State<SingleEvent> {
                             Padding(
                               padding: EdgeInsets.symmetric(
                                   horizontal: width / 16.0),
-                              child: Text(
-                                  widget.event.eventDate.format('m/j/y , H:i')),
+                              child: Text(widget.event.eventDate
+                                  .add(Duration(hours: 3))
+                                  .format('m/j/y , H:i')),
                             ),
                           ],
                         ),
@@ -340,6 +341,7 @@ class _SingleEventState extends State<SingleEvent> {
                                       width: width / 2,
                                       child: Text(
                                         widget.event.sessions[index].time
+                                            .add(Duration(hours: 3))
                                             .format('m/j/y , H:i'),
                                         style: Theme.of(context)
                                             .textTheme

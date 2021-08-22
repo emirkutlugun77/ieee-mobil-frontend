@@ -70,498 +70,524 @@ class _Home1State extends State<Home1> {
       ..dismissOnTap = false;
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        Padding(
-          padding:
-              EdgeInsets.all(8.0 * MediaQuery.of(context).size.height / 700),
-          child: buildFloatingSearchBar(context),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: height / 8),
-          child: Container(
-            color: Theme.of(context).backgroundColor,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 58 * height / 1000,
-                      vertical: 19 * height / 1000),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Komiteler',
-                        style: Theme.of(context).textTheme.headline1,
-                      ),
-                    ],
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          Padding(
+            padding:
+                EdgeInsets.all(4.0 * MediaQuery.of(context).size.height / 700),
+            child: buildFloatingSearchBar(context),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: height / 8),
+            child: Container(
+              color: Theme.of(context).backgroundColor,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 58 * height / 1000,
+                        vertical: 19 * height / 1000),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Komiteler',
+                          style: Theme.of(context).textTheme.headline1,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ListView.builder(
-                        padding: EdgeInsets.zero,
-                        itemCount: widget.committees.length,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ComiteePage(
-                                            user: widget.user,
-                                            commitee: widget.committees[index],
-                                          )));
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.all(8.0 * height / 1000),
-                              child: Container(
-                                height: height * 1 / 15,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    color: Theme.of(context).backgroundColor),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Hero(
-                                        tag: widget.committees[index].photo,
-                                        child: CachedNetworkImage(
-                                          imageUrl:
-                                              widget.committees[index].photo,
-                                          width: width / 10,
-                                          placeholder: (context, url) =>
-                                              CircularProgressIndicator(),
-                                          errorWidget: (context, url, error) =>
-                                              Image.network(
-                                                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRO2A88sIt_waHvZPhZQnnyt06SfGKFhqxVBg&usqp=CAU'),
+                  Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListView.builder(
+                          padding: EdgeInsets.zero,
+                          itemCount: widget.committees.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ComiteePage(
+                                              user: widget.user,
+                                              commitee:
+                                                  widget.committees[index],
+                                            )));
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0 * height / 1000),
+                                child: Container(
+                                  height: height * 1 / 15,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: Theme.of(context).backgroundColor),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Hero(
+                                          tag: widget.committees[index].photo,
+                                          child: CachedNetworkImage(
+                                            imageUrl:
+                                                widget.committees[index].photo,
+                                            width: width / 10,
+                                            placeholder: (context, url) =>
+                                                CircularProgressIndicator(),
+                                            errorWidget: (context, url,
+                                                    error) =>
+                                                Image.network(
+                                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRO2A88sIt_waHvZPhZQnnyt06SfGKFhqxVBg&usqp=CAU'),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Container(
-                                      width: width * 1 / 4.3,
-                                      child: Text(widget.committees[index].name,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1),
-                                    ),
-                                    Container(
-                                      width: width / 5,
-                                      child: Stack(
-                                        children: [
-                                          avatarMethod(35 * height / 1000,
-                                              index.isEven ? 6 : 2),
-                                          avatarMethod(20 * height / 1000,
-                                              index.isEven ? 3 : 1),
-                                          avatarMethod(5 * height / 1000,
-                                              index.isEven ? 5 : 4),
-                                        ],
+                                      Container(
+                                        width: width * 1 / 4.3,
+                                        child: Text(
+                                            widget.committees[index].name,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1),
                                       ),
-                                    ),
-                                    Container(
-                                      width: width / 5,
-                                      child: Text(
-                                          widget.committees[index]
-                                                  .subscriptionCount
-                                                  .toString() +
-                                              ' Üye',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText2!
-                                              .copyWith(
-                                                  color: Theme.of(context)
-                                                      .primaryColor)),
-                                    )
-                                  ],
+                                      Container(
+                                        width: width / 5,
+                                        child: Stack(
+                                          children: [
+                                            avatarMethod(35 * height / 1000,
+                                                index.isEven ? 6 : 2),
+                                            avatarMethod(20 * height / 1000,
+                                                index.isEven ? 3 : 1),
+                                            avatarMethod(5 * height / 1000,
+                                                index.isEven ? 5 : 4),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        width: width / 5,
+                                        child: Text(
+                                            widget.committees[index]
+                                                    .subscriptionCount
+                                                    .toString() +
+                                                ' Üye',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText2!
+                                                .copyWith(
+                                                    color: Theme.of(context)
+                                                        .primaryColor)),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        }),
+                            );
+                          }),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-        SlidingUpPanel(
-          maxHeight: status == searchState.FOUND ? height : height / 1.5,
-          renderPanelSheet: false,
-          padding: EdgeInsets.symmetric(
-              vertical: 60.0 * height / 1500, horizontal: 60.0 * height / 1000),
-          backdropEnabled: false,
-          color: Colors.transparent,
-          slideDirection: SlideDirection.DOWN,
-          minHeight: 0,
-          controller: _panelController,
-          panel: Container(
-            height: height / 1.5,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Container(
-                    width: width,
-                    height: height / 2,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: Colors.white,
-                        border: Border.all(color: Colors.accents[0])),
-                    child: Padding(
-                      padding: EdgeInsets.all(28.0 * height / 1000),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 4.0),
-                            child: Row(
-                              children: [
-                                Text(
-                                  'Bildirimler',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline1!
-                                      .copyWith(
-                                          color:
-                                              Theme.of(context).primaryColor),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Flexible(
-                              child: ListView.builder(
-                                  itemCount: widget.announcements.length,
-                                  itemBuilder: (context, index) {
-                                    return Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 8, horizontal: 4),
-                                        child: Container(
-                                            width: width,
-                                            height: widget.announcements[index]
-                                                        .text.length >=
-                                                    30
-                                                ? height / 4.5
-                                                : height / 8,
-                                            color: Colors.white,
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                        widget
-                                                            .announcements[
-                                                                index]
-                                                            .committeeName,
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyText2!
-                                                            .copyWith(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w200)),
-                                                  ],
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                      vertical:
-                                                          8.0 * height / 1000),
-                                                  child: Row(
-                                                    children: [
-                                                      Flexible(
-                                                        child: Text(
-                                                          widget
-                                                              .announcements[
-                                                                  index]
-                                                              .text,
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .bodyText1,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      widget
-                                                          .announcements[index]
-                                                          .date
-                                                          .format(
-                                                              'm/j/y , H:i'),
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodyText1!
-                                                          .copyWith(
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .primaryColor),
-                                                    )
-                                                  ],
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal:
-                                                          4.0 * height / 1000),
-                                                  child: Divider(),
-                                                )
-                                              ],
-                                            )));
-                                  }))
-                        ],
-                      ),
-                    )),
-              ],
-            ),
-          ),
-        ),
-        SlidingUpPanel(
-            defaultPanelState: PanelState.CLOSED,
-            onPanelClosed: () {
+          SlidingUpPanel(
+            maxHeight: status == searchState.FOUND ? height : height / 1.5,
+            renderPanelSheet: false,
+            onPanelOpened: () {
               setState(() {
-                status = searchState.INIT;
+                widget.seenAnnouncements = widget.announcements.length;
               });
             },
-            maxHeight: height,
-            renderPanelSheet: false,
-            padding: EdgeInsets.only(
-              top: 60.0 * height / 1500,
-            ),
+            padding: EdgeInsets.symmetric(
+                vertical: 60.0 * height / 1500,
+                horizontal: 60.0 * height / 1000),
             backdropEnabled: false,
             color: Colors.transparent,
             slideDirection: SlideDirection.DOWN,
             minHeight: 0,
-            controller: _panelController1,
-            panel: Scaffold(
-              resizeToAvoidBottomInset: false,
-              body: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: height,
-                  width: width,
-                  color: Colors.white,
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 59.0),
-                    child: Column(
-                      children: [
-                        result.committees.length > 0
-                            ? Padding(
-                                padding: EdgeInsets.only(
-                                    top: 38.0 * height / 1000,
-                                    left: 38.0 * height / 1000),
-                                child: Row(
-                                  children: [
-                                    GestureDetector(
-                                        onTap: () {
-                                          _panelController1.close();
+            controller: _panelController,
+            panel: Container(
+              height: height / 1.5,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                      width: width,
+                      height: height / 2,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: Colors.white,
+                          border: Border.all(color: Colors.accents[0])),
+                      child: Padding(
+                        padding: EdgeInsets.all(28.0 * height / 1000),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 4.0),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    'Bildirimler',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline1!
+                                        .copyWith(
+                                            color:
+                                                Theme.of(context).primaryColor),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Flexible(
+                                child: ListView.builder(
+                                    itemCount: widget.announcements.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 8, horizontal: 4),
+                                          child: Container(
+                                              width: width,
+                                              height: widget
+                                                          .announcements[index]
+                                                          .text
+                                                          .length >=
+                                                      30
+                                                  ? height / 4.5
+                                                  : height / 8,
+                                              color: Colors.white,
+                                              child: Column(
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                          widget
+                                                              .announcements[
+                                                                  index]
+                                                              .committeeName,
+                                                          style: Theme.of(
+                                                                  context)
+                                                              .textTheme
+                                                              .bodyText2!
+                                                              .copyWith(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w200)),
+                                                    ],
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 8.0 *
+                                                                height /
+                                                                1000),
+                                                    child: Row(
+                                                      children: [
+                                                        Flexible(
+                                                          child: Text(
+                                                            widget
+                                                                .announcements[
+                                                                    index]
+                                                                .text,
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyText1,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                        widget
+                                                            .announcements[
+                                                                index]
+                                                            .date
+                                                            .add(Duration(
+                                                                hours: 3))
+                                                            .format(
+                                                                'm/j/y , H:i'),
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyText1!
+                                                            .copyWith(
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .primaryColor),
+                                                      )
+                                                    ],
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 4.0 *
+                                                                height /
+                                                                1000),
+                                                    child: Divider(),
+                                                  )
+                                                ],
+                                              )));
+                                    }))
+                          ],
+                        ),
+                      )),
+                ],
+              ),
+            ),
+          ),
+          SlidingUpPanel(
+              defaultPanelState: PanelState.CLOSED,
+              onPanelClosed: () {
+                setState(() {
+                  status = searchState.INIT;
+                });
+              },
+              maxHeight: height,
+              renderPanelSheet: false,
+              padding: EdgeInsets.only(
+                top: 60.0 * height / 1500,
+              ),
+              backdropEnabled: false,
+              color: Colors.transparent,
+              slideDirection: SlideDirection.DOWN,
+              minHeight: 0,
+              controller: _panelController1,
+              panel: Scaffold(
+                resizeToAvoidBottomInset: false,
+                body: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: height,
+                    width: width,
+                    color: Colors.white,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 59.0),
+                      child: Column(
+                        children: [
+                          result.committees.length > 0
+                              ? Padding(
+                                  padding: EdgeInsets.only(
+                                      top: 38.0 * height / 1000,
+                                      left: 38.0 * height / 1000),
+                                  child: Row(
+                                    children: [
+                                      GestureDetector(
+                                          onTap: () {
+                                            _panelController1.close();
+                                          },
+                                          child:
+                                              Icon(FontAwesomeIcons.chevronUp)),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 28.0, vertical: 8),
+                                        child: Text(
+                                          result.committees.length > 0
+                                              ? 'Komiteler'
+                                              : '',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline1,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              : SizedBox(),
+                          Builder(builder: (context) {
+                            if (result.committees.length > 0) {
+                              return Flexible(
+                                child: ListView.builder(
+                                    shrinkWrap: true,
+                                    padding: EdgeInsets.zero,
+                                    itemCount: result.committees.length,
+                                    itemBuilder: (context, index) {
+                                      return GestureDetector(
+                                        onTap: () async {
+                                          EasyLoading.show(
+                                              indicator:
+                                                  LoadingBouncingGrid.square(
+                                            backgroundColor:
+                                                Theme.of(context).primaryColor,
+                                          ));
+                                          Commitee com = await getCommitteeById(
+                                              result.committees[index].id);
+                                          EasyLoading.dismiss();
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ComiteePage(
+                                                        commitee: com,
+                                                        user: widget.user,
+                                                      )));
                                         },
-                                        child:
-                                            Icon(FontAwesomeIcons.chevronUp)),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 28.0, vertical: 8),
-                                      child: Text(
-                                        result.committees.length > 0
-                                            ? 'Komiteler'
-                                            : '',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline1,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              )
-                            : SizedBox(),
-                        Builder(builder: (context) {
-                          if (result.committees.length > 0) {
-                            return Flexible(
-                              child: ListView.builder(
-                                  shrinkWrap: true,
-                                  padding: EdgeInsets.zero,
-                                  itemCount: result.committees.length,
-                                  itemBuilder: (context, index) {
-                                    return GestureDetector(
-                                      onTap: () async {
-                                        EasyLoading.show(
-                                            indicator:
-                                                LoadingBouncingGrid.square(
-                                          backgroundColor:
-                                              Theme.of(context).primaryColor,
-                                        ));
-                                        Commitee com = await getCommitteeById(
-                                            result.committees[index].id);
-                                        EasyLoading.dismiss();
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ComiteePage(
-                                                      commitee: com,
-                                                      user: widget.user,
-                                                    )));
-                                      },
-                                      child: Padding(
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 8.0, horizontal: 28),
+                                          child: Container(
+                                            color: Colors.white,
+                                            child: GFListTile(
+                                                avatar: CachedNetworkImage(
+                                                  imageUrl: result
+                                                      .committees[index].photo,
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width /
+                                                      7,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .width /
+                                                      7,
+                                                  progressIndicatorBuilder: (context,
+                                                          url,
+                                                          downloadProgress) =>
+                                                      CircularProgressIndicator(
+                                                          value:
+                                                              downloadProgress
+                                                                  .progress),
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Icon(Icons.error),
+                                                ),
+                                                title: Text(
+                                                    result
+                                                        .committees[index].name,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headline1!
+                                                        .copyWith(
+                                                            color:
+                                                                Colors.black)),
+                                                icon: Icon(FontAwesomeIcons
+                                                    .chevronRight)),
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                              );
+                            } else {
+                              return SizedBox();
+                            }
+                          }),
+                          result.events.length > 0
+                              ? Padding(
+                                  padding: EdgeInsets.only(
+                                      top: 38.0 * height / 1000,
+                                      left: 38.0 * height / 1000),
+                                  child: Row(
+                                    children: [
+                                      result.committees.length > 0
+                                          ? SizedBox()
+                                          : GestureDetector(
+                                              onTap: () {
+                                                _panelController1.close();
+                                              },
+                                              child: Icon(
+                                                  FontAwesomeIcons.chevronUp)),
+                                      Padding(
                                         padding: const EdgeInsets.symmetric(
-                                            vertical: 8.0, horizontal: 28),
-                                        child: Container(
-                                          color: Colors.white,
-                                          child: GFListTile(
-                                              avatar: CachedNetworkImage(
-                                                imageUrl: result
-                                                    .committees[index].photo,
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width /
-                                                    7,
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .width /
-                                                    7,
-                                                progressIndicatorBuilder:
-                                                    (context, url,
-                                                            downloadProgress) =>
-                                                        CircularProgressIndicator(
-                                                            value:
-                                                                downloadProgress
-                                                                    .progress),
-                                                errorWidget:
-                                                    (context, url, error) =>
-                                                        Icon(Icons.error),
-                                              ),
-                                              title: Text(
-                                                  result.committees[index].name,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .headline1!
-                                                      .copyWith(
-                                                          color: Colors.black)),
-                                              icon: Icon(FontAwesomeIcons
-                                                  .chevronRight)),
+                                            horizontal: 28.0, vertical: 8),
+                                        child: Text(
+                                          result.events.length > 0
+                                              ? 'Etkinlikler'
+                                              : '',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline1,
                                         ),
                                       ),
-                                    );
-                                  }),
-                            );
-                          } else {
-                            return SizedBox();
-                          }
-                        }),
-                        result.events.length > 0
-                            ? Padding(
-                                padding: EdgeInsets.only(
-                                    top: 38.0 * height / 1000,
-                                    left: 38.0 * height / 1000),
-                                child: Row(
-                                  children: [
-                                    result.committees.length > 0
-                                        ? SizedBox()
-                                        : GestureDetector(
-                                            onTap: () {
-                                              _panelController1.close();
-                                            },
-                                            child: Icon(
-                                                FontAwesomeIcons.chevronUp)),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 28.0, vertical: 8),
-                                      child: Text(
-                                        result.events.length > 0
-                                            ? 'Etkinlikler'
-                                            : '',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline1,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : SizedBox(),
-                        Builder(builder: (context) {
-                          if (result.events.length > 0) {
-                            return Flexible(
-                              child: ListView.builder(
-                                  padding: EdgeInsets.zero,
-                                  itemCount: result.events.length,
-                                  itemBuilder: (context, index) {
-                                    return GestureDetector(
-                                      onTap: () async {
-                                        EasyLoading.show(
-                                            indicator:
-                                                LoadingBouncingGrid.square(
-                                          backgroundColor:
-                                              Theme.of(context).primaryColor,
-                                        ));
-                                        Event event = await getEventById(
-                                            result.events[index].id);
-                                        EasyLoading.dismiss();
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    SingleEvent(
-                                                      event: event,
-                                                      user: widget.user,
-                                                    )));
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 8.0, horizontal: 28),
-                                        child: Container(
-                                          color: Colors.white,
-                                          child: GFListTile(
-                                              avatar: CachedNetworkImage(
-                                                imageUrl:
-                                                    result.events[index].photo,
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width /
-                                                    7,
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .width /
-                                                    7,
-                                                progressIndicatorBuilder:
-                                                    (context, url,
-                                                            downloadProgress) =>
-                                                        CircularProgressIndicator(
-                                                            value:
-                                                                downloadProgress
-                                                                    .progress),
-                                                errorWidget:
-                                                    (context, url, error) =>
-                                                        Icon(Icons.error),
-                                              ),
-                                              title: Text(
-                                                  result.events[index].name,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .headline1!
-                                                      .copyWith(
-                                                          color: Colors.black)),
-                                              icon: Icon(FontAwesomeIcons
-                                                  .chevronRight)),
+                                    ],
+                                  ),
+                                )
+                              : SizedBox(),
+                          Builder(builder: (context) {
+                            if (result.events.length > 0) {
+                              return Flexible(
+                                child: ListView.builder(
+                                    padding: EdgeInsets.zero,
+                                    itemCount: result.events.length,
+                                    itemBuilder: (context, index) {
+                                      return GestureDetector(
+                                        onTap: () async {
+                                          EasyLoading.show(
+                                              indicator:
+                                                  LoadingBouncingGrid.square(
+                                            backgroundColor:
+                                                Theme.of(context).primaryColor,
+                                          ));
+                                          Event event = await getEventById(
+                                              result.events[index].id);
+                                          EasyLoading.dismiss();
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      SingleEvent(
+                                                        event: event,
+                                                        user: widget.user,
+                                                      )));
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 8.0, horizontal: 28),
+                                          child: Container(
+                                            color: Colors.white,
+                                            child: GFListTile(
+                                                avatar: CachedNetworkImage(
+                                                  imageUrl: result
+                                                      .events[index].photo,
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width /
+                                                      7,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .width /
+                                                      7,
+                                                  progressIndicatorBuilder: (context,
+                                                          url,
+                                                          downloadProgress) =>
+                                                      CircularProgressIndicator(
+                                                          value:
+                                                              downloadProgress
+                                                                  .progress),
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Icon(Icons.error),
+                                                ),
+                                                title: Text(
+                                                    result.events[index].name,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headline1!
+                                                        .copyWith(
+                                                            color:
+                                                                Colors.black)),
+                                                icon: Icon(FontAwesomeIcons
+                                                    .chevronRight)),
+                                          ),
                                         ),
-                                      ),
-                                    );
-                                  }),
-                            );
-                          } else {
-                            return SizedBox();
-                          }
-                        }),
-                      ],
+                                      );
+                                    }),
+                              );
+                            } else {
+                              return SizedBox();
+                            }
+                          }),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ))
-      ],
+              ))
+        ],
+      ),
     );
   }
 

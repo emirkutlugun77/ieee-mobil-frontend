@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:my_app/UI/models/user.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 // ignore: must_be_immutable
 class ProfileContainer extends StatefulWidget {
@@ -14,8 +15,10 @@ class ProfileContainer extends StatefulWidget {
       required this.blogCount,
       required this.committeCount,
       required this.eventCount,
-      required this.containerInt})
+      required this.containerInt,
+      required this.panelController})
       : super(key: key);
+  final PanelController panelController;
   int containerInt;
   final PageController pageController;
   final int blogCount;
@@ -56,16 +59,21 @@ class _ProfileContainerState extends State<ProfileContainer> {
                     padding: const EdgeInsets.symmetric(horizontal: 18.0),
                     child: Row(
                       children: [
-                        Container(
-                          width: widget.width * 1 / 5,
-                          height: widget.width * 1 / 5,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: CachedNetworkImage(
-                              imageUrl: widget.user.photoXs != ''
-                                  ? widget.user.photoXs
-                                  : 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
-                              fit: BoxFit.fill,
+                        GestureDetector(
+                          onTap: () {
+                            widget.panelController.open();
+                          },
+                          child: Container(
+                            width: widget.width * 1 / 5,
+                            height: widget.width * 1 / 5,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: CachedNetworkImage(
+                                imageUrl: widget.user.photoXs != ''
+                                    ? widget.user.photoXs
+                                    : 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
+                                fit: BoxFit.fill,
+                              ),
                             ),
                           ),
                         ),
@@ -84,13 +92,17 @@ class _ProfileContainerState extends State<ProfileContainer> {
                               SizedBox(
                                 height: widget.height * 1 / 120,
                               ),
-                              Text(
-                                widget.user.title,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle1!
-                                    .copyWith(
-                                        color: Theme.of(context).primaryColor),
+                              Container(
+                                width: MediaQuery.of(context).size.width / 3,
+                                child: Text(
+                                  widget.user.title,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1!
+                                      .copyWith(
+                                          color:
+                                              Theme.of(context).primaryColor),
+                                ),
                               )
                             ],
                           ),

@@ -90,16 +90,16 @@ class _SignInPageState extends State<SignInPage> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return FutureBuilder(
-        future: future,
-        builder: (context, snapshot) {
-          return ModalProgressHUD(
-            inAsyncCall: logging,
-            opacity: 0,
-            child: SingleChildScrollView(
-              child: Stack(
-                children: [
-                  Padding(
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      backgroundColor: Colors.transparent,
+      body: FutureBuilder(
+          future: future,
+          builder: (context, snapshot) {
+            return Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Padding(
                     padding: EdgeInsets.symmetric(
                         vertical: width / 25, horizontal: width / 25),
                     child: FlipCard(
@@ -109,17 +109,17 @@ class _SignInPageState extends State<SignInPage> {
                       front: cardFront(width, context, height),
                     ),
                   ),
-                  SlidingWidget(
-                      message: userVariable,
-                      height: height,
-                      panelController: _panelController,
-                      backgroundColor:
-                          succ ? Colors.green : Theme.of(context).errorColor)
-                ],
-              ),
-            ),
-          );
-        });
+                ),
+                SlidingWidget(
+                    message: userVariable,
+                    height: height,
+                    panelController: _panelController,
+                    backgroundColor:
+                        succ ? Colors.green : Theme.of(context).errorColor)
+              ],
+            );
+          }),
+    );
   }
 
   Widget cardFront(double width, BuildContext context, double height) {

@@ -132,7 +132,10 @@ class _ArticleContainerState extends State<ArticleContainer> {
                           width: widget.width * 1 / 20,
                         ),
                         Text(
-                          'Tarih: ' + widget.blogPost.date.format('m/j/y  H:i'),
+                          'Tarih: ' +
+                              widget.blogPost.date
+                                  .add(Duration(hours: 3))
+                                  .format('m/j/y  H:i'),
                           style: Theme.of(context)
                               .textTheme
                               .subtitle1!

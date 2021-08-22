@@ -302,7 +302,10 @@ class _SocialFeedState extends State<SocialFeed>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  posts[index].date.format('m/j/y , H:i'),
+                  posts[index]
+                      .date
+                      .add(Duration(hours: 3))
+                      .format('m/j/y , H:i'),
                   style: Theme.of(context)
                       .textTheme
                       .subtitle1!
@@ -359,7 +362,7 @@ class _SocialFeedState extends State<SocialFeed>
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              posts[index].date.format('m/j/y , H:i'),
+              posts[index].date.add(Duration(hours: 3)).format('m/j/y , H:i'),
               style: Theme.of(context)
                   .textTheme
                   .subtitle1!

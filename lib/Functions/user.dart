@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_app/MinimizedModels/MinCertificate.dart';
 import 'package:my_app/MinimizedModels/MinCommittee.dart';
@@ -119,4 +120,17 @@ Future<bool> getUserData(
     getAllPostsByUserId(userId, token, posts)
   ]);
   return true;
+}
+
+Future updateUserPhoto(String id, File? image, String token) async {
+  var formData = FormData.fromMap({
+    'photo': image != null ? await MultipartFile.fromFile(image.path) : null
+  });
+  var response = await Dio().put(
+      'https://ancient-falls-28306.herokuapp.com/v1/users/$id/photo/',
+      data: formData,
+      options:
+          Options(headers: {HttpHeaders.authorizationHeader: 'Bearer $token'}));
+
+  return response;
 }

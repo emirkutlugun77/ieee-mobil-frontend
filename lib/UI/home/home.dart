@@ -134,6 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 events: widget.events,
               ),
               ProfilePage(
+                  token: widget.token,
                   user: widget.user,
                   minCommittees: widget.minCommittees,
                   minEvents: widget.minEvents,
@@ -167,7 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
             // selected tab background color
             padding: EdgeInsets.symmetric(
                 horizontal: 25 * MediaQuery.of(context).size.height / 1000,
-                vertical: 25 *
+                vertical: 35 *
                     MediaQuery.of(context).size.height /
                     1300), // navigation bar padding
             tabs: [

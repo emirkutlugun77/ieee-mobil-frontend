@@ -60,7 +60,16 @@ class _ComiteePageState extends State<ComiteePage> {
                                 onTap: () {
                                   Navigator.pop(context);
                                 },
-                                child: LineIcon.arrowLeft())),
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.grey.shade100,
+                                        borderRadius: BorderRadius.circular(5)),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0 *
+                                          MediaQuery.of(context).size.height /
+                                          1000),
+                                      child: LineIcon.arrowLeft(),
+                                    )))),
                       ],
                     ),
                   ),
