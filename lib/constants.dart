@@ -6,7 +6,7 @@ const Map<String, Color> blogCategoryColors = {
   'Kişisel Gelişim': Color(0xFFf7a950),
   'Spor': Color(0xFF27b438),
   'Eğlence': Color(0xFF811d7e),
-  'Sanat/Kültür': Color(0xFF383838),
+  'Sanat/Kültür': Color(0xFFb4573e),
   'Kariyer': Color(0xFF0d1d96),
   'Bilim': Color(0xFF33b9db),
   'Seyahat': Color(0xFFa21a1a),

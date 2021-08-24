@@ -70,6 +70,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       ..backgroundColor = Colors.transparent
       ..textColor = Colors.yellow
       ..maskColor = Colors.blue.withOpacity(0.5)
+      ..userInteractions = false
       ..dismissOnTap = false;
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;

@@ -23,7 +23,7 @@ void main() async {
     ..indicatorColor = Color(0xFF376AED)
     ..textColor = Colors.yellow
     ..maskColor = Colors.blue.withOpacity(0.5)
-    ..userInteractions = true
+    ..userInteractions = false
     ..dismissOnTap = false;
 
   runApp(MaterialApp(

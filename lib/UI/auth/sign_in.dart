@@ -374,12 +374,13 @@ class _SignInPageState extends State<SignInPage> {
                   label: classes[sliderValue.toInt()],
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text('Kayıt olarak ',
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1!
-                            .copyWith(fontSize: 13 * height / 1000)),
+                            .copyWith(fontSize: 16 * height / 1200)),
                     GestureDetector(
                       onTap: () {
                         showDialog(
@@ -405,13 +406,13 @@ class _SignInPageState extends State<SignInPage> {
                               .copyWith(
                                   color: Theme.of(context).primaryColor,
                                   decoration: TextDecoration.underline,
-                                  fontSize: 13.5 * height / 1000)),
+                                  fontSize: 16 * height / 1200)),
                     ),
                     Text(' kabul ediyorum. ',
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1!
-                            .copyWith(fontSize: 13 * height / 1000)),
+                            .copyWith(fontSize: 16 * height / 1200)),
                   ],
                 ),
                 verticalSpace(height * 1.3),

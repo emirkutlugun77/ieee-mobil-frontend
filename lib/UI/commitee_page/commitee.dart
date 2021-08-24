@@ -49,8 +49,11 @@ class _ComiteePageState extends State<ComiteePage> {
                       children: [
                         Hero(
                           tag: widget.commitee.photo,
-                          child: Image.network(
-                            widget.commitee.photo,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              widget.commitee.photo,
+                            ),
                           ),
                         ),
                         Positioned(
@@ -81,10 +84,14 @@ class _ComiteePageState extends State<ComiteePage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Center(
-                        child: Text(
-                          widget.commitee.name,
-                          style: Theme.of(context).textTheme.headline1,
-                        ),
+                        child: Text(widget.commitee.name,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline1!
+                                .copyWith(
+                                    fontSize: 30 *
+                                        MediaQuery.of(context).size.height /
+                                        1000)),
                       ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 1 / 40,
@@ -154,7 +161,9 @@ class _ComiteePageState extends State<ComiteePage> {
               child: Row(
                 children: [
                   Text('Hakkımızda:',
-                      style: Theme.of(context).textTheme.headline1),
+                      style: Theme.of(context).textTheme.headline1!.copyWith(
+                          fontSize:
+                              30 * MediaQuery.of(context).size.height / 1000)),
                 ],
               ),
             ),
@@ -163,9 +172,17 @@ class _ComiteePageState extends State<ComiteePage> {
               child: Wrap(children: [
                 Text(
                     widget.commitee.description.length >= 300
-                        ? widget.commitee.description.substring(0, 150) + '...'
+                        ? widget.commitee.description.substring(
+                                0,
+                                (150 +
+                                        (MediaQuery.of(context).size.height /
+                                            10))
+                                    .toInt()) +
+                            '...'
                         : widget.commitee.description,
-                    style: Theme.of(context).textTheme.bodyText1),
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        fontSize:
+                            17 * MediaQuery.of(context).size.height / 1000)),
                 GestureDetector(
                   onTap: () {
                     showDialog(
@@ -179,7 +196,14 @@ class _ComiteePageState extends State<ComiteePage> {
                           } else {
                             return AlertDialog(
                               title: Text('Hakkımızda'),
-                              content: Text(widget.commitee.description),
+                              content: SingleChildScrollView(
+                                  child: Column(
+                                children: [
+                                  Text(
+                                    widget.commitee.description,
+                                  ),
+                                ],
+                              )),
                             );
                           }
                         });
@@ -228,8 +252,10 @@ class _ComiteePageState extends State<ComiteePage> {
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) {
                             return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 18.0),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 15.0 *
+                                      MediaQuery.of(context).size.height /
+                                      1000),
                               child: GestureDetector(
                                 onTap: () {
                                   Navigator.push(

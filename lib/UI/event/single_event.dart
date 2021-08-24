@@ -68,6 +68,7 @@ class _SingleEventState extends State<SingleEvent> {
       ..backgroundColor = Colors.transparent
       ..textColor = Colors.yellow
       ..maskColor = Colors.blue.withOpacity(0.5)
+      ..userInteractions = false
       ..dismissOnTap = false;
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
@@ -82,30 +83,10 @@ class _SingleEventState extends State<SingleEvent> {
                   children: [
                     GestureDetector(
                       onDoubleTap: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              if (Platform.isIOS) {
-                                return CupertinoAlertDialog(
-                                  content: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image.network(
-                                      widget.event.photo,
-                                      height: height / 1.9,
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                );
-                              } else {
-                                return AlertDialog(
-                                  content: Image.network(
-                                    widget.event.photo,
-                                    height: height / 1.9,
-                                    fit: BoxFit.fill,
-                                  ),
-                                );
-                              }
-                            });
+                        showImage(context, height);
+                      },
+                      onLongPress: () {
+                        showImage(context, height);
                       },
                       child: Hero(
                         tag: widget.event.photo,
@@ -131,9 +112,18 @@ class _SingleEventState extends State<SingleEvent> {
                               comments.clear();
                               Navigator.pop(context);
                             },
-                            child: Icon(
-                              FontAwesomeIcons.arrowLeft,
-                              color: Theme.of(context).backgroundColor,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Theme.of(context).backgroundColor,
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0 * height / 1000),
+                                child: Icon(
+                                  FontAwesomeIcons.arrowLeft,
+                                  color: Colors.grey.shade700,
+                                ),
+                              ),
                             ),
                           )
                         ],
@@ -274,6 +264,33 @@ class _SingleEventState extends State<SingleEvent> {
     );
   }
 
+  Future<dynamic> showImage(BuildContext context, double height) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          if (Platform.isIOS) {
+            return CupertinoAlertDialog(
+              content: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(
+                  widget.event.photo,
+                  height: height / 1.9,
+                  fit: BoxFit.fill,
+                ),
+              ),
+            );
+          } else {
+            return AlertDialog(
+              content: Image.network(
+                widget.event.photo,
+                height: height / 1.9,
+                fit: BoxFit.fill,
+              ),
+            );
+          }
+        });
+  }
+
   SlidingUpPanel slidingForSessions(
       double height, BuildContext context, double width) {
     return SlidingUpPanel(
@@ -356,35 +373,19 @@ class _SingleEventState extends State<SingleEvent> {
                             widget.user.role == 0 ||
                                     widget.user.role == 1 ||
                                     widget.user.role == 4
-                                ? PopupMenuButton<String>(
-                                    color: Colors.white,
-                                    icon: Icon(FontAwesomeIcons.ellipsisH),
-                                    itemBuilder: (BuildContext context) {
-                                      return choices.map((String choice) {
-                                        return PopupMenuItem<String>(
-                                          value: choice,
-                                          child: GestureDetector(
-                                              onTap: () async {
-                                                if (choice == 'QR Kod Oku') {
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              ScanViewPage(
-                                                                eventId: widget
-                                                                    .event.id,
-                                                                sessionId: widget
-                                                                    .event
-                                                                    .sessions[
-                                                                        index]
-                                                                    .id,
-                                                              )));
-                                                }
-                                              },
-                                              child: Text(choice)),
-                                        );
-                                      }).toList();
+                                ? GestureDetector(
+                                    onTap: () async {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ScanViewPage(
+                                                    eventId: widget.event.id,
+                                                    sessionId: widget.event
+                                                        .sessions[index].id,
+                                                  )));
                                     },
+                                    child: Icon(FontAwesomeIcons.qrcode),
                                   )
                                 : SizedBox()
                           ],

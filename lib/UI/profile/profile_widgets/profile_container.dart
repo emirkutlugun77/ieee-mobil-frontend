@@ -72,7 +72,7 @@ class _ProfileContainerState extends State<ProfileContainer> {
                                 imageUrl: widget.user.photoXs != ''
                                     ? widget.user.photoXs
                                     : 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
-                                fit: BoxFit.fill,
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),
@@ -112,7 +112,9 @@ class _ProfileContainerState extends State<ProfileContainer> {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(
-                        horizontal: 18.0, vertical: 4 * widget.height / 700),
+                        horizontal:
+                            18.0 * MediaQuery.of(context).size.height / 1000,
+                        vertical: 3 * widget.height / 700),
                     child: Text('Okul',
                         style: Theme.of(context).textTheme.bodyText1!.copyWith(
                             fontSize: 14 * widget.height / 700,
@@ -124,16 +126,20 @@ class _ProfileContainerState extends State<ProfileContainer> {
                       width: widget.width * 5 / 6,
                       child: Text(
                         widget.user.education.university,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText1!
-                            .copyWith(fontSize: 14 * widget.height / 700),
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                            fontSize:
+                                widget.user.education.university.length > 35
+                                    ? 11 * widget.height / 700
+                                    : 13 * widget.height / 700),
                       ),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 18.0, vertical: 8),
+                    padding: EdgeInsets.symmetric(
+                        horizontal:
+                            18.0 * MediaQuery.of(context).size.height / 1000,
+                        vertical:
+                            6 * MediaQuery.of(context).size.height / 1000),
                     child: Text('Bölüm',
                         style: Theme.of(context).textTheme.bodyText1!.copyWith(
                             fontSize: 14 * widget.height / 700,
@@ -145,10 +151,11 @@ class _ProfileContainerState extends State<ProfileContainer> {
                       width: widget.width * 5 / 6,
                       child: Text(
                         widget.user.education.department,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText1!
-                            .copyWith(fontSize: 14 * widget.height / 700),
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                            fontSize:
+                                widget.user.education.department.length > 30
+                                    ? 9 * widget.height / 700
+                                    : 14 * widget.height / 700),
                       ),
                     ),
                   )

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
@@ -11,6 +12,7 @@ import 'package:getwidget/shape/gf_avatar_shape.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:line_icons/line_icon.dart';
+import 'package:loading_animations/loading_animations.dart';
 import 'package:my_app/Functions/auth_functions.dart';
 import 'package:my_app/Functions/image_picker.dart';
 import 'package:my_app/Functions/user.dart';
@@ -53,6 +55,7 @@ class ProfilePage extends StatefulWidget {
 
 bool loadingCom = false;
 bool loadingEvent = false;
+User? user;
 
 class _ProfilePageState extends State<ProfilePage> {
   PanelController _panelController = PanelController();
@@ -74,7 +77,15 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-
+    EasyLoading.instance
+      ..loadingStyle = EasyLoadingStyle.light
+      ..indicatorSize = 45.0
+      ..radius = 10.0
+      ..backgroundColor = Colors.transparent
+      ..textColor = Colors.yellow
+      ..maskColor = Colors.blue.withOpacity(0.5)
+      ..userInteractions = false
+      ..dismissOnTap = false;
     return Scaffold(
       body: Stack(
         children: [
@@ -93,43 +104,51 @@ class _ProfilePageState extends State<ProfilePage> {
                           'Profil',
                           style: Theme.of(context).textTheme.headline1,
                         ),
-                        PopupMenuButton<String>(
-                          color: Colors.white,
-                          icon: LineIcon.horizontalEllipsis(),
-                          itemBuilder: (BuildContext context) {
-                            return choices.map((String choice) {
-                              return PopupMenuItem<String>(
-                                value: choice,
-                                child: GestureDetector(
-                                    onTap: () async {
-                                      if (choice == 'QR Kodum') {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    QrCode(user: widget.user)));
-                                      } else if (choice == 'Çıkış Yap') {
-                                        widget.userPosts.clear();
-                                        widget.minnCerts.clear();
-                                        widget.minCommittees.clear();
-                                        widget.userPosts.clear();
-                                        SharedPreferences prefs =
-                                            await SharedPreferences
-                                                .getInstance();
-                                        prefs.setBool('logged', false);
-                                        prefs.setString('id', '');
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    OnBoardingPage()));
-                                      }
-                                    },
-                                    child: Text(choice)),
-                              );
-                            }).toList();
-                          },
+                        SizedBox(
+                          width: width / 3,
                         ),
+                        Container(
+                          width: width / 6,
+                          height: height / 15,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              QrCode(user: user!)));
+                                },
+                                child: Icon(FontAwesomeIcons.qrcode,
+                                    color: Colors.black),
+                              ),
+                              GestureDetector(
+                                  onTap: () async {
+                                    var value =
+                                        await logoutDialog(context, height);
+                                    if (value) {
+                                      widget.userPosts.clear();
+                                      widget.minnCerts.clear();
+                                      widget.minCommittees.clear();
+                                      widget.userPosts.clear();
+                                      SharedPreferences prefs =
+                                          await SharedPreferences.getInstance();
+                                      prefs.setBool('logged', false);
+                                      prefs.setString('id', '');
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  OnBoardingPage()));
+                                    }
+                                  },
+                                  child:
+                                      Icon(Icons.logout, color: Colors.black)),
+                            ],
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -142,7 +161,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     pageController: _pageController,
                     width: width,
                     height: height,
-                    user: widget.user,
+                    user: user!,
                     committeCount: widget.minCommittees.length,
                     blogCount: widget.minnCerts.length,
                     eventCount: widget.minEvents.length,
@@ -264,9 +283,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                   .textTheme
                                                                   .subtitle1!
                                                                   .copyWith(
-                                                                      fontSize: 13 *
-                                                                          height /
-                                                                          700),
+                                                                      fontSize: widget.minEvents[index].committeeName.length >
+                                                                              20
+                                                                          ? 11 *
+                                                                              height /
+                                                                              700
+                                                                          : 13 *
+                                                                              height /
+                                                                              700),
                                                             ),
                                                             SizedBox(
                                                               height: height *
@@ -518,6 +542,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             child: widget.userPosts.length != 0
                                 ? Flexible(
                                     child: ListView.builder(
+                                        padding: EdgeInsets.zero,
                                         itemCount: widget.userPosts.length,
                                         itemBuilder: (context, index) {
                                           return GFListTile(
@@ -618,12 +643,21 @@ class _ProfilePageState extends State<ProfilePage> {
                                         imageFile = value;
                                       });
                                       File image = File(imageFile!.path);
-                                      EasyLoading.show();
-                                      updateUserPhoto(widget.user.id, image,
-                                              widget.token)
+                                      _panelController.close();
+                                      EasyLoading.show(
+                                          indicator: LoadingBouncingGrid.square(
+                                        backgroundColor:
+                                            Theme.of(context).primaryColor,
+                                      ));
+                                      updateUserPhoto(
+                                              user!.id, image, widget.token)
                                           .then((value) {
-                                        _panelController.close();
-                                        EasyLoading.dismiss();
+                                        getMe(widget.token).then((value) {
+                                          setState(() {
+                                            user = value;
+                                          });
+                                        }).then(
+                                            (value) => EasyLoading.dismiss());
                                       });
                                     });
                                   },
@@ -642,13 +676,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                         imageFile = value;
                                       });
                                       File image = File(imageFile!.path);
-                                      EasyLoading.show();
-                                      updateUserPhoto(widget.user.id, image,
-                                              widget.token)
+                                      _panelController.close();
+                                      EasyLoading.show(
+                                          indicator: LoadingBouncingGrid.square(
+                                        backgroundColor:
+                                            Theme.of(context).primaryColor,
+                                      ));
+                                      updateUserPhoto(
+                                              user!.id, image, widget.token)
                                           .then((value) =>
                                               getMe(widget.token).then((value) {
                                                 setState(() {
-                                                  widget.user = value;
+                                                  user = value;
                                                 });
                                               }))
                                           .then(
@@ -672,6 +711,62 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
       ),
     );
+  }
+
+  Future<dynamic> logoutDialog(BuildContext context, double height) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          if (Platform.isIOS) {
+            return CupertinoAlertDialog(
+                content: Text('Çıkış Yapıyorsunuz'),
+                actions: [
+                  GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context, true);
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0 * height / 1000),
+                        child: Center(
+                            child: Text('Devam Et',
+                                style: Theme.of(context).textTheme.bodyText1)),
+                      )),
+                  GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context, false);
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0 * height / 1000),
+                        child: Center(
+                            child: Text('Geri Dön',
+                                style: Theme.of(context).textTheme.bodyText1)),
+                      ))
+                ]);
+          } else {
+            return AlertDialog(title: Text('Çıkış Yapıyorsunuz'), actions: [
+              GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context, true);
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0 * height / 1000),
+                    child: Center(
+                        child: Text('Devam Et',
+                            style: Theme.of(context).textTheme.bodyText1)),
+                  )),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context, false);
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0 * height / 1000),
+                    child: Center(
+                        child: Text('Geri Dön',
+                            style: Theme.of(context).textTheme.bodyText1)),
+                  ))
+            ]);
+          }
+        });
   }
 
   Container bottomIndicator(double width, double height) {

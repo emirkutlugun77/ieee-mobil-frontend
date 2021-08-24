@@ -67,6 +67,7 @@ class _Home1State extends State<Home1> {
       ..backgroundColor = Colors.transparent
       ..textColor = Colors.yellow
       ..maskColor = Colors.blue.withOpacity(0.5)
+      ..userInteractions = false
       ..dismissOnTap = false;
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
@@ -120,11 +121,11 @@ class _Home1State extends State<Home1> {
                                             )));
                               },
                               child: Padding(
-                                padding: EdgeInsets.all(8.0 * height / 1000),
+                                padding: EdgeInsets.all(4.0 * height / 1000),
                                 child: Container(
-                                  height: height * 1 / 15,
+                                  height: height * 1 / 13,
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
+                                      shape: BoxShape.circle,
                                       color: Theme.of(context).backgroundColor),
                                   child: Row(
                                     mainAxisAlignment:
@@ -134,16 +135,20 @@ class _Home1State extends State<Home1> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: Hero(
                                           tag: widget.committees[index].photo,
-                                          child: CachedNetworkImage(
-                                            imageUrl:
-                                                widget.committees[index].photo,
-                                            width: width / 10,
-                                            placeholder: (context, url) =>
-                                                CircularProgressIndicator(),
-                                            errorWidget: (context, url,
-                                                    error) =>
-                                                Image.network(
-                                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRO2A88sIt_waHvZPhZQnnyt06SfGKFhqxVBg&usqp=CAU'),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            child: CachedNetworkImage(
+                                              imageUrl: widget
+                                                  .committees[index].photo,
+                                              width: width / 10,
+                                              placeholder: (context, url) =>
+                                                  CircularProgressIndicator(),
+                                              errorWidget: (context, url,
+                                                      error) =>
+                                                  Image.network(
+                                                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRO2A88sIt_waHvZPhZQnnyt06SfGKFhqxVBg&usqp=CAU'),
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -221,7 +226,8 @@ class _Home1State extends State<Home1> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
                           color: Colors.white,
-                          border: Border.all(color: Colors.accents[0])),
+                          border: Border.all(
+                              color: Theme.of(context).primaryColor)),
                       child: Padding(
                         padding: EdgeInsets.all(28.0 * height / 1000),
                         child: Column(
@@ -249,7 +255,8 @@ class _Home1State extends State<Home1> {
                                     itemBuilder: (context, index) {
                                       return Padding(
                                           padding: EdgeInsets.symmetric(
-                                              vertical: 8, horizontal: 4),
+                                              vertical: 8 * height / 1000,
+                                              horizontal: 4 * height / 1000),
                                           child: Container(
                                               width: width,
                                               height: widget

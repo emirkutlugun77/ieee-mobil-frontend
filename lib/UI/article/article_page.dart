@@ -50,18 +50,20 @@ class _ArticlePageState extends State<ArticlePage> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 58.0 * height / 1000),
-            child: Container(
-              height: widget.blogPost.title.length >= 22
-                  ? height / 10
-                  : height / 16,
-              width: width,
-              child: Text(
-                widget.blogPost.title,
-                style: Theme.of(context).textTheme.headline1!.copyWith(
-                    fontSize: widget.blogPost.title.length >= 32
-                        ? 20 * height / 700
-                        : 21 * height / 700),
+            padding: EdgeInsets.symmetric(horizontal: 20.0 * height / 1000),
+            child: Center(
+              child: Container(
+                height: widget.blogPost.title.length >= 22
+                    ? height / 12
+                    : height / 16,
+                width: width,
+                child: Text(widget.blogPost.title,
+                    style: Theme.of(context).textTheme.headline1!.copyWith(
+                          fontSize: widget.blogPost.title.length >= 40
+                              ? 16.5 * height / 800
+                              : 21 * height / 700,
+                        ),
+                    textAlign: TextAlign.center),
               ),
             ),
           ),

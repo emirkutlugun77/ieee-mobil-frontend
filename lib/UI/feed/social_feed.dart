@@ -305,7 +305,7 @@ class _SocialFeedState extends State<SocialFeed>
                   posts[index]
                       .date
                       .add(Duration(hours: 3))
-                      .format('m/j/y , H:i'),
+                      .format('j/m/y , H:i'),
                   style: Theme.of(context)
                       .textTheme
                       .subtitle1!
@@ -318,9 +318,12 @@ class _SocialFeedState extends State<SocialFeed>
               style: Theme.of(context).textTheme.bodyText1,
             ),
             icon: LikeButton(
+              likeCount: posts[index].likeCount,
               onTap: (isLiked) async {
                 onLikeButtonTapped(isLiked, posts[index], widget.token);
-
+                setState(() {
+                  posts[index].liked = !isLiked;
+                });
                 return !isLiked;
               },
               isLiked: posts[index].liked,
@@ -362,7 +365,7 @@ class _SocialFeedState extends State<SocialFeed>
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              posts[index].date.add(Duration(hours: 3)).format('m/j/y , H:i'),
+              posts[index].date.add(Duration(hours: 3)).format('j/m/y , H:i'),
               style: Theme.of(context)
                   .textTheme
                   .subtitle1!

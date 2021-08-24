@@ -20,7 +20,7 @@ import 'package:my_app/UI/models/commitee.dart';
 import 'package:my_app/UI/models/event.dart';
 import 'package:my_app/UI/models/post.dart';
 import 'package:my_app/UI/models/user.dart';
-import 'package:my_app/UI/profile/profile.dart';
+import 'package:my_app/UI/profile/profile.dart' as profile;
 
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -101,6 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     feed.posts = widget.posts.reversed.toList();
+    profile.user = widget.user;
     connectAndListen();
   }
 
@@ -133,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 user: widget.user,
                 events: widget.events,
               ),
-              ProfilePage(
+              profile.ProfilePage(
                   token: widget.token,
                   user: widget.user,
                   minCommittees: widget.minCommittees,
@@ -164,11 +165,11 @@ class _MyHomePageState extends State<MyHomePage> {
             color: Colors.grey[800], // unselected icon color
             activeColor:
                 Theme.of(context).primaryColor, // selected icon and text color
-            iconSize: 30, // tab button icon size
+            iconSize: 26, // tab button icon size
             // selected tab background color
             padding: EdgeInsets.symmetric(
-                horizontal: 25 * MediaQuery.of(context).size.height / 1000,
-                vertical: 35 *
+                horizontal: 20 * MediaQuery.of(context).size.height / 1000,
+                vertical: 30 *
                     MediaQuery.of(context).size.height /
                     1300), // navigation bar padding
             tabs: [

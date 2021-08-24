@@ -146,6 +146,7 @@ class _LoginPageState extends State<LoginPage> {
                             ..backgroundColor = Colors.transparent
                             ..textColor = Colors.yellow
                             ..maskColor = Colors.blue.withOpacity(0.5)
+                            ..userInteractions = false
                             ..dismissOnTap = false;
                           EasyLoading.show(
                               indicator: LoadingBouncingGrid.square(

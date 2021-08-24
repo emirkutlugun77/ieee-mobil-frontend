@@ -26,12 +26,17 @@ class _EventsState extends State<Events> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
     return Container(
       color: Color(0xFFE6EAF1).withOpacity(0.1),
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 58.0, left: 58, right: 58),
+            padding: EdgeInsets.only(
+                top: 58.0 * height / 1000,
+                left: 58.0 * height / 1000,
+                right: 58.0 * height / 1000,
+                bottom: 18.0 * height / 1000),
             child: Row(
               children: [
                 Text(
