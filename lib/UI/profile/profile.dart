@@ -726,7 +726,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         Navigator.pop(context, true);
                       },
                       child: Padding(
-                        padding: EdgeInsets.all(8.0 * height / 1000),
+                        padding: EdgeInsets.all(12.0 * height / 1000),
                         child: Center(
                             child: Text('Devam Et',
                                 style: Theme.of(context).textTheme.bodyText1)),
@@ -736,7 +736,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         Navigator.pop(context, false);
                       },
                       child: Padding(
-                        padding: EdgeInsets.all(8.0 * height / 1000),
+                        padding: EdgeInsets.all(12.0 * height / 1000),
                         child: Center(
                             child: Text('Geri Dön',
                                 style: Theme.of(context).textTheme.bodyText1)),
@@ -749,7 +749,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     Navigator.pop(context, true);
                   },
                   child: Padding(
-                    padding: EdgeInsets.all(8.0 * height / 1000),
+                    padding: EdgeInsets.all(12.0 * height / 1000),
                     child: Center(
                         child: Text('Devam Et',
                             style: Theme.of(context).textTheme.bodyText1)),
@@ -759,7 +759,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     Navigator.pop(context, false);
                   },
                   child: Padding(
-                    padding: EdgeInsets.all(8.0 * height / 1000),
+                    padding: EdgeInsets.all(12.0 * height / 1000),
                     child: Center(
                         child: Text('Geri Dön',
                             style: Theme.of(context).textTheme.bodyText1)),

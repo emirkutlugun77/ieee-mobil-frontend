@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:my_app/MinimizedModels/MinCertificate.dart';
 import 'package:my_app/MinimizedModels/MinCommittee.dart';
 import 'package:my_app/MinimizedModels/MinEvent.dart';
@@ -60,6 +61,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<Post> userPosts = [];
   IO.Socket? socket;
+  Post? postForDelete;
   void connectAndListen() {
     socket = IO.io(
         'https://ancient-falls-28306.herokuapp.com/',
@@ -85,7 +87,21 @@ class _MyHomePageState extends State<MyHomePage> {
     socket!.onConnect((_) {
       print('connect');
     });
-
+    socket!.on(
+        'post-deleted',
+        (data) => {
+              print('post silindi'),
+              feed.posts.forEach((element) {
+                if (element.id == data['_id']) {
+                  setState(() {
+                    postForDelete = element;
+                  });
+                }
+              }),
+              setState(() {
+                feed.posts.remove(postForDelete);
+              })
+            });
     socket!.onDisconnect((_) => print('disconnect'));
   }
 
@@ -122,6 +138,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   committees: widget.committees,
                   blogPosts: widget.blogPosts),
               feed.SocialFeed(
+                user: widget.user,
                 socket: socket!,
                 posts: userPosts.reversed.toList(),
                 token: widget.token,

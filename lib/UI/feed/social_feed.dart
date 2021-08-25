@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:getwidget/getwidget.dart';
 import 'package:image_picker/image_picker.dart';
@@ -19,6 +20,7 @@ import 'package:my_app/UI/feed/add_to_feed.dart';
 
 import 'package:my_app/UI/models/post.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:my_app/UI/models/user.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -36,7 +38,9 @@ class SocialFeed extends StatefulWidget {
   IO.Socket socket;
   List<Post> posts;
   String token;
+  User user;
   SocialFeed({
+    required this.user,
     required this.socket,
     required this.posts,
     required this.token,
@@ -317,27 +321,51 @@ class _SocialFeedState extends State<SocialFeed>
               posts[index].text,
               style: Theme.of(context).textTheme.bodyText1,
             ),
-            icon: LikeButton(
-              likeCount: posts[index].likeCount,
-              onTap: (isLiked) async {
-                onLikeButtonTapped(isLiked, posts[index], widget.token);
-                setState(() {
-                  posts[index].liked = !isLiked;
-                });
-                return !isLiked;
-              },
-              isLiked: posts[index].liked,
-              bubblesColor: BubblesColor(
-                dotPrimaryColor: Colors.red,
-                dotSecondaryColor: Colors.redAccent,
-              ),
-              likeBuilder: (bool isLiked) {
-                return Icon(
-                  FontAwesomeIcons.solidHeart,
-                  color: isLiked ? Colors.red : Colors.grey,
-                  size: 30,
-                );
-              },
+            icon: Row(
+              children: [
+                widget.user.role == 1 || widget.user.role == 0
+                    ? TextButton(
+                        child: Text('Sil',
+                            style:
+                                Theme.of(context).textTheme.bodyText1!.copyWith(
+                                      color: Theme.of(context).errorColor,
+                                      decoration: TextDecoration.underline,
+                                    )),
+                        onPressed: () async {
+                          EasyLoading.show(
+                            indicator: LoadingBouncingGrid.square(
+                              backgroundColor: Theme.of(context).primaryColor,
+                            ),
+                          );
+                          deletePost(posts[index].id, widget.token)
+                              .then((value) => widget.socket
+                                  .emit('post-deleted', posts[index]))
+                              .then((value) => EasyLoading.dismiss());
+                        })
+                    : SizedBox(),
+                LikeButton(
+                  likeCount: posts[index].likeCount,
+                  onTap: (isLiked) async {
+                    onLikeButtonTapped(isLiked, posts[index], widget.token);
+                    setState(() {
+                      posts[index].liked = !isLiked;
+                    });
+                    return !isLiked;
+                  },
+                  isLiked: posts[index].liked,
+                  bubblesColor: BubblesColor(
+                    dotPrimaryColor: Colors.red,
+                    dotSecondaryColor: Colors.redAccent,
+                  ),
+                  likeBuilder: (bool isLiked) {
+                    return Icon(
+                      FontAwesomeIcons.solidHeart,
+                      color: isLiked ? Colors.red : Colors.grey,
+                      size: 30,
+                    );
+                  },
+                ),
+              ],
             )),
         Padding(
           padding: const EdgeInsets.only(bottom: 18.0, left: 18.0, right: 18),
@@ -377,27 +405,50 @@ class _SocialFeedState extends State<SocialFeed>
           posts[index].text,
           style: Theme.of(context).textTheme.bodyText1,
         ),
-        icon: LikeButton(
-          likeCount: posts[index].likeCount,
-          onTap: (isLiked) async {
-            onLikeButtonTapped(isLiked, posts[index], widget.token);
-            setState(() {
-              posts[index].liked = !isLiked;
-            });
-            return !isLiked;
-          },
-          isLiked: posts[index].liked,
-          bubblesColor: BubblesColor(
-            dotPrimaryColor: Colors.red,
-            dotSecondaryColor: Colors.redAccent,
-          ),
-          likeBuilder: (bool isLiked) {
-            return Icon(
-              FontAwesomeIcons.solidHeart,
-              color: isLiked ? Colors.red : Colors.grey,
-              size: 30,
-            );
-          },
+        icon: Row(
+          children: [
+            widget.user.role == 1 || widget.user.role == 0
+                ? TextButton(
+                    child: Text('Sil',
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                              color: Theme.of(context).errorColor,
+                              decoration: TextDecoration.underline,
+                            )),
+                    onPressed: () async {
+                      EasyLoading.show(
+                        indicator: LoadingBouncingGrid.square(
+                          backgroundColor: Theme.of(context).primaryColor,
+                        ),
+                      );
+                      deletePost(posts[index].id, widget.token)
+                          .then((value) =>
+                              widget.socket.emit('post-deleted', posts[index]))
+                          .then((value) => EasyLoading.dismiss());
+                    })
+                : SizedBox(),
+            LikeButton(
+              likeCount: posts[index].likeCount,
+              onTap: (isLiked) async {
+                onLikeButtonTapped(isLiked, posts[index], widget.token);
+                setState(() {
+                  posts[index].liked = !isLiked;
+                });
+                return !isLiked;
+              },
+              isLiked: posts[index].liked,
+              bubblesColor: BubblesColor(
+                dotPrimaryColor: Colors.red,
+                dotSecondaryColor: Colors.redAccent,
+              ),
+              likeBuilder: (bool isLiked) {
+                return Icon(
+                  FontAwesomeIcons.solidHeart,
+                  color: isLiked ? Colors.red : Colors.grey,
+                  size: 30,
+                );
+              },
+            ),
+          ],
         ));
   }
 
@@ -407,15 +458,11 @@ class _SocialFeedState extends State<SocialFeed>
     // monitor network fetch
     await getAllPosts(postList).then((value) {
       print('aaa');
-      value.forEach((post) {
-        if (!posts.contains(post)) {
-          setState(() {
-            posts.insert(0, post);
-          });
-        }
+      setState(() {
+        posts = value.reversed.toList();
       });
     });
-    // if failed,use refreshFailed()
+
     _refreshController.refreshCompleted();
   }
 }

@@ -82,7 +82,7 @@ class _Home1State extends State<Home1> {
             child: buildFloatingSearchBar(context),
           ),
           Padding(
-            padding: EdgeInsets.only(top: height / 8),
+            padding: EdgeInsets.only(top: height / 7.5),
             child: Container(
               color: Theme.of(context).backgroundColor,
               child: Column(

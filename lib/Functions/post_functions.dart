@@ -53,3 +53,14 @@ Future writePost(
 
   return response.data['post']['_doc'];
 }
+
+Future deletePost(String id, String token) async {
+  try {
+    await http.delete(Uri.parse(baseUri + 'v1/post/$id'),
+        headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
+    print('post silindi');
+    return 'Post Silindi';
+  } catch (e) {
+    return 'Post Silinirken Hata';
+  }
+}
