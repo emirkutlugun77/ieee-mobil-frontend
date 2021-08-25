@@ -134,3 +134,22 @@ Future updateUserPhoto(String id, File? image, String token) async {
 
   return response;
 }
+
+Future flagUser(String flaggedBy, String id, String token) async {
+  print(id);
+  var response = await http
+      .put(Uri.parse('http://localhost:8080/v1/users/$id/flag'), body: {
+    'userId': id,
+    'flaggedBy': flaggedBy,
+  }, headers: {
+    HttpHeaders.authorizationHeader: 'Bearer $token'
+  });
+
+  if (response.statusCode == 200) {
+    print('post flagged');
+    return true;
+  } else {
+    print('error');
+    return false;
+  }
+}

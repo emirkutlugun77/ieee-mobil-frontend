@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:date_time_format/date_time_format.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -16,6 +17,7 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:my_app/Functions/image_picker.dart';
 
 import 'package:my_app/Functions/post_functions.dart';
+import 'package:my_app/Functions/user.dart';
 import 'package:my_app/UI/feed/add_to_feed.dart';
 
 import 'package:my_app/UI/models/post.dart';
@@ -342,7 +344,32 @@ class _SocialFeedState extends State<SocialFeed>
                                   .emit('post-deleted', posts[index]))
                               .then((value) => EasyLoading.dismiss());
                         })
-                    : SizedBox(),
+                    : TextButton(
+                        child: Text('Raporla',
+                            style:
+                                Theme.of(context).textTheme.bodyText1!.copyWith(
+                                      color: Theme.of(context).errorColor,
+                                      decoration: TextDecoration.underline,
+                                    )),
+                        onPressed: () async {
+                          await flagUser(widget.user.id, posts[index].userId.id,
+                                  widget.token)
+                              .then((value) => showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    if (Platform.isIOS) {
+                                      return CupertinoAlertDialog(
+                                          title: Text(value
+                                              ? 'Kullanıcı Raporlandı'
+                                              : 'Bu Kullanıcıyı Raporladınız'));
+                                    } else {
+                                      return AlertDialog(
+                                          title: Text(value
+                                              ? 'Kullanıcı Raporlandı'
+                                              : 'Bu Kullanıcıyı Raporladınız'));
+                                    }
+                                  }));
+                        }),
                 LikeButton(
                   likeCount: posts[index].likeCount,
                   onTap: (isLiked) async {
@@ -425,7 +452,31 @@ class _SocialFeedState extends State<SocialFeed>
                               widget.socket.emit('post-deleted', posts[index]))
                           .then((value) => EasyLoading.dismiss());
                     })
-                : SizedBox(),
+                : TextButton(
+                    child: Text('Raporla',
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                              color: Theme.of(context).errorColor,
+                              decoration: TextDecoration.underline,
+                            )),
+                    onPressed: () async {
+                      await flagUser(widget.user.id, posts[index].userId.id,
+                              widget.token)
+                          .then((value) => showDialog(
+                              context: context,
+                              builder: (context) {
+                                if (Platform.isIOS) {
+                                  return CupertinoAlertDialog(
+                                      title: Text(value
+                                          ? 'Kullanıcı Raporlandı'
+                                          : 'Bu Kullanıcıyı Daha Önce Raporladınız'));
+                                } else {
+                                  return AlertDialog(
+                                      title: Text(value
+                                          ? 'Kullanıcı Raporlandı'
+                                          : 'Bu Kullanıcıyı Daha Önce Raporladınız'));
+                                }
+                              }));
+                    }),
             LikeButton(
               likeCount: posts[index].likeCount,
               onTap: (isLiked) async {
