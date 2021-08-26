@@ -61,7 +61,7 @@ class _SocialFeedState extends State<SocialFeed>
   @override
   void initState() {
     super.initState();
-    print(posts.first.date.toString());
+    setState(() {});
   }
 
   @override
@@ -70,68 +70,65 @@ class _SocialFeedState extends State<SocialFeed>
     double width = MediaQuery.of(context).size.width;
     return Stack(
       children: [
-        Container(
-          color: Color(0xFFF8FAFF),
-          child: Scaffold(
-            floatingActionButton: GestureDetector(
-              onTap: () {
-                _panelController.open();
-              },
-              child: Container(
-                width: width * 1 / 5,
-                height: height * 1 / 20,
-                decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(10)),
-                child: Center(
-                  child: state == FeedState.INITIAL
-                      ? LineIcon.plus(
-                          color: Theme.of(context).backgroundColor,
-                        )
-                      : Icon(FontAwesomeIcons.chevronLeft),
-                ),
+        Scaffold(
+          floatingActionButton: GestureDetector(
+            onTap: () {
+              _panelController.open();
+            },
+            child: Container(
+              width: width * 1 / 5,
+              height: height * 1 / 20,
+              decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  borderRadius: BorderRadius.circular(10)),
+              child: Center(
+                child: state == FeedState.INITIAL
+                    ? LineIcon.plus(
+                        color: Theme.of(context).backgroundColor,
+                      )
+                    : Icon(FontAwesomeIcons.chevronLeft),
               ),
             ),
-            body: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: 58.0 * height / 1000,
-                    left: 58.0 * height / 1000,
-                    right: 58.0 * height / 1000,
-                  ),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Pano',
-                        style: Theme.of(context).textTheme.headline1,
-                      )
-                    ],
-                  ),
+          ),
+          body: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(
+                  top: 58.0 * height / 1000,
+                  left: 58.0 * height / 1000,
+                  right: 58.0 * height / 1000,
                 ),
-                Expanded(
-                  child: SmartRefresher(
-                    header: WaterDropMaterialHeader(),
-                    controller: _refreshController,
-                    onRefresh: _onRefresh,
-                    enablePullDown: true,
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: posts.length,
-                        itemBuilder: (
-                          context,
-                          index,
-                        ) {
-                          if (posts[index].photo == '') {
-                            return postBox(index, context, height);
-                          } else {
-                            return postBoxWithImage(index, context, height);
-                          }
-                        }),
-                  ),
-                )
-              ],
-            ),
+                child: Row(
+                  children: [
+                    Text(
+                      'Pano',
+                      style: Theme.of(context).textTheme.headline1,
+                    )
+                  ],
+                ),
+              ),
+              Flexible(
+                child: SmartRefresher(
+                  header: WaterDropMaterialHeader(),
+                  controller: _refreshController,
+                  onRefresh: _onRefresh,
+                  enablePullDown: true,
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: posts.length,
+                      itemBuilder: (
+                        context,
+                        index,
+                      ) {
+                        if (posts[index].photo == '') {
+                          return postBox(index, context, height);
+                        } else {
+                          return postBoxWithImage(index, context, height);
+                        }
+                      }),
+                ),
+              )
+            ],
           ),
         ),
         SlidingUpPanel(
