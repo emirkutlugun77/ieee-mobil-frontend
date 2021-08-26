@@ -156,7 +156,21 @@ Future flagUser(String flaggedBy, String id, String token) async {
 Future blockUser(String userId, String blockedUserId, String token) async {
   try {
     var response = await http.post(
-        Uri.parse('http://localhost:8080/v1/users/$blockedUserId/block'),
+        Uri.parse(
+            'https://ancient-falls-28306.herokuapp.com/v1/users/$blockedUserId/block'),
+        body: {'userId': userId, 'blockedUserId': blockedUserId},
+        headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
+
+    return response.statusCode;
+  } catch (e) {
+    return e;
+  }
+}
+
+Future unBlockUser(String userId, String blockedUserId, String token) async {
+  try {
+    var response = await http.post(
+        Uri.parse('http://localhost:8080/v1/users/$blockedUserId/unblock'),
         body: {'userId': userId, 'blockedUserId': blockedUserId},
         headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
 

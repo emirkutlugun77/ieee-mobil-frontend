@@ -16,6 +16,7 @@ import 'package:loading_animations/loading_animations.dart';
 import 'package:my_app/Functions/auth_functions.dart';
 import 'package:my_app/Functions/image_picker.dart';
 import 'package:my_app/Functions/user.dart';
+import 'package:my_app/UI/auth/auth_widgets/slidingUpPanel.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:date_time_format/date_time_format.dart';
@@ -61,15 +62,24 @@ class _ProfilePageState extends State<ProfilePage> {
   PanelController _panelController = PanelController();
   PageController _pageController = PageController(initialPage: 0);
   int checkNum = 0;
-  static const List<String> choices = <String>[
-    'QR Kodum',
-    'Çıkış Yap',
-  ];
-
+  PanelController _panelController1 = PanelController();
+  late Future getBlocked;
   @override
   void initState() {
     super.initState();
-    print(widget.minCommittees.length);
+    getBlocked = getBlockedUsers(widget.user.blockedUsers);
+  }
+
+  List<User> blockedUsersProfile = [];
+
+  Future getBlockedUsers(List<dynamic> blockedUsers) async {
+    blockedUsers.forEach((element) async {
+      User user = await getUser(element);
+      print('working');
+      setState(() {
+        blockedUsersProfile.add(user);
+      });
+    });
   }
 
   int containerInt = 0;
@@ -96,7 +106,8 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 58.0),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 48.0 * height / 1000),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -108,7 +119,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           width: width / 3,
                         ),
                         Container(
-                          width: width / 6,
+                          width: width / 4,
                           height: height / 15,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -122,6 +133,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                               QrCode(user: user!)));
                                 },
                                 child: Icon(FontAwesomeIcons.qrcode,
+                                    color: Colors.black),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  _panelController1.open();
+                                },
+                                child: Icon(FontAwesomeIcons.userAltSlash,
+                                    size: 25 * height / 1000,
                                     color: Colors.black),
                               ),
                               GestureDetector(
@@ -608,107 +627,205 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
           ),
+          slidingProfile(height, context),
           SlidingUpPanel(
-            onPanelClosed: () {
-              setState(() {
-                imageFile = null;
-              });
-            },
-            controller: _panelController,
+            controller: _panelController1,
             minHeight: 0,
-            slideDirection: SlideDirection.UP,
-            maxHeight: height / 8,
-            panel: Scaffold(
-              body: Container(
-                height: height / 2,
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    imageFile != null
-                        ? Center(
-                            child: Image.file(
-                                File(
-                                  imageFile!.path,
+            maxHeight: height,
+            panel: FutureBuilder(
+                future: getBlocked,
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting:
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+
+                    default:
+                      print(blockedUsersProfile.length);
+                      return Container(
+                        height: height,
+                        width: width,
+                        child: Column(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                _panelController1.close();
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.all(58.0 * height / 1000),
+                                child: Row(
+                                  children: [
+                                    Icon(FontAwesomeIcons.chevronDown)
+                                  ],
                                 ),
-                                height: height / 4),
-                          )
-                        : Row(
-                            children: [
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    getImageFromCamera().then((value) {
-                                      setState(() {
-                                        imageFile = value;
-                                      });
-                                      File image = File(imageFile!.path);
-                                      _panelController.close();
-                                      EasyLoading.show(
-                                          indicator: LoadingBouncingGrid.square(
-                                        backgroundColor:
-                                            Theme.of(context).primaryColor,
-                                      ));
-                                      updateUserPhoto(
-                                              user!.id, image, widget.token)
-                                          .then((value) {
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Bloklanan Kullanıcılar',
+                                )
+                              ],
+                            ),
+                            Expanded(
+                              child: ListView.builder(
+                                  itemCount: blockedUsersProfile.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding:
+                                          EdgeInsets.all(8.0 * height / 1000),
+                                      child: GFListTile(
+                                        avatar: GFAvatar(
+                                          backgroundImage: NetworkImage(
+                                              blockedUsersProfile[index]
+                                                          .photoXs !=
+                                                      ''
+                                                  ? blockedUsersProfile[index]
+                                                      .photoXs
+                                                  : 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png'),
+                                        ),
+                                        title: Text(
+                                          blockedUsersProfile[index].name +
+                                              ' ' +
+                                              blockedUsersProfile[index]
+                                                  .surname,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText2,
+                                        ),
+                                        icon: GestureDetector(
+                                            onTap: () {
+                                              unBlockUser(
+                                                  widget.user.id,
+                                                  blockedUsersProfile[index].id,
+                                                  widget.token);
+
+                                              setState(() {
+                                                widget.user.blockedUsers.remove(
+                                                    blockedUsersProfile[index]
+                                                        .id);
+                                                blockedUsersProfile.removeWhere(
+                                                    (element) =>
+                                                        element.id ==
+                                                        blockedUsersProfile[
+                                                                index]
+                                                            .id);
+                                              });
+                                            },
+                                            child:
+                                                Icon(FontAwesomeIcons.minus)),
+                                      ),
+                                    );
+                                  }),
+                            ),
+                          ],
+                        ),
+                      );
+                  }
+                }),
+          ),
+        ],
+      ),
+    );
+  }
+
+  SlidingUpPanel slidingProfile(double height, BuildContext context) {
+    return SlidingUpPanel(
+      onPanelClosed: () {
+        setState(() {
+          imageFile = null;
+        });
+      },
+      controller: _panelController,
+      minHeight: 0,
+      slideDirection: SlideDirection.UP,
+      maxHeight: height / 8,
+      panel: Scaffold(
+        body: Container(
+          height: height / 2,
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              imageFile != null
+                  ? Center(
+                      child: Image.file(
+                          File(
+                            imageFile!.path,
+                          ),
+                          height: height / 4),
+                    )
+                  : Row(
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              getImageFromCamera().then((value) {
+                                setState(() {
+                                  imageFile = value;
+                                });
+                                File image = File(imageFile!.path);
+                                _panelController.close();
+                                EasyLoading.show(
+                                    indicator: LoadingBouncingGrid.square(
+                                  backgroundColor:
+                                      Theme.of(context).primaryColor,
+                                ));
+                                updateUserPhoto(user!.id, image, widget.token)
+                                    .then((value) {
+                                  getMe(widget.token).then((value) {
+                                    setState(() {
+                                      user = value;
+                                    });
+                                  }).then((value) => EasyLoading.dismiss());
+                                });
+                              });
+                            },
+                            child: Icon(
+                              FontAwesomeIcons.camera,
+                              color: Theme.of(context).primaryColor,
+                              size: 60 * height / 1000,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              getImageFromGallery().then((value) {
+                                setState(() {
+                                  imageFile = value;
+                                });
+                                File image = File(imageFile!.path);
+                                _panelController.close();
+                                EasyLoading.show(
+                                    indicator: LoadingBouncingGrid.square(
+                                  backgroundColor:
+                                      Theme.of(context).primaryColor,
+                                ));
+                                updateUserPhoto(user!.id, image, widget.token)
+                                    .then((value) =>
                                         getMe(widget.token).then((value) {
                                           setState(() {
                                             user = value;
                                           });
-                                        }).then(
-                                            (value) => EasyLoading.dismiss());
-                                      });
-                                    });
-                                  },
-                                  child: Icon(
-                                    FontAwesomeIcons.camera,
-                                    color: Theme.of(context).primaryColor,
-                                    size: 60 * height / 1000,
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    getImageFromGallery().then((value) {
-                                      setState(() {
-                                        imageFile = value;
-                                      });
-                                      File image = File(imageFile!.path);
-                                      _panelController.close();
-                                      EasyLoading.show(
-                                          indicator: LoadingBouncingGrid.square(
-                                        backgroundColor:
-                                            Theme.of(context).primaryColor,
-                                      ));
-                                      updateUserPhoto(
-                                              user!.id, image, widget.token)
-                                          .then((value) =>
-                                              getMe(widget.token).then((value) {
-                                                setState(() {
-                                                  user = value;
-                                                });
-                                              }))
-                                          .then(
-                                              (value) => EasyLoading.dismiss());
-                                    });
-                                  },
-                                  child: Icon(
-                                    FontAwesomeIcons.image,
-                                    color: Theme.of(context).primaryColor,
-                                    size: 60 * height / 1000,
-                                  ),
-                                ),
-                              )
-                            ],
+                                        }))
+                                    .then((value) => EasyLoading.dismiss());
+                              });
+                            },
+                            child: Icon(
+                              FontAwesomeIcons.image,
+                              color: Theme.of(context).primaryColor,
+                              size: 60 * height / 1000,
+                            ),
                           ),
-                  ],
-                ),
-              ),
-            ),
-          )
-        ],
+                        )
+                      ],
+                    ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -726,7 +843,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         Navigator.pop(context, true);
                       },
                       child: Padding(
-                        padding: EdgeInsets.all(12.0 * height / 1000),
+                        padding: EdgeInsets.all(20.0 * height / 1000),
                         child: Center(
                             child: Text('Devam Et',
                                 style: Theme.of(context).textTheme.bodyText1)),
@@ -736,7 +853,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         Navigator.pop(context, false);
                       },
                       child: Padding(
-                        padding: EdgeInsets.all(12.0 * height / 1000),
+                        padding: EdgeInsets.all(20.0 * height / 1000),
                         child: Center(
                             child: Text('Geri Dön',
                                 style: Theme.of(context).textTheme.bodyText1)),
@@ -749,7 +866,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     Navigator.pop(context, true);
                   },
                   child: Padding(
-                    padding: EdgeInsets.all(12.0 * height / 1000),
+                    padding: EdgeInsets.all(20.0 * height / 1000),
                     child: Center(
                         child: Text('Devam Et',
                             style: Theme.of(context).textTheme.bodyText1)),
@@ -759,7 +876,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     Navigator.pop(context, false);
                   },
                   child: Padding(
-                    padding: EdgeInsets.all(12.0 * height / 1000),
+                    padding: EdgeInsets.all(20.0 * height / 1000),
                     child: Center(
                         child: Text('Geri Dön',
                             style: Theme.of(context).textTheme.bodyText1)),

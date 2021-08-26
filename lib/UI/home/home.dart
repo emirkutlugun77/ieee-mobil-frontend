@@ -118,6 +118,10 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     setState(() {
       feed.posts = widget.posts.reversed.toList();
+      feed.posts = feed.posts
+          .where((element) =>
+              widget.user.blockedUsers.contains(element.userId.id) == false)
+          .toList();
     });
 
     profile.user = widget.user;

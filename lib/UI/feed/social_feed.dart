@@ -323,7 +323,8 @@ class _SocialFeedState extends State<SocialFeed>
             ),
             icon: Row(
               children: [
-                widget.user.role == 1 || widget.user.role == 0
+                (widget.user.role == 1 || widget.user.role == 0) &&
+                        (widget.user.id != posts[index].userId.id)
                     ? TextButton(
                         child: Text('Sil',
                             style:
@@ -342,16 +343,41 @@ class _SocialFeedState extends State<SocialFeed>
                                   .emit('post-deleted', posts[index]))
                               .then((value) => EasyLoading.dismiss());
                         })
-                    : TextButton(
-                        child: Text('Raporla',
-                            style:
-                                Theme.of(context).textTheme.bodyText1!.copyWith(
+                    : widget.user.id == posts[index].userId.id
+                        ? SizedBox()
+                        : TextButton(
+                            child: Text('Raporla',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .copyWith(
                                       color: Theme.of(context).errorColor,
                                       decoration: TextDecoration.underline,
                                     )),
-                        onPressed: () {
-                          block(context, height, index);
-                        }),
+                            onPressed: () async {
+                              var result =
+                                  await blockOrReport(index, context, height);
+
+                              if (result) {
+                                setState(() {
+                                  widget.user.blockedUsers
+                                      .add(posts[index].userId.id);
+                                });
+
+                                await blockUser(widget.user.id,
+                                    posts[index].userId.id, widget.token);
+                                setState(() {
+                                  posts = posts
+                                      .where((element) =>
+                                          element.userId.id !=
+                                          posts[index].userId.id)
+                                      .toList();
+                                });
+                              } else {
+                                flagUser(widget.user.id, posts[index].userId.id,
+                                    widget.token);
+                              }
+                            }),
                 LikeButton(
                   likeCount: posts[index].likeCount,
                   onTap: (isLiked) async {
@@ -386,23 +412,22 @@ class _SocialFeedState extends State<SocialFeed>
     );
   }
 
-  Future<void> block(BuildContext context, double height, int index) async {
-    bool reportOrBlock = await showDialog(
+  Future blockOrReport(int index, BuildContext context, double height) async {
+    return showDialog(
         context: context,
         builder: (context) {
           if (Platform.isIOS) {
             return CupertinoAlertDialog(
-                content:
-                    Text('Kullanıcıyı raporlamak istediğinize emin misiniz?'),
+                content: Text('Hangi Eylemi Yapmak İstersiniz'),
                 actions: [
                   GestureDetector(
                       onTap: () {
                         Navigator.pop(context, true);
                       },
                       child: Padding(
-                        padding: EdgeInsets.all(12.0 * height / 1000),
+                        padding: EdgeInsets.all(20.0 * height / 1000),
                         child: Center(
-                            child: Text('Evet',
+                            child: Text('Blokla',
                                 style: Theme.of(context).textTheme.bodyText1)),
                       )),
                   GestureDetector(
@@ -410,25 +435,24 @@ class _SocialFeedState extends State<SocialFeed>
                         Navigator.pop(context, false);
                       },
                       child: Padding(
-                        padding: EdgeInsets.all(12.0 * height / 1000),
+                        padding: EdgeInsets.all(20.0 * height / 1000),
                         child: Center(
-                            child: Text('Geri Dön',
+                            child: Text('Raporla',
                                 style: Theme.of(context).textTheme.bodyText1)),
                       ))
                 ]);
           } else {
             return AlertDialog(
-                title:
-                    Text('Kullanıcıyı raporlamak istediğinize emin misiniz?'),
+                title: Text('Hangi Eylemi Yapmak İstersiniz'),
                 actions: [
                   GestureDetector(
                       onTap: () {
                         Navigator.pop(context, true);
                       },
                       child: Padding(
-                        padding: EdgeInsets.all(12.0 * height / 1000),
+                        padding: EdgeInsets.all(20.0 * height / 1000),
                         child: Center(
-                            child: Text('Evet',
+                            child: Text('Blokla',
                                 style: Theme.of(context).textTheme.bodyText1)),
                       )),
                   GestureDetector(
@@ -436,32 +460,33 @@ class _SocialFeedState extends State<SocialFeed>
                         Navigator.pop(context, false);
                       },
                       child: Padding(
-                        padding: EdgeInsets.all(12.0 * height / 1000),
+                        padding: EdgeInsets.all(20.0 * height / 1000),
                         child: Center(
-                            child: Text('Geri Dön',
+                            child: Text('Raporla',
                                 style: Theme.of(context).textTheme.bodyText1)),
                       ))
                 ]);
           }
         });
-    if (reportOrBlock) {
-      await flagUser(widget.user.id, posts[index].userId.id, widget.token)
-          .then((value) => showDialog(
-              context: context,
-              builder: (context) {
-                if (Platform.isIOS) {
-                  return CupertinoAlertDialog(
-                      title: Text(value
-                          ? 'Kullanıcı Raporlandı'
-                          : 'Bu Kullanıcıyı Raporladınız'));
-                } else {
-                  return AlertDialog(
-                      title: Text(value
-                          ? 'Kullanıcı Raporlandı'
-                          : 'Bu Kullanıcıyı Raporladınız'));
-                }
-              }));
-    } else {}
+  }
+
+  Future<void> block(BuildContext context, double height, int index) async {
+    await flagUser(widget.user.id, posts[index].userId.id, widget.token)
+        .then((value) => showDialog(
+            context: context,
+            builder: (context) {
+              if (Platform.isIOS) {
+                return CupertinoAlertDialog(
+                    title: Text(value
+                        ? 'Kullanıcı Raporlandı'
+                        : 'Bu Kullanıcıyı Raporladınız'));
+              } else {
+                return AlertDialog(
+                    title: Text(value
+                        ? 'Kullanıcı Raporlandı'
+                        : 'Bu Kullanıcıyı Raporladınız'));
+              }
+            }));
   }
 
   GFListTile postBox(int index, BuildContext context, double height) {
@@ -494,7 +519,8 @@ class _SocialFeedState extends State<SocialFeed>
         ),
         icon: Row(
           children: [
-            widget.user.role == 1 || widget.user.role == 0
+            (widget.user.role == 1 || widget.user.role == 0) &&
+                    (widget.user.id != posts[index].userId.id)
                 ? TextButton(
                     child: Text('Sil',
                         style: Theme.of(context).textTheme.bodyText1!.copyWith(
@@ -512,15 +538,38 @@ class _SocialFeedState extends State<SocialFeed>
                               widget.socket.emit('post-deleted', posts[index]))
                           .then((value) => EasyLoading.dismiss());
                     })
-                : TextButton(
-                    child: Text('Raporla',
-                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                              color: Theme.of(context).errorColor,
-                              decoration: TextDecoration.underline,
-                            )),
-                    onPressed: () {
-                      block(context, height, index);
-                    }),
+                : widget.user.id == posts[index].userId.id
+                    ? SizedBox()
+                    : TextButton(
+                        child: Text('Raporla',
+                            style:
+                                Theme.of(context).textTheme.bodyText1!.copyWith(
+                                      color: Theme.of(context).errorColor,
+                                      decoration: TextDecoration.underline,
+                                    )),
+                        onPressed: () async {
+                          var result =
+                              await blockOrReport(index, context, height);
+
+                          if (result) {
+                            setState(() {
+                              widget.user.blockedUsers
+                                  .add(posts[index].userId.id);
+                            });
+                            await blockUser(widget.user.id,
+                                posts[index].userId.id, widget.token);
+                            setState(() {
+                              posts = posts
+                                  .where((element) =>
+                                      element.userId.id !=
+                                      posts[index].userId.id)
+                                  .toList();
+                            });
+                          } else {
+                            flagUser(widget.user.id, posts[index].userId.id,
+                                widget.token);
+                          }
+                        }),
             LikeButton(
               likeCount: posts[index].likeCount,
               onTap: (isLiked) async {
@@ -552,9 +601,12 @@ class _SocialFeedState extends State<SocialFeed>
     List<Post> postList = [];
     // monitor network fetch
     await getAllPosts(postList).then((value) {
-      print('aaa');
       setState(() {
         posts = value.reversed.toList();
+        posts = posts
+            .where((element) =>
+                widget.user.blockedUsers.contains(element.userId.id) == false)
+            .toList();
       });
     });
 

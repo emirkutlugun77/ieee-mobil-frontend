@@ -5,25 +5,25 @@ User userFromJson(String str) => User.fromJson(json.decode(str));
 String userToJson(User data) => json.encode(data.toJson());
 
 class User {
-  User({
-    required this.id,
-    required this.isVerified,
-    required this.bio,
-    required this.photo,
-    required this.phoneNo,
-    required this.committeeId,
-    required this.title,
-    required this.role,
-    required this.name,
-    required this.surname,
-    required this.username,
-    required this.education,
-    required this.date,
-    required this.v,
-    required this.photoSm,
-    required this.photoXs,
-  });
-
+  User(
+      {required this.id,
+      required this.isVerified,
+      required this.bio,
+      required this.photo,
+      required this.phoneNo,
+      required this.committeeId,
+      required this.title,
+      required this.role,
+      required this.name,
+      required this.surname,
+      required this.username,
+      required this.education,
+      required this.date,
+      required this.v,
+      required this.photoSm,
+      required this.photoXs,
+      required this.blockedUsers});
+  List<dynamic> blockedUsers;
   final String id;
   final bool isVerified;
   final String bio;
@@ -60,6 +60,7 @@ class User {
         v: json["__v"],
         photoSm: json["photoSm"] == null ? '' : json["photoSm"],
         photoXs: json["photoXs"] == null ? '' : json['photoXs'],
+        blockedUsers: json['blockedUsers'] != null ? json['blockedUsers'] : [],
       );
 
   Map<String, dynamic> toJson() => {
