@@ -136,20 +136,32 @@ Future updateUserPhoto(String id, File? image, String token) async {
 }
 
 Future flagUser(String flaggedBy, String id, String token) async {
-  print(id);
-  var response = await http
-      .put(Uri.parse('http://localhost:8080/v1/users/$id/flag'), body: {
-    'userId': id,
-    'flaggedBy': flaggedBy,
-  }, headers: {
-    HttpHeaders.authorizationHeader: 'Bearer $token'
-  });
-
+  var response = await http.post(
+      Uri.parse('https://ancient-falls-28306.herokuapp.com/v1/users/$id/flag'),
+      body: {
+        'userId': id,
+        'flaggedBy': flaggedBy,
+      },
+      headers: {
+        HttpHeaders.authorizationHeader: 'Bearer $token'
+      });
+  print(response.statusCode);
   if (response.statusCode == 200) {
-    print('post flagged');
     return true;
   } else {
-    print('error');
     return false;
+  }
+}
+
+Future blockUser(String userId, String blockedUserId, String token) async {
+  try {
+    var response = await http.post(
+        Uri.parse('http://localhost:8080/v1/users/$blockedUserId/block'),
+        body: {'userId': userId, 'blockedUserId': blockedUserId},
+        headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
+
+    return response.statusCode;
+  } catch (e) {
+    return e;
   }
 }

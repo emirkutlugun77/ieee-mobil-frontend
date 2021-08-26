@@ -53,16 +53,15 @@ Future<dynamic> registerUser(String name, String surname, Education education,
       'education[year]': education.year.toString(),
       'password': password
     });
+    var decodedData = jsonDecode(response.body);
+    var prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', decodedData['token']);
 
-    return response;
-  } catch (e) {
-    var errorMessage;
-    await translator
-        .translate(e.toString(), from: 'en', to: 'tr')
-        .then((value) => errorMessage = value.text);
-
-    return errorMessage;
-  }
+    User user = await getMe(decodedData['token']);
+    prefs.setString('id', user.id);
+    prefs.setBool('logged', true);
+    return user;
+  } catch (e) {}
 }
 
 Future forgotPassword(String email) async {

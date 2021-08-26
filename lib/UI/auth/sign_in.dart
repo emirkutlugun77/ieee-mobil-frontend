@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:my_app/Functions/post_functions.dart';
 import 'package:my_app/constants.dart' as constant;
 import 'package:flip_card/flip_card_controller.dart';
 import 'package:flutter/cupertino.dart';
@@ -430,45 +431,43 @@ class _SignInPageState extends State<SignInPage> {
                         year: year);
                     registerUser(name, surname, education, email, password)
                         .then((value) async {
-                      if (value.statusCode == 201) {
+                      if (value != null) {
                         setState(() {
                           succ = true;
+                          user = value;
+                          print(user);
                         });
-                        String token = jsonDecode(value.body)['token'];
-
-                        print(token);
-                        SharedPreferences prefs =
-                            await SharedPreferences.getInstance();
-
-                        prefs.setBool('logged', true);
 
                         openPanel('Kayıt Başarılı');
-                        getMe(token)
-                            .then((value) => user = value)
-                            .then((value) => prefs.setString('id', user!.id));
-                        getMost5(blogPosts, token, 0).then((value) =>
-                            getAnnouncements(token)
-                                .then((value) => announcements = value)
-                                .then((value) {
-                              EasyLoading.dismiss();
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => MyHomePage(
-                                            seenAnnouncements: 0,
-                                            announcements: announcements,
-                                            events: widget.events,
-                                            user: user!,
-                                            committees: widget.commiteeList,
-                                            blogPosts: blogPosts,
-                                            posts: posts,
-                                            token: token,
-                                            minCommittees: [],
-                                            minEvents: [],
-                                            minnCerts: [],
-                                            userPosts: [],
-                                          )));
-                            }));
+                        var prefs = await SharedPreferences.getInstance();
+                        token = prefs.getString('token')!;
+                        Future.wait([
+                          getAllPosts(posts),
+                          getMost5(blogPosts, token, 0),
+                          getAnnouncements(token)
+                              .then((value) => announcements = value)
+                        ]);
+
+                        EasyLoading.dismiss();
+                        setState(() {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MyHomePage(
+                                        seenAnnouncements: 0,
+                                        announcements: announcements,
+                                        events: widget.events,
+                                        user: user!,
+                                        committees: widget.commiteeList,
+                                        blogPosts: blogPosts,
+                                        posts: posts,
+                                        token: token,
+                                        minCommittees: [],
+                                        minEvents: [],
+                                        minnCerts: [],
+                                        userPosts: [],
+                                      )));
+                        });
                       } else {
                         EasyLoading.dismiss();
                         openPanel('Bu E-mail Kullanımda');

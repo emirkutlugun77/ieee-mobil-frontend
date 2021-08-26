@@ -116,7 +116,10 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    feed.posts = widget.posts.reversed.toList();
+    setState(() {
+      feed.posts = widget.posts.reversed.toList();
+    });
+
     profile.user = widget.user;
     connectAndListen();
   }

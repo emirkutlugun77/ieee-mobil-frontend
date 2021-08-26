@@ -116,6 +116,7 @@ class _SocialFeedState extends State<SocialFeed>
                     onRefresh: _onRefresh,
                     enablePullDown: true,
                     child: ListView.builder(
+                        shrinkWrap: true,
                         itemCount: posts.length,
                         itemBuilder: (
                           context,
@@ -351,24 +352,8 @@ class _SocialFeedState extends State<SocialFeed>
                                       color: Theme.of(context).errorColor,
                                       decoration: TextDecoration.underline,
                                     )),
-                        onPressed: () async {
-                          await flagUser(widget.user.id, posts[index].userId.id,
-                                  widget.token)
-                              .then((value) => showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    if (Platform.isIOS) {
-                                      return CupertinoAlertDialog(
-                                          title: Text(value
-                                              ? 'Kullanıcı Raporlandı'
-                                              : 'Bu Kullanıcıyı Raporladınız'));
-                                    } else {
-                                      return AlertDialog(
-                                          title: Text(value
-                                              ? 'Kullanıcı Raporlandı'
-                                              : 'Bu Kullanıcıyı Raporladınız'));
-                                    }
-                                  }));
+                        onPressed: () {
+                          block(context, height, index);
                         }),
                 LikeButton(
                   likeCount: posts[index].likeCount,
@@ -402,6 +387,84 @@ class _SocialFeedState extends State<SocialFeed>
         )
       ],
     );
+  }
+
+  Future<void> block(BuildContext context, double height, int index) async {
+    bool reportOrBlock = await showDialog(
+        context: context,
+        builder: (context) {
+          if (Platform.isIOS) {
+            return CupertinoAlertDialog(
+                content:
+                    Text('Kullanıcıyı raporlamak istediğinize emin misiniz?'),
+                actions: [
+                  GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context, true);
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.all(12.0 * height / 1000),
+                        child: Center(
+                            child: Text('Evet',
+                                style: Theme.of(context).textTheme.bodyText1)),
+                      )),
+                  GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context, false);
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.all(12.0 * height / 1000),
+                        child: Center(
+                            child: Text('Geri Dön',
+                                style: Theme.of(context).textTheme.bodyText1)),
+                      ))
+                ]);
+          } else {
+            return AlertDialog(
+                title:
+                    Text('Kullanıcıyı raporlamak istediğinize emin misiniz?'),
+                actions: [
+                  GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context, true);
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.all(12.0 * height / 1000),
+                        child: Center(
+                            child: Text('Evet',
+                                style: Theme.of(context).textTheme.bodyText1)),
+                      )),
+                  GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context, false);
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.all(12.0 * height / 1000),
+                        child: Center(
+                            child: Text('Geri Dön',
+                                style: Theme.of(context).textTheme.bodyText1)),
+                      ))
+                ]);
+          }
+        });
+    if (reportOrBlock) {
+      await flagUser(widget.user.id, posts[index].userId.id, widget.token)
+          .then((value) => showDialog(
+              context: context,
+              builder: (context) {
+                if (Platform.isIOS) {
+                  return CupertinoAlertDialog(
+                      title: Text(value
+                          ? 'Kullanıcı Raporlandı'
+                          : 'Bu Kullanıcıyı Raporladınız'));
+                } else {
+                  return AlertDialog(
+                      title: Text(value
+                          ? 'Kullanıcı Raporlandı'
+                          : 'Bu Kullanıcıyı Raporladınız'));
+                }
+              }));
+    } else {}
   }
 
   GFListTile postBox(int index, BuildContext context, double height) {
@@ -458,24 +521,8 @@ class _SocialFeedState extends State<SocialFeed>
                               color: Theme.of(context).errorColor,
                               decoration: TextDecoration.underline,
                             )),
-                    onPressed: () async {
-                      await flagUser(widget.user.id, posts[index].userId.id,
-                              widget.token)
-                          .then((value) => showDialog(
-                              context: context,
-                              builder: (context) {
-                                if (Platform.isIOS) {
-                                  return CupertinoAlertDialog(
-                                      title: Text(value
-                                          ? 'Kullanıcı Raporlandı'
-                                          : 'Bu Kullanıcıyı Daha Önce Raporladınız'));
-                                } else {
-                                  return AlertDialog(
-                                      title: Text(value
-                                          ? 'Kullanıcı Raporlandı'
-                                          : 'Bu Kullanıcıyı Daha Önce Raporladınız'));
-                                }
-                              }));
+                    onPressed: () {
+                      block(context, height, index);
                     }),
             LikeButton(
               likeCount: posts[index].likeCount,
