@@ -275,6 +275,8 @@ class _LoginPageState extends State<LoginPage> {
       },
       style: Theme.of(context).textTheme.bodyText2,
       decoration: InputDecoration(
+        enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Theme.of(context).primaryColorDark)),
         focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: Theme.of(context).primaryColorDark)),
       ),
@@ -291,6 +293,9 @@ class _LoginPageState extends State<LoginPage> {
         });
       },
       decoration: InputDecoration(
+          enabledBorder: UnderlineInputBorder(
+              borderSide:
+                  BorderSide(color: Theme.of(context).primaryColorDark)),
           focusedBorder: UnderlineInputBorder(
               borderSide:
                   BorderSide(color: Theme.of(context).primaryColorDark)),

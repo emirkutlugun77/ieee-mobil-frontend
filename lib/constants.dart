@@ -16,9 +16,11 @@ const Map<String, Color> blogCategoryColors = {
 };
 
 ThemeData whiteTheme = ThemeData(
+    iconTheme: IconThemeData(color: Colors.black),
+    brightness: Brightness.light,
     primaryColor: Color(0xFF376AED),
     primaryColorDark: Color(0xFF2151CD),
-    primaryColorLight: Color(0xFF386BED),
+    primaryColorLight: Colors.grey.shade50,
     cardColor: Color(0xFF0D253C),
     bottomAppBarColor: Color(0xFF7B8BB2),
     accentColor: Color(0xFF8FE6FF),
@@ -58,6 +60,55 @@ ThemeData whiteTheme = ThemeData(
         fontSize: 14,
         fontWeight: FontWeight.w400,
         color: Color(0xFF2D4379),
+      ),
+    ));
+
+ThemeData darkTheme = ThemeData(
+    brightness: Brightness.light,
+    iconTheme: IconThemeData(color: Colors.white),
+    primaryColorDark: Color(0xFF5865F2),
+    primaryColorLight: Color(0xFF2C2F33),
+    primaryColor: Color(0xFF7289DA),
+    cardColor: Color(0xFF0D253C),
+    bottomAppBarColor: Color(0xFF7B8BB2),
+    accentColor: Color(0xFF8FE6FF),
+    splashColor: Color(0xFF127C12),
+    errorColor: Color(0xFFEB459E),
+    backgroundColor: Color(0xFF23272A),
+    textTheme: TextTheme(
+      bodyText1: GoogleFonts.inter(
+          fontSize: 14, color: Colors.white, fontWeight: FontWeight.w400),
+      bodyText2: GoogleFonts.inter(
+          fontSize: 16, color: Colors.white, fontWeight: FontWeight.w600),
+      headline1: GoogleFonts.inter(
+        fontSize: 25,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+      ),
+      headline2: GoogleFonts.inter(
+        fontSize: 18,
+        fontWeight: FontWeight.w500,
+        color: Colors.white,
+      ),
+      headline3: GoogleFonts.inter(
+        fontSize: 19,
+        fontWeight: FontWeight.w600,
+        color: Colors.white,
+      ),
+      headline4: GoogleFonts.inter(
+        fontSize: 15,
+        fontWeight: FontWeight.w400,
+        color: Colors.white,
+      ),
+      subtitle1: GoogleFonts.inter(
+        fontSize: 14,
+        fontWeight: FontWeight.w300,
+        color: Colors.white,
+      ),
+      subtitle2: GoogleFonts.inter(
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: Colors.white,
       ),
     ));
 

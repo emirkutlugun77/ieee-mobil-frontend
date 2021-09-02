@@ -50,7 +50,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
 
     return IntroductionScreen(
       key: introKey,
-      globalBackgroundColor: Colors.white,
+      globalBackgroundColor: Theme.of(context).backgroundColor,
       globalHeader: Align(
         alignment: Alignment.topRight,
         child: SafeArea(
@@ -68,7 +68,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           //"Socialdaki birçok özellik artık mobil uygulamamızda, isterseniz komiteler hakkında bilgi alın, isterseniz makale okuyun!",
           image: Image.asset('images/ob1.png'),
           decoration: pageDecoration.copyWith(
-              imagePadding: EdgeInsets.only(bottom: 32)),
+              imagePadding: EdgeInsets.only(bottom: 32),
+              pageColor: Theme.of(context).backgroundColor),
         ),
         PageViewModel(
           title: "QR Kodlar",
@@ -76,7 +77,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
               "Etkinlik oturumlarına katılırken QR kodunuzu uygulamadan okutabilirsiniz!  ",
           image: Image.asset('images/ob3.png'),
           decoration: pageDecoration.copyWith(
-              imagePadding: EdgeInsets.only(bottom: 40)),
+              imagePadding: EdgeInsets.only(bottom: 40),
+              pageColor: Theme.of(context).backgroundColor),
         ),
         PageViewModel(
           title: "Sertifikalar",
@@ -84,7 +86,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
               "Artık sertifikalarınız cebinizde! \n Social mobil ile dilediğiniz zaman sertifikalarınıza bakabilirsiniz",
           image: Image.asset('images/ob2.png'),
           decoration: pageDecoration.copyWith(
-              imagePadding: EdgeInsets.only(bottom: 18)),
+              imagePadding: EdgeInsets.only(bottom: 18),
+              pageColor: Theme.of(context).backgroundColor),
         ),
       ],
       onDone: () => _onIntroEnd(context),
@@ -93,9 +96,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       skipFlex: 0,
       nextFlex: 0,
       //rtl: true, // Display as right-to-left
-      skip: const Text('Geç'),
+      skip: Text('Geç', style: Theme.of(context).textTheme.bodyText1),
       next: const Icon(Icons.arrow_forward),
-      done: const Text('Giriş', style: TextStyle(fontWeight: FontWeight.w600)),
+      done: Text('Giriş', style: Theme.of(context).textTheme.bodyText1),
       curve: Curves.fastLinearToSlowEaseIn,
       controlsMargin: const EdgeInsets.all(16),
       controlsPadding: kIsWeb

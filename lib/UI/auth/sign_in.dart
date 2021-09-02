@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:my_app/Functions/post_functions.dart';
 import 'package:my_app/constants.dart' as constant;
@@ -8,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:loading_animations/loading_animations.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+
 import 'package:my_app/Functions/announce.dart';
 import 'package:my_app/Functions/auth_functions.dart';
 import 'package:my_app/Functions/blog.dart';
@@ -530,7 +529,10 @@ class _SignInPageState extends State<SignInPage> {
                       onTap: () {
                         _panelControllerUni.close();
                       },
-                      child: Icon(FontAwesomeIcons.chevronLeft))
+                      child: Icon(
+                        FontAwesomeIcons.chevronLeft,
+                        color: Theme.of(context).iconTheme.color,
+                      ))
                 ],
               ),
             ),
@@ -540,7 +542,7 @@ class _SignInPageState extends State<SignInPage> {
                 height: height * 1 / 1.9,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(35),
-                    color: Colors.white),
+                    color: Theme.of(context).backgroundColor),
                 child: ListView.builder(
                     itemCount:
                         choosingUni ? departments.length : universities.length,
@@ -618,6 +620,8 @@ class _SignInPageState extends State<SignInPage> {
       },
       style: Theme.of(context).textTheme.bodyText2,
       decoration: InputDecoration(
+        enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Theme.of(context).primaryColorDark)),
         focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: Theme.of(context).primaryColorDark)),
       ),
@@ -644,6 +648,9 @@ class _SignInPageState extends State<SignInPage> {
         }
       },
       decoration: InputDecoration(
+          enabledBorder: UnderlineInputBorder(
+              borderSide:
+                  BorderSide(color: Theme.of(context).primaryColorDark)),
           focusedBorder: UnderlineInputBorder(
               borderSide:
                   BorderSide(color: Theme.of(context).primaryColorDark)),

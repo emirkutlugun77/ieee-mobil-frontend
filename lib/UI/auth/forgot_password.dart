@@ -86,7 +86,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               child: Container(
                 height: height * 1 / 1.5,
                 decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).backgroundColor,
                     borderRadius: BorderRadius.circular(35)),
                 child: Padding(
                   padding: EdgeInsets.all(width * 1 / 9),

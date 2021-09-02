@@ -20,16 +20,22 @@ Future getUserSubscriptions(
     var decodedData = await jsonDecode(response.body);
     print(decodedData);
     if (decodedData['subscriptions'] != null) {
-      await decodedData['subscriptions']
-          .forEach((e) => userCommites.add(MinCommittee(
-                id: e['committeeId']['_id'],
-                photo: e['committeeId']['photo'],
-                subCount: e['committeeId']['subscriptionCount'],
-                name: e['committeeId']['name'],
-                instaUrl: e['committeeId']['instaUrl'] != null
-                    ? e['committeeId']['instaUrl']
-                    : 'Instagram Linki Yok',
-              )));
+      await decodedData['subscriptions'].forEach((e) {
+        if (e['committeeId']['_id'] != null &&
+            e['committeeId']['photo'] != null &&
+            e['committeeId']['name'] != null &&
+            e['committeeId']['subscriptionCount'] != null) {
+          userCommites.add(MinCommittee(
+            id: e['committeeId']['_id'],
+            photo: e['committeeId']['photo'],
+            subCount: e['committeeId']['subscriptionCount'],
+            name: e['committeeId']['name'],
+            instaUrl: e['committeeId']['instaUrl'] != null
+                ? e['committeeId']['instaUrl']
+                : 'Instagram Linki Yok',
+          ));
+        }
+      });
       return userCommites;
     } else {
       return [];

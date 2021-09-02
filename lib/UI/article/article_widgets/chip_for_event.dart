@@ -7,6 +7,7 @@ class CustomChipForEvent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
+      color: Theme.of(context).backgroundColor,
       child: Container(
         decoration: BoxDecoration(
             border: Border.all(

@@ -25,6 +25,7 @@ import 'package:my_app/UI/models/blogposts.dart';
 import 'package:my_app/UI/models/commitee.dart';
 import 'package:my_app/UI/models/event.dart';
 import 'package:my_app/UI/models/user.dart';
+import 'package:my_app/UI/widgets/marquee.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -72,7 +73,7 @@ class _Home1State extends State<Home1> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).backgroundColor,
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -104,7 +105,7 @@ class _Home1State extends State<Home1> {
                   ),
                   Flexible(
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(8.0 * height / 1000),
                       child: ListView.builder(
                           padding: EdgeInsets.zero,
                           itemCount: widget.committees.length,
@@ -121,7 +122,7 @@ class _Home1State extends State<Home1> {
                                             )));
                               },
                               child: Padding(
-                                padding: EdgeInsets.all(4.0 * height / 1000),
+                                padding: EdgeInsets.all(6.0 * height / 1000),
                                 child: Container(
                                   height: height * 1 / 13,
                                   decoration: BoxDecoration(
@@ -153,12 +154,15 @@ class _Home1State extends State<Home1> {
                                         ),
                                       ),
                                       Container(
-                                        width: width * 1 / 4.3,
-                                        child: Text(
-                                            widget.committees[index].name,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1),
+                                        width: width * 1 / 4,
+                                        child: MarqueeWidget(
+                                          direction: Axis.vertical,
+                                          child: Text(
+                                              widget.committees[index].name,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1),
+                                        ),
                                       ),
                                       Container(
                                         width: width / 5,
@@ -199,155 +203,7 @@ class _Home1State extends State<Home1> {
               ),
             ),
           ),
-          SlidingUpPanel(
-            maxHeight: status == searchState.FOUND ? height : height / 1.5,
-            renderPanelSheet: false,
-            onPanelOpened: () {
-              setState(() {
-                widget.seenAnnouncements = widget.announcements.length;
-              });
-            },
-            padding: EdgeInsets.symmetric(
-                vertical: 60.0 * height / 1500,
-                horizontal: 60.0 * height / 1000),
-            backdropEnabled: false,
-            color: Colors.transparent,
-            slideDirection: SlideDirection.DOWN,
-            minHeight: 0,
-            controller: _panelController,
-            panel: Container(
-              height: height / 1.5,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Container(
-                      width: width,
-                      height: height / 2,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          color: Colors.white,
-                          border: Border.all(
-                              color: Theme.of(context).primaryColor)),
-                      child: Padding(
-                        padding: EdgeInsets.all(28.0 * height / 1000),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 4.0),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    'Bildirimler',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline1!
-                                        .copyWith(
-                                            color:
-                                                Theme.of(context).primaryColor),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Flexible(
-                                child: ListView.builder(
-                                    itemCount: widget.announcements.length,
-                                    itemBuilder: (context, index) {
-                                      return Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 8 * height / 1000,
-                                              horizontal: 4 * height / 1000),
-                                          child: Container(
-                                              width: width,
-                                              height: widget
-                                                          .announcements[index]
-                                                          .text
-                                                          .length >=
-                                                      30
-                                                  ? height / 4.5
-                                                  : height / 8,
-                                              color: Colors.white,
-                                              child: Column(
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      Text(
-                                                          widget
-                                                              .announcements[
-                                                                  index]
-                                                              .committeeName,
-                                                          style: Theme.of(
-                                                                  context)
-                                                              .textTheme
-                                                              .bodyText2!
-                                                              .copyWith(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w200)),
-                                                    ],
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 8.0 *
-                                                                height /
-                                                                1000),
-                                                    child: Row(
-                                                      children: [
-                                                        Flexible(
-                                                          child: Text(
-                                                            widget
-                                                                .announcements[
-                                                                    index]
-                                                                .text,
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodyText1,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Text(
-                                                        widget
-                                                            .announcements[
-                                                                index]
-                                                            .date
-                                                            .add(Duration(
-                                                                hours: 3))
-                                                            .format(
-                                                                'm/j/y , H:i'),
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyText1!
-                                                            .copyWith(
-                                                                color: Theme.of(
-                                                                        context)
-                                                                    .primaryColor),
-                                                      )
-                                                    ],
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 4.0 *
-                                                                height /
-                                                                1000),
-                                                    child: Divider(),
-                                                  )
-                                                ],
-                                              )));
-                                    }))
-                          ],
-                        ),
-                      )),
-                ],
-              ),
-            ),
-          ),
+          announcePanel(height, width, context),
           SlidingUpPanel(
               defaultPanelState: PanelState.CLOSED,
               onPanelClosed: () {
@@ -366,13 +222,14 @@ class _Home1State extends State<Home1> {
               minHeight: 0,
               controller: _panelController1,
               panel: Scaffold(
+                backgroundColor: Theme.of(context).backgroundColor,
                 resizeToAvoidBottomInset: false,
                 body: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(8.0),
                   child: Container(
                     height: height,
                     width: width,
-                    color: Colors.white,
+                    color: Theme.of(context).backgroundColor,
                     child: Padding(
                       padding: EdgeInsets.only(top: 59.0),
                       child: Column(
@@ -388,8 +245,11 @@ class _Home1State extends State<Home1> {
                                           onTap: () {
                                             _panelController1.close();
                                           },
-                                          child:
-                                              Icon(FontAwesomeIcons.chevronUp)),
+                                          child: Icon(
+                                              FontAwesomeIcons.chevronUp,
+                                              color: Theme.of(context)
+                                                  .iconTheme
+                                                  .color)),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 28.0, vertical: 8),
@@ -438,7 +298,11 @@ class _Home1State extends State<Home1> {
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 8.0, horizontal: 28),
                                           child: Container(
-                                            color: Colors.white,
+                                            decoration: BoxDecoration(
+                                                color: Theme.of(context)
+                                                    .primaryColorDark,
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
                                             child: GFListTile(
                                                 avatar: CachedNetworkImage(
                                                   imageUrl: result
@@ -496,7 +360,10 @@ class _Home1State extends State<Home1> {
                                                 _panelController1.close();
                                               },
                                               child: Icon(
-                                                  FontAwesomeIcons.chevronUp)),
+                                                  FontAwesomeIcons.chevronUp,
+                                                  color: Theme.of(context)
+                                                      .iconTheme
+                                                      .color)),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 28.0, vertical: 8),
@@ -544,7 +411,11 @@ class _Home1State extends State<Home1> {
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 8.0, horizontal: 28),
                                           child: Container(
-                                            color: Colors.white,
+                                            decoration: BoxDecoration(
+                                                color: Theme.of(context)
+                                                    .primaryColorDark,
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
                                             child: GFListTile(
                                                 avatar: CachedNetworkImage(
                                                   imageUrl: result
@@ -576,8 +447,12 @@ class _Home1State extends State<Home1> {
                                                         .copyWith(
                                                             color:
                                                                 Colors.black)),
-                                                icon: Icon(FontAwesomeIcons
-                                                    .chevronRight)),
+                                                icon: Icon(
+                                                    FontAwesomeIcons
+                                                        .chevronRight,
+                                                    color: Theme.of(context)
+                                                        .iconTheme
+                                                        .color)),
                                           ),
                                         ),
                                       );
@@ -594,6 +469,143 @@ class _Home1State extends State<Home1> {
                 ),
               ))
         ],
+      ),
+    );
+  }
+
+  SlidingUpPanel announcePanel(
+      double height, double width, BuildContext context) {
+    return SlidingUpPanel(
+      maxHeight: status == searchState.FOUND ? height : height / 1.5,
+      renderPanelSheet: false,
+      onPanelOpened: () {
+        setState(() {
+          widget.seenAnnouncements = widget.announcements.length;
+        });
+      },
+      padding: EdgeInsets.symmetric(
+          vertical: 60.0 * height / 1500, horizontal: 60.0 * height / 1000),
+      backdropEnabled: false,
+      color: Colors.transparent,
+      slideDirection: SlideDirection.DOWN,
+      minHeight: 0,
+      controller: _panelController,
+      panel: Container(
+        height: height / 1.5,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+                width: width,
+                height: height / 2,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    color: Theme.of(context).backgroundColor,
+                    border: Border.all(color: Theme.of(context).primaryColor)),
+                child: Padding(
+                  padding: EdgeInsets.all(28.0 * height / 1000),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                        child: Row(
+                          children: [
+                            Text(
+                              'Bildirimler',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline1!
+                                  .copyWith(
+                                      color: Theme.of(context).primaryColor),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Flexible(
+                          child: ListView.builder(
+                              itemCount: widget.announcements.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 8 * height / 1000,
+                                        horizontal: 4 * height / 1000),
+                                    child: Container(
+                                        width: width,
+                                        height: widget.announcements[index].text
+                                                    .length >=
+                                                30
+                                            ? height / 4.5
+                                            : height / 8,
+                                        color:
+                                            Theme.of(context).backgroundColor,
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Container(
+                                                  width: width / 1.7,
+                                                  child: Text(
+                                                      widget
+                                                          .announcements[index]
+                                                          .committeeName,
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyText2!
+                                                          .copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w200)),
+                                                ),
+                                              ],
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical:
+                                                      8.0 * height / 1000),
+                                              child: Row(
+                                                children: [
+                                                  Flexible(
+                                                    child: Container(
+                                                      width: width / 1.5,
+                                                      child: Text(
+                                                        widget
+                                                            .announcements[
+                                                                index]
+                                                            .text,
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyText1,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  widget
+                                                      .announcements[index].date
+                                                      .add(Duration(hours: 3))
+                                                      .format('m/j/y , H:i'),
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText1!
+                                                      .copyWith(
+                                                          color: Theme.of(
+                                                                  context)
+                                                              .primaryColor),
+                                                )
+                                              ],
+                                            ),
+                                          ],
+                                        )));
+                              }))
+                    ],
+                  ),
+                )),
+          ],
+        ),
       ),
     );
   }
@@ -649,7 +661,7 @@ class _Home1State extends State<Home1> {
               }
             },
             icon: LineIcon.bell(
-              color: Theme.of(context).cardColor,
+              color: Theme.of(context).iconTheme.color,
               size: 30,
             ),
             type: GFButtonType.transparent,
@@ -658,13 +670,15 @@ class _Home1State extends State<Home1> {
             child: Text((widget.announcements.length - widget.seenAnnouncements)
                 .toString()),
             shape: GFBadgeShape.circle,
+            color: Theme.of(context).errorColor,
           ),
         ),
       ],
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).primaryColorLight,
       automaticallyImplyBackButton: false,
       backdropColor: Colors.transparent,
       hint: 'Ara',
+      hintStyle: Theme.of(context).textTheme.bodyText1,
       axisAlignment: isPortrait ? 0.0 : -1.0,
       openAxisAlignment: 0.0,
       width: isPortrait ? 600 : 500,

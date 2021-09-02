@@ -28,7 +28,7 @@ class _EventsState extends State<Events> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     return Container(
-      color: Color(0xFFE6EAF1).withOpacity(0.1),
+      color: Theme.of(context).backgroundColor,
       child: Column(
         children: [
           Padding(

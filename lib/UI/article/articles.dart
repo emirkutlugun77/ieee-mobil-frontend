@@ -42,7 +42,7 @@ class _ArticlesState extends State<Articles> {
 
     return Scaffold(
       body: Container(
-        color: Colors.white,
+        color: Theme.of(context).backgroundColor,
         child: Column(
           children: [
             Padding(

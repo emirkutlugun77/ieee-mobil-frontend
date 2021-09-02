@@ -18,7 +18,6 @@ import 'package:my_app/Functions/image_picker.dart';
 
 import 'package:my_app/Functions/post_functions.dart';
 import 'package:my_app/Functions/user.dart';
-import 'package:my_app/UI/feed/add_to_feed.dart';
 
 import 'package:my_app/UI/models/post.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -71,6 +70,7 @@ class _SocialFeedState extends State<SocialFeed>
     return Stack(
       children: [
         Scaffold(
+          backgroundColor: Theme.of(context).backgroundColor,
           floatingActionButton: GestureDetector(
             onTap: () {
               _panelController.open();
@@ -86,7 +86,8 @@ class _SocialFeedState extends State<SocialFeed>
                     ? LineIcon.plus(
                         color: Theme.of(context).backgroundColor,
                       )
-                    : Icon(FontAwesomeIcons.chevronLeft),
+                    : Icon(FontAwesomeIcons.chevronLeft,
+                        color: Theme.of(context).iconTheme.color),
               ),
             ),
           ),
@@ -142,9 +143,11 @@ class _SocialFeedState extends State<SocialFeed>
           slideDirection: SlideDirection.UP,
           maxHeight: height / 2,
           panel: Scaffold(
+            backgroundColor: Theme.of(context).backgroundColor,
             floatingActionButton: FloatingActionButton(
               backgroundColor: Theme.of(context).primaryColor,
-              child: Icon(FontAwesomeIcons.chevronRight, color: Colors.white),
+              child: Icon(FontAwesomeIcons.chevronRight,
+                  color: Theme.of(context).iconTheme.color),
               onPressed: () async {
                 setState(() {
                   sendingPost = true;
@@ -389,13 +392,14 @@ class _SocialFeedState extends State<SocialFeed>
                   },
                   isLiked: posts[index].liked,
                   bubblesColor: BubblesColor(
-                    dotPrimaryColor: Colors.red,
+                    dotPrimaryColor: Theme.of(context).errorColor,
                     dotSecondaryColor: Colors.redAccent,
                   ),
                   likeBuilder: (bool isLiked) {
                     return Icon(
                       FontAwesomeIcons.solidHeart,
-                      color: isLiked ? Colors.red : Colors.grey,
+                      color:
+                          isLiked ? Theme.of(context).errorColor : Colors.grey,
                       size: 30,
                     );
                   },
@@ -581,13 +585,13 @@ class _SocialFeedState extends State<SocialFeed>
               },
               isLiked: posts[index].liked,
               bubblesColor: BubblesColor(
-                dotPrimaryColor: Colors.red,
+                dotPrimaryColor: Theme.of(context).errorColor,
                 dotSecondaryColor: Colors.redAccent,
               ),
               likeBuilder: (bool isLiked) {
                 return Icon(
                   FontAwesomeIcons.solidHeart,
-                  color: isLiked ? Colors.red : Colors.grey,
+                  color: isLiked ? Theme.of(context).errorColor : Colors.grey,
                   size: 30,
                 );
               },

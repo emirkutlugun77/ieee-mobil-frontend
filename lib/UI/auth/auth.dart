@@ -73,7 +73,7 @@ class _AuthPageState extends State<AuthPage> {
                       height: height * 4.1 / 5,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                          color: Color(0xFF376AED),
+                          color: Theme.of(context).primaryColor,
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(35),
                               topRight: Radius.circular(35))),

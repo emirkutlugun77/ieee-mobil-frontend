@@ -100,29 +100,25 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height,
-      color: Colors.white,
+      color: Theme.of(context).backgroundColor,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           AnimatedOpacity(
             opacity: opacityValue,
             duration: Duration(milliseconds: 350),
             child: Padding(
-              padding: const EdgeInsets.only(
-                  top: 200.0, bottom: 18, left: 40, right: 40),
-              child: Image.asset(
-                'images/social.png',
-                height: MediaQuery.of(context).size.height / 4,
-                fit: BoxFit.fill,
-                scale: 1.5,
+              padding: EdgeInsets.all(
+                  38.0 * MediaQuery.of(context).size.height / 1000),
+              child: Center(
+                child: Image.asset(
+                  'images/social.png',
+                  height: MediaQuery.of(context).size.height / 4,
+                  fit: BoxFit.fill,
+                  scale: 1.5,
+                ),
               ),
             ),
-          ),
-          Image.asset(
-            'images/splash.png',
-            height: MediaQuery.of(context).size.height / 2.5,
-            width: MediaQuery.of(context).size.width / 1.2,
-            scale: 0.1,
           ),
         ],
       ),

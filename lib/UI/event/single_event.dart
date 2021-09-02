@@ -119,10 +119,8 @@ class _SingleEventState extends State<SingleEvent> {
                               ),
                               child: Padding(
                                 padding: EdgeInsets.all(8.0 * height / 1000),
-                                child: Icon(
-                                  FontAwesomeIcons.arrowLeft,
-                                  color: Colors.grey.shade700,
-                                ),
+                                child: Icon(FontAwesomeIcons.arrowLeft,
+                                    color: Theme.of(context).iconTheme.color),
                               ),
                             ),
                           )
@@ -299,101 +297,108 @@ class _SingleEventState extends State<SingleEvent> {
       maxHeight: height,
       defaultPanelState: PanelState.CLOSED,
       controller: _panelController,
-      panel: Padding(
-        padding: EdgeInsets.all(58.0 * height / 1000),
-        child: SingleChildScrollView(
-          physics: ScrollPhysics(),
-          child: Column(
-            children: <Widget>[
-              Row(
-                children: [
-                  GestureDetector(
-                      onTap: () {
-                        _panelController.close();
-                      },
-                      child: Icon(Icons.clear))
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Oturumlar',
-                    style: Theme.of(context).textTheme.headline1,
-                  )
-                ],
-              ),
-              ListView.builder(
-                  padding: EdgeInsets.all(3),
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: widget.event.sessions.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsets.all(8.0 * height / 1000),
-                      child: Container(
-                        width: width,
-                        height: width / 4,
-                        decoration: BoxDecoration(
-                          border: Border(
-                              bottom:
-                                  BorderSide(color: Colors.black, width: 0.5)),
-                          color: Theme.of(context).backgroundColor,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  Container(
-                                    width: width / 1.7,
-                                    child: Text(
-                                        widget.event.sessions[index].title,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1),
-                                  ),
-                                  Container(
-                                      width: width / 2,
+      panel: Container(
+        color: Theme.of(context).backgroundColor,
+        child: Padding(
+          padding: EdgeInsets.all(58.0 * height / 1000),
+          child: SingleChildScrollView(
+            physics: ScrollPhysics(),
+            child: Column(
+              children: <Widget>[
+                Row(
+                  children: [
+                    GestureDetector(
+                        onTap: () {
+                          _panelController.close();
+                        },
+                        child: Icon(Icons.clear,
+                            color: Theme.of(context).iconTheme.color))
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Oturumlar',
+                      style: Theme.of(context).textTheme.headline1,
+                    )
+                  ],
+                ),
+                ListView.builder(
+                    padding: EdgeInsets.all(3),
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: widget.event.sessions.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: EdgeInsets.all(8.0 * height / 1000),
+                        child: Container(
+                          width: width,
+                          height: width / 4,
+                          decoration: BoxDecoration(
+                            border: Border(
+                                bottom: BorderSide(
+                                    color: Colors.black, width: 0.5)),
+                            color: Theme.of(context).backgroundColor,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      width: width / 1.7,
                                       child: Text(
-                                        widget.event.sessions[index].time
-                                            .add(Duration(hours: 3))
-                                            .format('m/j/y , H:i'),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .copyWith(
-                                                color: Theme.of(context)
-                                                    .primaryColor),
-                                      )),
-                                ],
+                                          widget.event.sessions[index].title,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1),
+                                    ),
+                                    Container(
+                                        width: width / 2,
+                                        child: Text(
+                                          widget.event.sessions[index].time
+                                              .add(Duration(hours: 3))
+                                              .format('m/j/y , H:i'),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1!
+                                              .copyWith(
+                                                  color: Theme.of(context)
+                                                      .primaryColor),
+                                        )),
+                                  ],
+                                ),
                               ),
-                            ),
-                            widget.user.role == 0 ||
-                                    widget.user.role == 1 ||
-                                    widget.user.role == 4
-                                ? GestureDetector(
-                                    onTap: () async {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ScanViewPage(
-                                                    eventId: widget.event.id,
-                                                    sessionId: widget.event
-                                                        .sessions[index].id,
-                                                  )));
-                                    },
-                                    child: Icon(FontAwesomeIcons.qrcode),
-                                  )
-                                : SizedBox()
-                          ],
+                              widget.user.role == 0 ||
+                                      widget.user.role == 1 ||
+                                      widget.user.role == 4
+                                  ? GestureDetector(
+                                      onTap: () async {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ScanViewPage(
+                                                      eventId: widget.event.id,
+                                                      sessionId: widget.event
+                                                          .sessions[index].id,
+                                                    )));
+                                      },
+                                      child: Icon(FontAwesomeIcons.qrcode,
+                                          color: Theme.of(context)
+                                              .iconTheme
+                                              .color),
+                                    )
+                                  : SizedBox()
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  })
-            ],
+                      );
+                    })
+              ],
+            ),
           ),
         ),
       ),
@@ -411,83 +416,87 @@ class _SingleEventState extends State<SingleEvent> {
       maxHeight: height,
       defaultPanelState: PanelState.CLOSED,
       controller: _panelController1,
-      panel: Padding(
-        padding: EdgeInsets.all(38.0 * height / 1000),
-        child: SingleChildScrollView(
-          physics: ScrollPhysics(),
-          child: Column(
-            children: <Widget>[
-              Row(
-                children: [
-                  GestureDetector(
-                      onTap: () {
-                        _panelController1.close();
-                      },
-                      child: Icon(Icons.clear))
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Yorumlar',
-                    style: Theme.of(context).textTheme.headline1,
-                  )
-                ],
-              ),
-              comments.length == 0
-                  ? Center(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 100.0 * height / 1000),
-                        child: Text(
-                          'Henüz Yorum Yok',
-                          style: Theme.of(context).textTheme.headline1,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
+      panel: Container(
+        color: Theme.of(context).backgroundColor,
+        child: Padding(
+          padding: EdgeInsets.all(38.0 * height / 1000),
+          child: SingleChildScrollView(
+            physics: ScrollPhysics(),
+            child: Column(
+              children: <Widget>[
+                Row(
+                  children: [
+                    GestureDetector(
+                        onTap: () {
+                          _panelController1.close();
+                        },
+                        child: Icon(Icons.clear,
+                            color: Theme.of(context).iconTheme.color))
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Yorumlar',
+                      style: Theme.of(context).textTheme.headline1,
                     )
-                  : ListView.builder(
-                      padding: EdgeInsets.all(3),
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: comments.length,
-                      itemBuilder: (context, index) {
-                        return GFListTile(
-                          avatar: GFAvatar(
-                            backgroundImage: NetworkImage(comments[index]
-                                        .userId
-                                        .photo !=
-                                    ''
-                                ? comments[index].userId.photo
-                                : 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png'),
-                            shape: GFAvatarShape.standard,
+                  ],
+                ),
+                comments.length == 0
+                    ? Center(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 100.0 * height / 1000),
+                          child: Text(
+                            'Henüz Yorum Yok',
+                            style: Theme.of(context).textTheme.headline1,
+                            textAlign: TextAlign.center,
                           ),
-                          title: Text(
-                            comments[index].userId.name +
-                                ' ' +
-                                comments[index].userId.surname,
-                            style: Theme.of(context).textTheme.bodyText2,
-                          ),
-                          description: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                comments[index].date.format('m/j/y , H:i'),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle1!
-                                    .copyWith(fontSize: 12 * height / 800),
-                              ),
-                            ],
-                          ),
-                          subTitle: Text(
-                            comments[index].text,
-                            style: Theme.of(context).textTheme.bodyText1,
-                          ),
-                        );
-                      })
-            ],
+                        ),
+                      )
+                    : ListView.builder(
+                        padding: EdgeInsets.all(3),
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: comments.length,
+                        itemBuilder: (context, index) {
+                          return GFListTile(
+                            avatar: GFAvatar(
+                              backgroundImage: NetworkImage(comments[index]
+                                          .userId
+                                          .photo !=
+                                      ''
+                                  ? comments[index].userId.photo
+                                  : 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png'),
+                              shape: GFAvatarShape.standard,
+                            ),
+                            title: Text(
+                              comments[index].userId.name +
+                                  ' ' +
+                                  comments[index].userId.surname,
+                              style: Theme.of(context).textTheme.bodyText2,
+                            ),
+                            description: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  comments[index].date.format('m/j/y , H:i'),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1!
+                                      .copyWith(fontSize: 12 * height / 800),
+                                ),
+                              ],
+                            ),
+                            subTitle: Text(
+                              comments[index].text,
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                          );
+                        })
+              ],
+            ),
           ),
         ),
       ),
@@ -506,7 +515,10 @@ class _SingleEventState extends State<SingleEvent> {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(40),
                 color: Theme.of(context).backgroundColor,
-                boxShadow: [BoxShadow(blurRadius: 40, color: Colors.grey)]),
+                boxShadow: [
+                  BoxShadow(
+                      blurRadius: 20, color: Theme.of(context).primaryColor)
+                ]),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

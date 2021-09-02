@@ -8,15 +8,15 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getwidget/components/avatar/gf_avatar.dart';
 
 import 'package:getwidget/components/list_tile/gf_list_tile.dart';
+import 'package:getwidget/components/toggle/gf_toggle.dart';
 import 'package:getwidget/shape/gf_avatar_shape.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'package:line_icons/line_icon.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:my_app/Functions/auth_functions.dart';
 import 'package:my_app/Functions/image_picker.dart';
 import 'package:my_app/Functions/user.dart';
-import 'package:my_app/UI/auth/auth_widgets/slidingUpPanel.dart';
+import 'package:my_app/UI/widgets/marquee.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:date_time_format/date_time_format.dart';
@@ -30,6 +30,7 @@ import 'package:my_app/UI/onboard/onboard.dart';
 import 'package:my_app/UI/profile/profile_widgets/profile_container.dart';
 import 'package:my_app/UI/profile/profile_widgets/profile_section.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:theme_provider/theme_provider.dart';
 
 XFile? imageFile;
 
@@ -97,6 +98,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ..userInteractions = false
       ..dismissOnTap = false;
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
       body: Stack(
         children: [
           Container(
@@ -107,7 +109,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   Padding(
                     padding:
-                        EdgeInsets.symmetric(horizontal: 48.0 * height / 1000),
+                        EdgeInsets.symmetric(horizontal: 58.0 * height / 1000),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -115,33 +117,37 @@ class _ProfilePageState extends State<ProfilePage> {
                           'Profil',
                           style: Theme.of(context).textTheme.headline1,
                         ),
-                        SizedBox(
-                          width: width / 3,
-                        ),
                         Container(
-                          width: width / 4,
+                          width: width / 3,
                           height: height / 15,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
+                              GFToggle(
+                                  onChanged: (val) {
+                                    ThemeProvider.controllerOf(context)
+                                        .nextTheme();
+                                  },
+                                  value: ThemeProvider.themeOf(context).id ==
+                                      'dark'),
                               GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              QrCode(user: user!)));
-                                },
-                                child: Icon(FontAwesomeIcons.qrcode,
-                                    color: Colors.black),
-                              ),
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                QrCode(user: user!)));
+                                  },
+                                  child: Icon(FontAwesomeIcons.qrcode,
+                                      color:
+                                          Theme.of(context).iconTheme.color)),
                               GestureDetector(
                                 onTap: () {
                                   _panelController1.open();
                                 },
                                 child: Icon(FontAwesomeIcons.userAltSlash,
                                     size: 25 * height / 1000,
-                                    color: Colors.black),
+                                    color: Theme.of(context).iconTheme.color),
                               ),
                               GestureDetector(
                                   onTap: () async {
@@ -163,8 +169,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   OnBoardingPage()));
                                     }
                                   },
-                                  child:
-                                      Icon(Icons.logout, color: Colors.black)),
+                                  child: Icon(Icons.logout,
+                                      color:
+                                          Theme.of(context).iconTheme.color)),
                             ],
                           ),
                         )
@@ -248,7 +255,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                           index]
                                                                       .photo
                                                                   : 'https://ae01.alicdn.com/kf/HTB1kBs1IFXXXXXuXXXXq6xXFXXXD/Fine-oil-painting-on-canvas-Vincent-Van-Gogh-The-Starry-Night-moon-landscape-canvas.jpg_Q90.jpg_.webp',
-                                                              fit: BoxFit.fill,
+                                                              fit: BoxFit.cover,
                                                               width: width *
                                                                   1 /
                                                                   4.5,
@@ -272,19 +279,24 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                 width: width *
                                                                     1 /
                                                                     3.2,
-                                                                child: Text(
-                                                                    widget
-                                                                        .minEvents[
-                                                                            index]
-                                                                        .name,
-                                                                    style: Theme.of(context).textTheme.headline1!.copyWith(
-                                                                        fontSize: 14 *
-                                                                            height /
-                                                                            700,
-                                                                        color: Theme.of(context)
-                                                                            .primaryColor,
-                                                                        fontWeight:
-                                                                            FontWeight.w100)),
+                                                                child:
+                                                                    MarqueeWidget(
+                                                                  direction: Axis
+                                                                      .vertical,
+                                                                  child: Text(
+                                                                      widget
+                                                                          .minEvents[
+                                                                              index]
+                                                                          .name,
+                                                                      style: Theme.of(context).textTheme.headline1!.copyWith(
+                                                                          fontSize: 14 *
+                                                                              height /
+                                                                              700,
+                                                                          color: Theme.of(context)
+                                                                              .primaryColor,
+                                                                          fontWeight:
+                                                                              FontWeight.w100)),
+                                                                ),
                                                               ),
                                                             ),
                                                             SizedBox(
@@ -292,24 +304,28 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                   1 /
                                                                   100,
                                                             ),
-                                                            Text(
-                                                              widget
-                                                                  .minEvents[
-                                                                      index]
-                                                                  .committeeName,
-                                                              style: Theme.of(
-                                                                      context)
-                                                                  .textTheme
-                                                                  .subtitle1!
-                                                                  .copyWith(
-                                                                      fontSize: widget.minEvents[index].committeeName.length >
-                                                                              20
-                                                                          ? 11 *
-                                                                              height /
-                                                                              700
-                                                                          : 13 *
-                                                                              height /
-                                                                              700),
+                                                            Container(
+                                                              width:
+                                                                  width / 2.5,
+                                                              child: Text(
+                                                                widget
+                                                                    .minEvents[
+                                                                        index]
+                                                                    .committeeName,
+                                                                style: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .subtitle1!
+                                                                    .copyWith(
+                                                                        fontSize: widget.minEvents[index].committeeName.length >
+                                                                                20
+                                                                            ? 11 *
+                                                                                height /
+                                                                                700
+                                                                            : 13 *
+                                                                                height /
+                                                                                700),
+                                                              ),
                                                             ),
                                                             SizedBox(
                                                               height: height *
@@ -645,6 +661,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       print(blockedUsersProfile.length);
                       return Container(
                         height: height,
+                        color: Theme.of(context).backgroundColor,
                         width: width,
                         child: Column(
                           children: [
@@ -656,7 +673,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                 padding: EdgeInsets.all(58.0 * height / 1000),
                                 child: Row(
                                   children: [
-                                    Icon(FontAwesomeIcons.chevronDown)
+                                    Icon(FontAwesomeIcons.chevronDown,
+                                        color:
+                                            Theme.of(context).iconTheme.color)
                                   ],
                                 ),
                               ),
@@ -664,9 +683,11 @@ class _ProfilePageState extends State<ProfilePage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  'Bloklanan Kullanıcılar',
-                                )
+                                Text('Bloklanan Kullanıcılar',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText2!
+                                        .copyWith(fontSize: 30 * height / 1000))
                               ],
                             ),
                             Expanded(
@@ -714,8 +735,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                                             .id);
                                               });
                                             },
-                                            child:
-                                                Icon(FontAwesomeIcons.minus)),
+                                            child: Icon(FontAwesomeIcons.minus,
+                                                color: Theme.of(context)
+                                                    .iconTheme
+                                                    .color)),
                                       ),
                                     );
                                   }),
@@ -869,7 +892,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     padding: EdgeInsets.all(20.0 * height / 1000),
                     child: Center(
                         child: Text('Devam Et',
-                            style: Theme.of(context).textTheme.bodyText1)),
+                            style: Theme.of(context).textTheme.bodyText1!)),
                   )),
               GestureDetector(
                   onTap: () {
@@ -888,11 +911,11 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Container bottomIndicator(double width, double height) {
     return Container(
-      color: Colors.white,
+      color: Theme.of(context).backgroundColor,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: width * 1 / 3),
         child: Container(
-          color: Colors.white,
+          color: Theme.of(context).backgroundColor,
           height: height * 1 / 28,
           width: double.infinity,
           child: ListView.builder(

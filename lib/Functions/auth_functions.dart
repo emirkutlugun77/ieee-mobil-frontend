@@ -103,7 +103,7 @@ Future getMe(String token) async {
     print('err');
   } else {
     var decodedData = jsonDecode(response.body);
-
+    print(decodedData['user']);
     return User.fromJson(decodedData['user']);
   }
 }

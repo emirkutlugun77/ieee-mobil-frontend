@@ -27,7 +27,9 @@ class QrCode extends StatelessWidget {
                     onTap: () {
                       Navigator.pop(context);
                     },
-                    child: LineIcon.angleLeft())
+                    child: LineIcon.angleLeft(
+                      color: Theme.of(context).textTheme.headline1!.color,
+                    ))
               ],
             ),
           ),
@@ -56,6 +58,7 @@ class QrCode extends StatelessWidget {
             height: height * 1 / 40,
           ),
           QrImage(
+            foregroundColor: Theme.of(context).textTheme.headline1!.color,
             data: user.id, //user.id
             version: QrVersions.auto,
             size: height * 2 / 5,

@@ -6,6 +6,7 @@ import 'package:my_app/constants.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:theme_provider/theme_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,6 +15,7 @@ void main() async {
 
   bool? logged =
       prefs.getBool('logged') == null ? false : prefs.getBool('logged');
+  String? themeId = prefs.getString('theme');
   EasyLoading.instance
     ..indicatorType = EasyLoadingIndicatorType.fadingCircle
     ..loadingStyle = EasyLoadingStyle.dark
@@ -26,10 +28,23 @@ void main() async {
     ..userInteractions = false
     ..dismissOnTap = false;
 
-  runApp(MaterialApp(
-      debugShowCheckedModeBanner: false,
-      builder: EasyLoading.init(),
-      title: 'Flutter Demo',
-      theme: whiteTheme,
-      home: logged! ? SplashScreen() : OnBoardingPage()));
+  runApp(ThemeProvider(
+      saveThemesOnChange: true,
+      loadThemeOnInit: true,
+      themes: [
+        AppTheme(id: 'white', data: whiteTheme, description: 'white theme'),
+        AppTheme(id: 'dark', data: darkTheme, description: 'dark theme'),
+      ],
+      child: ThemeConsumer(
+        child: Builder(
+          builder: (themeContext) {
+            return MaterialApp(
+                debugShowCheckedModeBanner: false,
+                builder: EasyLoading.init(),
+                title: 'Social',
+                theme: ThemeProvider.themeOf(themeContext).data,
+                home: logged! ? SplashScreen() : OnBoardingPage());
+          },
+        ),
+      )));
 }

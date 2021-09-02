@@ -123,7 +123,9 @@ class _ArticleContainerState extends State<ArticleContainer> {
                           likeBuilder: (bool isLiked) {
                             return Icon(
                               FontAwesomeIcons.solidHeart,
-                              color: isLiked ? Colors.red : Colors.grey,
+                              color: isLiked
+                                  ? Theme.of(context).errorColor
+                                  : Colors.grey,
                               size: 30,
                             );
                           },

@@ -71,7 +71,9 @@ class _ComiteePageState extends State<ComiteePage> {
                                       padding: EdgeInsets.all(8.0 *
                                           MediaQuery.of(context).size.height /
                                           1000),
-                                      child: LineIcon.arrowLeft(),
+                                      child: LineIcon.arrowLeft(
+                                        color: Colors.black,
+                                      ),
                                     )))),
                       ],
                     ),

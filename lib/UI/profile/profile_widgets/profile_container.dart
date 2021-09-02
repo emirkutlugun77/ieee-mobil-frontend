@@ -46,7 +46,8 @@ class _ProfileContainerState extends State<ProfileContainer> {
             width: widget.width * 3 / 4,
             height: widget.height * 1.7 / 5,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10), color: Colors.white),
+                borderRadius: BorderRadius.circular(10),
+                color: Theme.of(context).backgroundColor),
             child: Padding(
               padding: EdgeInsets.all(8.0 * widget.height / 700),
               child: Column(

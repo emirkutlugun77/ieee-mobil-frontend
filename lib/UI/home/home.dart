@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+
 import 'package:my_app/MinimizedModels/MinCertificate.dart';
 import 'package:my_app/MinimizedModels/MinCommittee.dart';
 import 'package:my_app/MinimizedModels/MinEvent.dart';
@@ -186,9 +186,10 @@ class _MyHomePageState extends State<MyHomePage> {
             curve: Curves.ease, // tab animation curves
             duration: Duration(milliseconds: 365), // tab animation duration
 
-            color: Colors.grey[800], // unselected icon color
-            activeColor:
-                Theme.of(context).primaryColor, // selected icon and text color
+            color: Theme.of(context).bottomAppBarColor,
+            activeColor: Theme.of(context).primaryColor,
+
+            // selected icon and text color
             iconSize: 26, // tab button icon size
             // selected tab background color
             padding: EdgeInsets.symmetric(

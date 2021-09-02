@@ -76,7 +76,7 @@ class _ScanViewPageState extends State<ScanViewPage> {
                     },
                     child: Icon(
                       FontAwesomeIcons.chevronLeft,
-                      color: Colors.black,
+                      color: Theme.of(context).iconTheme.color,
                       size: 40,
                     ),
                   ),
