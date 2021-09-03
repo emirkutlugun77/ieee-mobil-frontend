@@ -118,12 +118,14 @@ class _ProfilePageState extends State<ProfilePage> {
                           style: Theme.of(context).textTheme.headline1,
                         ),
                         Container(
-                          width: width / 3,
+                          width: width / 2.5,
                           height: height / 15,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               GFToggle(
+                                  enabledThumbColor:
+                                      Theme.of(context).primaryColor,
                                   onChanged: (val) {
                                     ThemeProvider.controllerOf(context)
                                         .nextTheme();

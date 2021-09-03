@@ -173,6 +173,7 @@ class _LoginPageState extends State<LoginPage> {
                             prefs.setBool('logged', true);
                             prefs.setString('id', user!.id);
                             token = prefs.getString('token')!;
+
                             getMost5(blogPosts, token, 0).then((value) =>
                                 getUserData(user!.id, minCommittees, minnCerts,
                                         minEvents, userPosts, token)
