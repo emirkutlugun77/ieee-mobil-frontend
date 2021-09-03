@@ -76,7 +76,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Future getBlockedUsers(List<dynamic> blockedUsers) async {
     blockedUsers.forEach((element) async {
       User user = await getUser(element);
-      print('working');
+
       setState(() {
         blockedUsersProfile.add(user);
       });
@@ -660,7 +660,6 @@ class _ProfilePageState extends State<ProfilePage> {
                       );
 
                     default:
-                      print(blockedUsersProfile.length);
                       return Container(
                         height: height,
                         color: Theme.of(context).backgroundColor,

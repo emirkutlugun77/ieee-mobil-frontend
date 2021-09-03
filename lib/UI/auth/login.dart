@@ -4,6 +4,7 @@ import 'package:loading_animations/loading_animations.dart';
 
 import 'package:my_app/Functions/announce.dart';
 import 'package:my_app/Functions/blog.dart';
+import 'package:my_app/Functions/notifications.dart';
 import 'package:my_app/Functions/post_functions.dart';
 import 'package:my_app/Functions/user.dart';
 import 'package:my_app/MinimizedModels/MinCertificate.dart';
@@ -13,6 +14,7 @@ import 'package:my_app/UI/auth/auth.dart';
 import 'package:my_app/UI/models/announcement.dart';
 import 'package:my_app/UI/models/event.dart';
 import 'package:my_app/UI/models/post.dart';
+import 'package:my_app/UI/models/notification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -53,6 +55,7 @@ String token = '';
 
 //USER VARIABLES
 class _LoginPageState extends State<LoginPage> {
+  List<NotificationModel> notifications = [];
   List<BlogPost> blogPosts = [];
   List<Announcement> announcements = [];
   List<Post> userPosts = [];
@@ -173,43 +176,36 @@ class _LoginPageState extends State<LoginPage> {
                             prefs.setBool('logged', true);
                             prefs.setString('id', user!.id);
                             token = prefs.getString('token')!;
-
-                            getMost5(blogPosts, token, 0).then((value) =>
-                                getUserData(user!.id, minCommittees, minnCerts,
-                                        minEvents, userPosts, token)
-                                    .then((value) => getAllPosts(posts).then(
-                                        (value) => getAnnouncements(token)
-                                                .then((value) =>
-                                                    announcements = value)
-                                                .then((value) {
-                                              EasyLoading.dismiss();
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          MyHomePage(
-                                                            seenAnnouncements:
-                                                                seenAnnouncements!,
-                                                            announcements:
-                                                                announcements,
-                                                            events: events,
-                                                            user: user!,
-                                                            committees: widget
-                                                                .commiteeList,
-                                                            blogPosts:
-                                                                blogPosts,
-                                                            posts: posts,
-                                                            token: token,
-                                                            minCommittees:
-                                                                minCommittees,
-                                                            minEvents:
-                                                                minEvents,
-                                                            minnCerts:
-                                                                minnCerts,
-                                                            userPosts:
-                                                                userPosts,
-                                                          )));
-                                            }))));
+                            Future.wait([
+                              getMost5(blogPosts, token, 0),
+                              getUserData(user!.id, minCommittees, minnCerts,
+                                  minEvents, userPosts, token),
+                              getAllPosts(posts),
+                              getAnnouncements(token)
+                                  .then((value) => announcements = value),
+                              getNotifications(user!.id, token, notifications)
+                            ]).then((value) {
+                              EasyLoading.dismiss();
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MyHomePage(
+                                            notifications: notifications,
+                                            seenAnnouncements:
+                                                seenAnnouncements!,
+                                            announcements: announcements,
+                                            events: events,
+                                            user: user!,
+                                            committees: widget.commiteeList,
+                                            blogPosts: blogPosts,
+                                            posts: posts,
+                                            token: token,
+                                            minCommittees: minCommittees,
+                                            minEvents: minEvents,
+                                            minnCerts: minnCerts,
+                                            userPosts: userPosts,
+                                          )));
+                            });
                           }
                         },
                         child: Container(

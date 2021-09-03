@@ -26,12 +26,6 @@ bool loading = true;
 
 class _ArticlesState extends State<Articles> {
   int page = 0;
-  @override
-  void initState() {
-    super.initState();
-    print(widget.token);
-    print(widget.blogPosts[0].liked);
-  }
 
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);

@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:my_app/Functions/notifications.dart';
 import 'package:my_app/Functions/post_functions.dart';
+import 'package:my_app/UI/models/notification.dart';
 import 'package:my_app/constants.dart' as constant;
 import 'package:flip_card/flip_card_controller.dart';
 import 'package:flutter/cupertino.dart';
@@ -65,6 +67,7 @@ List<Announcement> announcements = [];
 List<MapEntry<String, dynamic>> universities = [];
 
 List<Post> posts = [];
+List<NotificationModel> notifications = [];
 
 class _SignInPageState extends State<SignInPage> {
   FlipCardController _flipCardController = FlipCardController();
@@ -293,7 +296,6 @@ class _SignInPageState extends State<SignInPage> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    print('clicked');
                     _panelControllerUni.open();
                   },
                   child: Padding(
@@ -434,7 +436,6 @@ class _SignInPageState extends State<SignInPage> {
                         setState(() {
                           succ = true;
                           user = value;
-                          print(user);
                         });
 
                         openPanel('Kayıt Başarılı');
@@ -444,7 +445,8 @@ class _SignInPageState extends State<SignInPage> {
                           getAllPosts(posts),
                           getMost5(blogPosts, token, 0),
                           getAnnouncements(token)
-                              .then((value) => announcements = value)
+                              .then((value) => announcements = value),
+                          getNotifications(user!.id, token, notifications)
                         ]);
 
                         EasyLoading.dismiss();
@@ -453,6 +455,7 @@ class _SignInPageState extends State<SignInPage> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => MyHomePage(
+                                        notifications: notifications,
                                         seenAnnouncements: 0,
                                         announcements: announcements,
                                         events: widget.events,

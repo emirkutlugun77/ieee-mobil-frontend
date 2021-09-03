@@ -16,7 +16,7 @@ Future searchAll(String query) async {
       events.add(SearchData(id: e['_id'], name: e['name'], photo: e['photo'])));
   decodedData['committees'].forEach((e) => committees
       .add(SearchData(id: e['_id'], name: e['name'], photo: e['photo'])));
-  print(committees.length);
+
   ListBox listBox = ListBox(committees: committees, events: events);
   return listBox;
 }

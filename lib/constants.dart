@@ -19,12 +19,12 @@ ThemeData whiteTheme = ThemeData(
     iconTheme: IconThemeData(color: Colors.black),
     brightness: Brightness.light,
     primaryColor: Color(0xFF376AED),
-    primaryColorDark: Color(0xFF2151CD),
+    primaryColorDark: Color(0xFF548CA8),
     primaryColorLight: Colors.grey.shade50,
     cardColor: Color(0xFF0D253C),
     bottomAppBarColor: Color(0xFF7B8BB2),
     accentColor: Color(0xFF8FE6FF),
-    splashColor: Color(0xFF127C12),
+    splashColor: Color(0xFFFF96AD),
     backgroundColor: Colors.white,
     textTheme: TextTheme(
       bodyText1: GoogleFonts.inter(

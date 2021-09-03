@@ -18,7 +18,6 @@ Future<dynamic> loginUser(String email, String password) async {
     var prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', decodedData['token']);
 
-    print(response.body);
     var token = prefs.getString('token');
 
     User user = await getMe(token!);
@@ -67,7 +66,7 @@ Future<dynamic> registerUser(String name, String surname, Education education,
 Future forgotPassword(String email) async {
   var response = await http.post(Uri.parse(baseUri + 'v1/auth/password/forgot'),
       body: {'email': email});
-  print(response.body);
+
   if (response.statusCode != 200) {
     return false;
   } else {
@@ -88,7 +87,7 @@ Future checkMailToken(String mailToken) async {
 Future resetPassword(String newPassword, String token) async {
   var response = await http.post(Uri.parse(baseUri + 'v1/auth/password/reset'),
       body: {'mailTokenId': token, 'password': password});
-  print(response.body);
+
   if (response.statusCode != 200) {
     return false;
   } else {
@@ -100,10 +99,9 @@ Future getMe(String token) async {
   var response = await http.get(Uri.parse(baseUri + 'v1/users/me'),
       headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
   if (response.statusCode == 400) {
-    print('err');
   } else {
     var decodedData = jsonDecode(response.body);
-    print(decodedData['user']);
+
     return User.fromJson(decodedData['user']);
   }
 }
@@ -111,7 +109,6 @@ Future getMe(String token) async {
 Future getUser(String id) async {
   var response = await http.get(Uri.parse(baseUri + 'v1/users/$id'));
   if (response.statusCode == 400) {
-    print('err');
   } else {
     var decodedData = jsonDecode(response.body);
 

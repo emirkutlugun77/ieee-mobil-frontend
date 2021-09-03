@@ -32,12 +32,10 @@ Future<bool> likeBlog(bool isLiked, String token, BlogPost post) async {
     post.likeCount--;
     await http.put(Uri.parse(baseUri + 'v1/blog-post/${post.id}/unlike/'),
         headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
-    print('working');
   } else {
     post.likeCount++;
     await http.put(Uri.parse(baseUri + 'v1/blog-post/${post.id}/like'),
         headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
-    print('working');
   }
 
   return !isLiked;

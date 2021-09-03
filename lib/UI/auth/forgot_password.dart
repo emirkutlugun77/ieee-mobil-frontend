@@ -239,7 +239,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                 current == resetState.INITIAL
                                     ? current = resetState.CHECKING_TOKEN
                                     : current = resetState.INITIAL;
-                                print(current);
+
                                 checkState(current);
                               });
                             },

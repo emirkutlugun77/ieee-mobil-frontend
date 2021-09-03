@@ -13,7 +13,7 @@ Future getAllCommittees(List<Commitee> committees) async {
 
   decodedData['committees']
       .forEach((x) => committees.add(Commitee.fromJson(x)));
-  print('working');
+
   return committees;
 }
 

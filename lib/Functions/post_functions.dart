@@ -11,7 +11,7 @@ const baseUri = 'https://ancient-falls-28306.herokuapp.com/';
 
 Future getAllPosts(List<Post> posts) async {
   String token;
-  print('aaa');
+
   var prefs = await SharedPreferences.getInstance();
   token = (prefs.getString('token'))!;
   var response = await http.get(Uri.parse(baseUri + 'v1/post/'),
@@ -32,7 +32,6 @@ Future<bool> onLikeButtonTapped(bool isLiked, Post post, String token) async {
         headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
   }
 
-  print('working');
   return !isLiked;
 }
 
@@ -58,7 +57,7 @@ Future deletePost(String id, String token) async {
   try {
     await http.delete(Uri.parse(baseUri + 'v1/post/$id'),
         headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
-    print('post silindi');
+
     return 'Post Silindi';
   } catch (e) {
     return 'Post Silinirken Hata';

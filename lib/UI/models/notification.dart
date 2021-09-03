@@ -1,20 +1,17 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
-
-class Notification {
+class NotificationModel {
   DateTime date;
   DateTime expireDate;
-  List<dynamic> seenBy;
+
   String id;
   String title;
   String coverImage;
   String actionType;
   String context;
-  Notification({
+  NotificationModel({
     required this.date,
     required this.expireDate,
-    required this.seenBy,
     required this.id,
     required this.title,
     required this.coverImage,
@@ -26,7 +23,6 @@ class Notification {
     return {
       'date': date.millisecondsSinceEpoch,
       'expireDate': expireDate.millisecondsSinceEpoch,
-      'seenBy': seenBy,
       '_id': id,
       'title': title,
       'coverImage': coverImage,
@@ -35,26 +31,19 @@ class Notification {
     };
   }
 
-  factory Notification.fromMap(Map<String, dynamic> map) {
-    return Notification(
-      date: DateTime.fromMillisecondsSinceEpoch(map['date']),
-      expireDate: DateTime.fromMillisecondsSinceEpoch(map['expireDate']),
-      seenBy: List<dynamic>.from(map['seenBy']),
-      id: map['_id'],
-      title: map['title'],
-      coverImage: map['coverImage'],
-      actionType: map['actionType'],
-      context: map['context'],
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory Notification.fromJson(String source) =>
-      Notification.fromMap(json.decode(source));
+  factory NotificationModel.fromJson(Map<String, dynamic> json) =>
+      NotificationModel(
+        date: DateTime.parse(json['date']),
+        expireDate: DateTime.parse(json['expireDate']),
+        id: json['_id'],
+        title: json['title'],
+        coverImage: json['coverImage'],
+        actionType: json['actionType'],
+        context: json['context'],
+      );
 
   @override
   String toString() {
-    return 'Notification(date: $date, expireDate: $expireDate, seenBy: $seenBy, _id: $id, title: $title, coverImage: $coverImage, actionType: $actionType, context: $context)';
+    return 'Notification(date: $date, expireDate: $expireDate, _id: $id, title: $title, coverImage: $coverImage, actionType: $actionType, context: $context)';
   }
 }

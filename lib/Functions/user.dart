@@ -18,7 +18,7 @@ Future getUserSubscriptions(
         Uri.parse(baseUri + 'v1/users/$userId/subscriptions'),
         headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
     var decodedData = await jsonDecode(response.body);
-    print(decodedData);
+
     if (decodedData['subscriptions'] != null) {
       await decodedData['subscriptions'].forEach((e) {
         if (e['committeeId']['_id'] != null &&
@@ -151,7 +151,7 @@ Future flagUser(String flaggedBy, String id, String token) async {
       headers: {
         HttpHeaders.authorizationHeader: 'Bearer $token'
       });
-  print(response.statusCode);
+
   if (response.statusCode == 200) {
     return true;
   } else {

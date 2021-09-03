@@ -8,6 +8,6 @@ Future readQr(String eventId, String sessionId, String userId) async {
       body: {'eventId': eventId, 'sessionId': sessionId, 'userId': userId});
   var decodedData = json.decode(response.body);
   String message = decodedData['message'];
-  print(message);
+
   return message;
 }

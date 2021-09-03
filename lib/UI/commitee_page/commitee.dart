@@ -101,7 +101,6 @@ class _ComiteePageState extends State<ComiteePage> {
                       FutureBuilder<List<dynamic>>(
                           future: getCoordinationTeamInit(widget.commitee.id),
                           builder: (context, snapshot) {
-                            print(snapshot);
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
                               return Center(

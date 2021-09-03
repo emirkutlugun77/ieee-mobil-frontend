@@ -7,6 +7,7 @@ import 'package:my_app/Functions/auth_functions.dart';
 import 'package:my_app/Functions/blog.dart';
 import 'package:my_app/Functions/committee.dart';
 import 'package:my_app/Functions/events.dart';
+import 'package:my_app/Functions/notifications.dart';
 import 'package:my_app/Functions/post_functions.dart';
 import 'package:my_app/Functions/user.dart';
 import 'package:my_app/MinimizedModels/MinCertificate.dart';
@@ -17,6 +18,7 @@ import 'package:my_app/UI/models/announcement.dart';
 import 'package:my_app/UI/models/blogposts.dart';
 import 'package:my_app/UI/models/commitee.dart';
 import 'package:my_app/UI/models/event.dart';
+import 'package:my_app/UI/models/notification.dart';
 import 'package:my_app/UI/models/post.dart';
 import 'package:my_app/UI/models/user.dart';
 
@@ -30,7 +32,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 User? user;
-
+List<NotificationModel> notifications = [];
 List<MinEvent> minEvents = [];
 List<MinCertificate> minnCerts = [];
 List<MinCommittee> minCommittees = [];
@@ -75,11 +77,13 @@ class _SplashScreenState extends State<SplashScreen> {
           getAllCommittees(commiteeList),
           getAllEvents(0).then((value) => events = value),
           getAllPosts(posts),
-          getAnnouncements(token).then((value) => announcementList = value)
+          getAnnouncements(token).then((value) => announcementList = value),
+          getNotifications(user!.id, token, notifications)
         ]).then((value) => Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => MyHomePage(
+                      notifications: notifications,
                       seenAnnouncements: seenAnnouncements!,
                       announcements: announcementList,
                       events: events,
