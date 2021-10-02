@@ -6,16 +6,20 @@ import 'package:flutter/material.dart';
 import 'package:line_icons/line_icon.dart';
 
 import 'package:my_app/Functions/committee.dart';
+import 'package:my_app/MinimizedModels/MinCommittee.dart';
 import 'package:my_app/UI/event/single_event.dart';
 import 'package:my_app/UI/models/commitee.dart';
 import 'package:my_app/UI/models/event.dart';
+import 'package:my_app/UI/models/subscription.dart';
 import 'package:my_app/UI/models/user.dart';
 
 // ignore: must_be_immutable
 class ComiteePage extends StatefulWidget {
   final Commitee commitee;
+  final List<MinCommittee> userSubs;
   User user;
   ComiteePage({
+    required this.userSubs,
     Key? key,
     required this.commitee,
     required this.user,

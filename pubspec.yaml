@@ -15,7 +15,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+4
+version: 1.0.0+6
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -26,7 +26,7 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-
+  auto_size_text: ^3.0.0-nullsafety.0
   theme_provider: ^0.5.0
   cupertino_icons: ^1.0.2
   translator: ^0.1.7
@@ -58,7 +58,7 @@ dependencies:
   animated_splash_screen: ^1.1.0
   like_button: ^2.0.2
   font_awesome_flutter: ^9.1.0
-
+  awesome_notifications: ^0.0.6+10
   scan: ^1.4.3
   image_picker: ^0.8.3+2
   dio: ^4.0.0
@@ -66,6 +66,12 @@ dependencies:
   alphabet_list_scroll_view: ^2.0.0
   flutter_easyloading: ^3.0.0
   rounded_loading_button: ^2.0.5
+  syncfusion_flutter_datepicker: ^19.3.43
+  intl: ^0.17.0
+  syncfusion_localizations: ^19.3.43
+  get: ^4.3.8
+  firebase_core: "^1.0.4"
+  firebase_messaging: "^9.1.2"
 
 dev_dependencies:
   flutter_test:
@@ -97,8 +103,7 @@ flutter:
     - images/ob3.png
     - images/ieee.png
     - images/resim.png
-    - images/emir.jpeg
-    - images/java.png
+
     - images/avatar1.png
     - images/avatar2.png
     - images/avatar3.png
@@ -107,8 +112,6 @@ flutter:
     - images/avatar6.png
     - assets/departments.json
     - assets/universities.json
-
-    - images/search.png
 
   #   - images/a_dot_ham.jpeg
 

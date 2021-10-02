@@ -16,6 +16,7 @@ import 'package:loading_animations/loading_animations.dart';
 import 'package:my_app/Functions/auth_functions.dart';
 import 'package:my_app/Functions/image_picker.dart';
 import 'package:my_app/Functions/user.dart';
+import 'package:my_app/UI/profile/new_register.dart';
 import 'package:my_app/UI/widgets/marquee.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -117,6 +118,17 @@ class _ProfilePageState extends State<ProfilePage> {
                           'Profil',
                           style: Theme.of(context).textTheme.headline1,
                         ),
+                        widget.user.role == 0 || widget.user.role == 1
+                            ? IconButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => NewRegister()));
+                                },
+                                icon: Icon(FontAwesomeIcons.userCheck,
+                                    color: Theme.of(context).primaryColor))
+                            : SizedBox(),
                         Container(
                           width: width / 2.5,
                           height: height / 15,
@@ -124,6 +136,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               GFToggle(
+                                  enabledTrackColor:
+                                      Theme.of(context).primaryColorDark,
                                   enabledThumbColor:
                                       Theme.of(context).primaryColor,
                                   onChanged: (val) {

@@ -15,6 +15,7 @@ import 'package:my_app/Functions/committee.dart';
 import 'package:my_app/Functions/events.dart';
 
 import 'package:my_app/Functions/search.dart';
+import 'package:my_app/MinimizedModels/MinCommittee.dart';
 
 import 'package:my_app/UI/commitee_page/commitee.dart';
 import 'package:my_app/UI/event/single_event.dart';
@@ -24,6 +25,7 @@ import 'package:my_app/UI/models/announcement.dart';
 import 'package:my_app/UI/models/blogposts.dart';
 import 'package:my_app/UI/models/commitee.dart';
 import 'package:my_app/UI/models/event.dart';
+import 'package:my_app/UI/models/subscription.dart';
 import 'package:my_app/UI/models/user.dart';
 import 'package:my_app/UI/widgets/marquee.dart';
 
@@ -41,9 +43,10 @@ class Home1 extends StatefulWidget {
     required this.user,
     required this.committees,
     required this.blogPosts,
+    required this.userSubs,
   });
   int seenAnnouncements;
-
+  List<MinCommittee> userSubs;
   User user;
   List<Commitee> committees;
   List<BlogPost> blogPosts;
@@ -116,6 +119,7 @@ class _Home1State extends State<Home1> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => ComiteePage(
+                                              userSubs: widget.userSubs,
                                               user: widget.user,
                                               commitee:
                                                   widget.committees[index],
@@ -290,6 +294,8 @@ class _Home1State extends State<Home1> {
                                               MaterialPageRoute(
                                                   builder: (context) =>
                                                       ComiteePage(
+                                                        userSubs:
+                                                            widget.userSubs,
                                                         commitee: com,
                                                         user: widget.user,
                                                       )));

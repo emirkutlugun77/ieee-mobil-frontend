@@ -1,18 +1,20 @@
 import 'dart:io';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
+
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_app/Functions/notifications.dart';
+import 'package:my_app/Functions/push_notification.dart';
 
 import 'package:my_app/MinimizedModels/MinCertificate.dart';
 import 'package:my_app/MinimizedModels/MinCommittee.dart';
 import 'package:my_app/MinimizedModels/MinEvent.dart';
 import 'package:my_app/UI/article/articles.dart';
-import 'package:my_app/UI/auth/auth_widgets/slidingUpPanel.dart';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:my_app/UI/event/event_page.dart';
 import 'package:my_app/UI/feed/social_feed.dart' as feed;
 
@@ -129,10 +131,24 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    /* widget.notifications.forEach((element) {
-      readNotifications(widget.user.id, element.id);
-    });*/
-    Future.delayed(Duration(milliseconds: 600)).then((value) {
+    if (widget.notifications.length > 0) {
+      readNotifications(widget.user.id, widget.notifications.first.id);
+    }
+    AwesomeNotifications().createdStream.listen((notification) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Notification Created on ${notification.channelKey}'),
+        ),
+      );
+    });
+    AwesomeNotifications().isNotificationAllowed().then(
+      (isAllowed) {
+        if (!isAllowed) {
+          AwesomeNotifications().requestPermissionToSendNotifications();
+        }
+      },
+    );
+    Future.delayed(Duration(milliseconds: 900)).then((value) {
       setState(() {
         showPanel = true;
       });
@@ -162,6 +178,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 children: <Widget>[
                   Home1(
+                      userSubs: widget.minCommittees,
                       seenAnnouncements: widget.seenAnnouncements,
                       announcements: widget.announcements,
                       user: widget.user,
@@ -263,65 +280,77 @@ class _MyHomePageState extends State<MyHomePage> {
                     return notificationWidget(widget.notifications[index]);
                   },
                   options: CarouselOptions(
-                      height: MediaQuery.of(context).size.height / 1.8,
+                      onPageChanged: (index, reason) {
+                        readNotifications(
+                            widget.user.id, widget.notifications[index].id);
+                      },
+                      height: MediaQuery.of(context).size.height / 1.7,
                       enableInfiniteScroll: false,
                       aspectRatio: 0.1,
                       enlargeCenterPage: true,
                       viewportFraction: 0.9),
                 ),
-                Padding(
-                  padding: EdgeInsets.all(
-                      8.0 * MediaQuery.of(context).size.height / 1000),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height / 20,
-                    width: MediaQuery.of(context).size.width / 3,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                            flex: 2,
-                            child: GestureDetector(
-                              onTap: () {
-                                _carouselController.previousPage();
-                              },
-                              child: Container(
-                                height: MediaQuery.of(context).size.height / 20,
-                                decoration: BoxDecoration(
-                                    color: Theme.of(context).primaryColor,
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: Icon(
-                                  FontAwesomeIcons.chevronLeft,
-                                  color: Theme.of(context).iconTheme.color,
-                                ),
-                              ),
-                            )),
-                        Expanded(flex: 1, child: SizedBox()),
-                        Expanded(
-                            flex: 2,
-                            child: GestureDetector(
-                              onTap: () {
-                                _carouselController.nextPage();
-                              },
-                              child: Container(
-                                height: MediaQuery.of(context).size.height / 20,
-                                decoration: BoxDecoration(
-                                    color: Theme.of(context).primaryColor,
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: Icon(
-                                  FontAwesomeIcons.chevronRight,
-                                  color: Theme.of(context).iconTheme.color,
-                                ),
-                              ),
-                            ))
-                      ],
-                    ),
-                  ),
-                )
+                carouselButtons()
               ],
             )),
       );
     }
     return SizedBox();
+  }
+
+  Widget carouselButtons() {
+    if (widget.notifications.length > 1) {
+      return Padding(
+        padding:
+            EdgeInsets.all(8.0 * MediaQuery.of(context).size.height / 1000),
+        child: Container(
+          height: MediaQuery.of(context).size.height / 20,
+          width: MediaQuery.of(context).size.width / 3,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                  flex: 2,
+                  child: GestureDetector(
+                    onTap: () {
+                      _carouselController.previousPage();
+                    },
+                    child: Container(
+                      height: MediaQuery.of(context).size.height / 20,
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Icon(
+                        FontAwesomeIcons.chevronLeft,
+                        color: Theme.of(context).backgroundColor,
+                      ),
+                    ),
+                  )),
+              Expanded(flex: 1, child: SizedBox()),
+              Expanded(
+                  flex: 2,
+                  child: GestureDetector(
+                    onTap: () {
+                      _carouselController.nextPage();
+                    },
+                    child: Container(
+                      height: MediaQuery.of(context).size.height / 20,
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Icon(
+                        FontAwesomeIcons.chevronRight,
+                        color: Theme.of(context).backgroundColor,
+                      ),
+                    ),
+                  ))
+            ],
+          ),
+        ),
+      );
+    } else {
+      return SizedBox();
+    }
   }
 
   Center notificationWidget(NotificationModel notification) {
@@ -335,8 +364,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Stack(
             children: [
               Material(
-                elevation: 10,
-                shadowColor: Colors.grey.shade50,
+                elevation: 5,
                 color: Colors.transparent,
                 child: Container(
                   width: MediaQuery.of(context).size.width,
@@ -352,22 +380,27 @@ class _MyHomePageState extends State<MyHomePage> {
                             topLeft: Radius.circular(20),
                             topRight: Radius.circular(20)),
                         child: CachedNetworkImage(
-                            imageUrl: notification.coverImage),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(
-                            8.0 * MediaQuery.of(context).size.height / 1000),
-                        child: Text(
-                          notification.context,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText2!
-                              .copyWith(
-                                  fontSize: 18 *
-                                      MediaQuery.of(context).size.height /
-                                      1000),
-                          textAlign: TextAlign.center,
+                          fit: BoxFit.fitWidth,
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height / 3,
+                          imageUrl: notification.coverImage,
                         ),
+                      ),
+                      Container(
+                        height: MediaQuery.of(context).size.height / 10,
+                        child: Padding(
+                            padding: EdgeInsets.all(8.0 *
+                                MediaQuery.of(context).size.height /
+                                1000),
+                            child: AutoSizeText(
+                              notification.context,
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2!
+                                  .copyWith(),
+                              maxLines: 4,
+                            )),
                       ),
                       buildActionButtonsForNotificationPanel(
                           notification.actionType)
@@ -385,6 +418,32 @@ class _MyHomePageState extends State<MyHomePage> {
   buildActionButtonsForNotificationPanel(String actionType) {
     switch (actionType) {
       case 'basic':
+        return Flexible(
+          child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20),
+                ),
+                color: Theme.of(context).primaryColor),
+            child: Center(
+              child: TextButton(
+                onPressed: () {
+                  _panelController.close();
+                },
+                child: Text(
+                  'Tamam',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText2!
+                      .copyWith(color: Colors.white),
+                ),
+              ),
+            ),
+          ),
+        );
+
+      case 'event':
         return Flexible(
           child: Container(
             decoration: BoxDecoration(

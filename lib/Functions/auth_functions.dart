@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:my_app/UI/auth/login.dart';
 import 'package:my_app/UI/models/user.dart';
+import 'package:my_app/UI/profile/new_register.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:translator/translator.dart';
 
@@ -113,5 +114,37 @@ Future getUser(String id) async {
     var decodedData = jsonDecode(response.body);
 
     return User.fromJson(decodedData['user']);
+  }
+}
+
+Future<dynamic> registerUserToClub(
+    num serialNum,
+    String name,
+    DateTime birthDate,
+    String email,
+    String faculty,
+    String department,
+    String phoneNumber,
+    bool wantToGetEmail,
+    int receiptNumber) async {
+  try {
+    var response =
+        await http.post(Uri.parse(baseUri + 'v1/auth/register-new'), body: {
+      'serialNumber': '10',
+      'name': name,
+      'faculty': faculty,
+      'department': department,
+      'registerDate': DateTime.now().toString(),
+      'birthDate': birthDate.toString(),
+      'email': email,
+      'phoneNo': phoneNumber,
+      'wantToGetEmail': wantToGetEmail.toString(),
+      'receiptNumber': receiptNumber.toString(),
+    });
+    print(response.statusCode);
+    return response.statusCode;
+  } catch (e) {
+    print(e);
+    return e;
   }
 }

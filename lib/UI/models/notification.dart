@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class NotificationModel {
   DateTime date;
   DateTime expireDate;

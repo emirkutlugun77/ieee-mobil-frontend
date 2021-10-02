@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:http/http.dart' as http;
 import 'package:my_app/UI/models/notification.dart';
@@ -8,8 +7,7 @@ const baseUri = 'https://ancient-falls-28306.herokuapp.com/';
 
 Future getNotifications(
     String userId, String token, List<NotificationModel> notifications) async {
-  var response =
-      await http.get(Uri.parse('http://localhost:8080/v1/notifications/'));
+  var response = await http.get(Uri.parse(baseUri + 'v1/notifications/'));
 
   var decodedData = jsonDecode(response.body);
 
@@ -26,7 +24,7 @@ Future getNotifications(
 
 Future readNotifications(String userId, String notificationId) async {
   try {
-    await http.put(Uri.parse('http://localhost:8080/v1/notifications/$userId'),
+    await http.put(Uri.parse(baseUri + 'v1/notifications/$userId'),
         body: {'userId': userId, 'id': notificationId});
     return 'ok';
   } catch (e) {
